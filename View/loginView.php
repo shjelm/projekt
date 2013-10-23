@@ -253,11 +253,11 @@ class loginView{
 		$array = array();
 		
 		array_push($array, $name);
-		array_push($array, $personalnr);
-		array_push($array, $address);
+		array_push($array, $personalnr);		
+		array_push($array, $class);
 		array_push($array, $email);
 		array_push($array, $phonenr);
-		array_push($array, $class);
+		array_push($array, $address);
 		array_push($array, $paydate);
 		
 		var_dump($array);

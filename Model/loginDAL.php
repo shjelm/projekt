@@ -48,14 +48,15 @@ class LoginDAL
 		var_dump($stmt);
 		
 		$name = $user->getName();
-		$pnr = $user ->getPersonalNr();
-		$class = $user->getClass();
-		$phnr = $user->getPhoneNr();
-		$email = $user->getEmail();
+		$pnr = $user ->getPersonalNr();		
 		$address = $user->getAddres();
+		$phnr = $user->getPhoneNr();
+		$email = $user->getEmail();		
+		$class = $user->getClass();
 		$paydate = $user->getPayDate();
 		
-		$stmt->bind_param("ssssssi",$name,$pnr,$class,$phnr,$email,$address,$paydate);
+		
+		$stmt->bind_param("sssssss",$name,$pnr,$class,$phnr,$email,$address,$paydate);
 		$stmt->execute();
     }
 	
