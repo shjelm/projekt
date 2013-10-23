@@ -4,9 +4,10 @@ namespace model;
 
 class LoginDAL
 {
- 	private static $tableName = "users";
+ 	private static $tableName = "member";
 	
 	private $mysqli;
+	private $con;
 	
 	public function __construct() {
 
@@ -23,23 +24,38 @@ class LoginDAL
 		)
 		ENGINE = MyISAM;";
 		
-		if ($this->mysqli->query($sql) === FALSE) {
-          throw new \Exception("'$sql' failed " . $this->mysqli->error);
+		if ($this->con->query($sql) === FALSE) {
+          throw new \Exception("'$sql' failed " . $this->con->error);
       }
 	}
 	
-	public function addUser($user, $pass)
+	public function addUser(user $user)
 	{
 		$sql = "INSERT INTO ". self::$tableName."
 		(
-			user,
-			password
+			Name,
+			Personalnr,
+			Class,
+			Phonenr,
+			Emailaddress,
+			Address,
+			Payed_until
+			
 		)
-		VALUES(?,?)";
+		VALUES(?,?,?,?,?,?,?)";
 		
-		$stmt = $this->mysqli->prepare($sql);
+		$stmt = $this->con->prepare($sql);
+		var_dump($stmt);
 		
-		$stmt->bind_param("ss",$user,$pass);
+		$name = $user->getName();
+		$pnr = $user ->getPersonalNr();
+		$class = $user->getClass();
+		$phnr = $user->getPhoneNr();
+		$email = $user->getEmail();
+		$address = $user->getAddres();
+		$paydate = $user->getPayDate();
+		
+		$stmt->bind_param("ssssssi",$name,$pnr,$class,$phnr,$email,$address,$paydate);
 		$stmt->execute();
     }
 	

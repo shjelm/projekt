@@ -3,6 +3,15 @@
 namespace view;
 
 class loginView{
+		
+	private static $NAME = "name";
+	private static $PERSONALNR = "personalNr";
+	private static $ADDRESS = "address";
+	private static $EMAIL = "email";
+	private static $PHONENR = "phoneNr";
+	private static $CLASS = "class";
+	private static $PAYDATE = "payDate";
+	
 	/**
 	 * @var string
 	 */
@@ -227,5 +236,31 @@ class loginView{
 		if(isset($_COOKIE[self::$password])){	
 			return $this->cryptedPassword; 
 		}
+	}
+	
+	public function getUser()
+	{
+		if($_POST){
+			$name = $_POST[self::$NAME];
+			$personalnr = $_POST[self::$PERSONALNR];
+			$address = $_POST[self::$ADDRESS];
+			$email = $_POST[self::$EMAIL];
+			$phonenr = $_POST[self::$PHONENR];
+			$class = $_POST[self::$CLASS];
+			$paydate = $_POST[self::$PAYDATE];
+		}
+		
+		$array = array();
+		
+		array_push($array, $name);
+		array_push($array, $personalnr);
+		array_push($array, $address);
+		array_push($array, $email);
+		array_push($array, $phonenr);
+		array_push($array, $class);
+		array_push($array, $paydate);
+		
+		var_dump($array);
+		return $array;
 	}
 }

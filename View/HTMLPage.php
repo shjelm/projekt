@@ -13,7 +13,15 @@ class HTMLPage{
 	private static $PASSWORD = "password";
 	private static $REPEATPASSWORD = "repeatPassword";
 	private static $REGISTRATE ="addMember";
-	private static $BACK = "getBack";
+	private static $BACK = "getBack";	
+	private static $NAME = "name";
+	private static $PERSONALNR = "personalNr";
+	private static $ADDRESS = "address";
+	private static $EMAIL = "email";
+	private static $PHONENR = "phoneNr";
+	private static $CLASS = "class";
+	private static $PAYDATE = "payDate";
+	
 	/**
 	 * @var $string HTML
 	 * */
@@ -136,11 +144,19 @@ class HTMLPage{
 					<fieldset>
 						<legend>Registrera ny användare - Skriv in namn och lösenord</legend>
 						<p><label for='UserNameID' >Namn :</label>
-						<input type='text' size='20' name='" . self::$USERNAME . "' id='UserNameID' value='". $value ."' /></p>
-						<p><label for='PasswordID' >Lösenord  :</label>
-						<input type='password' size='20' name='" . self::$PASSWORD . "' id='PasswordID' value='' /></p>
-						<p><label for='PasswordID' >Repetera lösenord  :</label>
-						<input type='password' size='20' name='" . self::$REPEATPASSWORD . "' id='SecondPasswordID' value='' /></p>
+						<input type='text' size='20' name='" . self::$NAME . "' id='UserNameID' value='". $value ."' /></p>
+						<p><label for='PasswordID' >Personnummer  :</label>
+						<input type='text' size='20' name='" . self::$PERSONALNR . "' id='UserNameID' value='". $value ."' /></p>
+						<p><label for='PasswordID' >Adress  :</label>
+						<input type='text' size='20' name='" . self::$ADDRESS . "' id='UserNameID' value='". $value ."' /></p>
+						<p><label for='PasswordID' >Epost  :</label>
+						<input type='text' size='20' name='" . self::$EMAIL . "' id='UserNameID' value='". $value ."' /></p>
+						<p><label for='PasswordID' >Telefonnummer  :</label>
+						<input type='text' size='20' name='" . self::$PHONENR . "' id='UserNameID' value='". $value ."' /></p>
+						<p><label for='PasswordID' >Klass  :</label>
+						<input type='text' size='20' name='" . self::$CLASS . "' id='UserNameID' value='". $value ."' /></p>
+						<p><label for='PasswordID' >Betalat till  :</label>
+						<input type='text' size='20' name='" . self::$PAYDATE . "' id='UserNameID' value='". $value ."' /></p>
 						<input type='submit' name=''  value='Registrera' />
 					</fieldset>
 				</form>

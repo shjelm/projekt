@@ -6,6 +6,7 @@ require_once realpath(dirname(__DIR__)).'/View/loginView.php';
 require_once realpath(dirname(__DIR__)).'/View/HTMLPage.php';
 require_once realpath(dirname(__DIR__)).'/Model/loginModel.php';
 require_once realpath(dirname(__DIR__)).'/Model/loginDAL.php';
+require_once realpath(dirname(__DIR__)).'/Model/user.php';
 
 class loginController{
 	/**
@@ -146,7 +147,12 @@ class loginController{
 
 	public function adminWantsToAddMember()
 	{
-		echo 'hej';
+		$newUser = $this->loginView->getUser();
+		$user = new \model\user($newUser[0], $newUser[1],
+								$newUser[2], $newUser[3],
+								$newUser[4], $newUser[5],
+								$newUser[6]);
+		$this->loginDAL->addUser($user);
 	}
 	
 	public function showPage()
