@@ -11,7 +11,7 @@ class LoginDAL
 	
 	public function __construct() {
 
-		$this->con = mysqli_connect("localhost", "root", "", "users");
+		$this->con = mysqli_connect("localhost", "185594_zh40528", "lolipoP19", "185594-register");
 	}
 	
 	public function createTable()
@@ -58,6 +58,7 @@ class LoginDAL
 		
 		$stmt->bind_param("sssssss",$name,$pnr,$class,$phnr,$email,$address,$paydate);
 		$stmt->execute();
+		mysqli_close($this->con);
     }
 	
 	public function getUsers()
@@ -69,7 +70,7 @@ class LoginDAL
 		  	echo "Failed to connect to MySQL: " . mysqli_connect_error();
 		  }
 		
-		$result = mysqli_query($this->con,"SELECT * FROM user;");
+		$result = mysqli_query($this->con,"SELECT * FROM member;");
 		
 		$array = array();
 		

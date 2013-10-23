@@ -147,7 +147,7 @@ class loginController{
 
 	public function adminWantsToAddMember()
 	{
-		$newUser = $this->loginView->getUser();
+		$newUser = $this->loginView->setUser();
 		$user = new \model\user($newUser[0], $newUser[1],
 								$newUser[2], $newUser[3],
 								$newUser[4], $newUser[5],

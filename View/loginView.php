@@ -238,7 +238,7 @@ class loginView{
 		}
 	}
 	
-	public function getUser()
+	public function setUser()
 	{
 		if($_POST){
 			$name = $_POST[self::$NAME];
@@ -248,19 +248,18 @@ class loginView{
 			$phonenr = $_POST[self::$PHONENR];
 			$class = $_POST[self::$CLASS];
 			$paydate = $_POST[self::$PAYDATE];
+		
+			$array = array();
+			
+			array_push($array, $name);
+			array_push($array, $personalnr);		
+			array_push($array, $class);
+			array_push($array, $email);
+			array_push($array, $phonenr);
+			array_push($array, $address);
+			array_push($array, $paydate);
+		
 		}
-		
-		$array = array();
-		
-		array_push($array, $name);
-		array_push($array, $personalnr);		
-		array_push($array, $class);
-		array_push($array, $email);
-		array_push($array, $phonenr);
-		array_push($array, $address);
-		array_push($array, $paydate);
-		
-		var_dump($array);
 		return $array;
 	}
 }
