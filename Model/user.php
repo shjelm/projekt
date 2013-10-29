@@ -12,6 +12,8 @@ class User{
 	private $address;
 	private $paydate;
 	private $loginDAL;
+	private $username;
+	private $password;
 	
 	
 	public function __construct($name, $personalnr, $class, $phonenr, $email, $address, $paydate)
@@ -25,6 +27,9 @@ class User{
 		$this->email = $email;
 		$this->address = $address;
 		$this->paydate = $paydate;
+		$this->username = $this->generateUsername($name, $personalnr);
+		$this->password = "Password";
+		
 	}
 	
 	public function getName()
@@ -60,5 +65,18 @@ class User{
 	public function getPayDate()
 	{
 		return $this->paydate;
+	}
+	
+	public function getUsername()
+	{
+		return $this->username;
+	}
+	
+	public function generateUsername($name, $pnr)
+	{
+		$un = substr($name, 0,3);
+		$un .= substr($pnr, 0,2);
+		var_dump($un);
+		return $un;
 	}
 }

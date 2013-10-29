@@ -12,6 +12,9 @@ class loginView{
 	private static $CLASS = "class";
 	private static $PAYDATE = "payDate";
 	
+	
+	private $html;
+	
 	/**
 	 * @var string
 	 */

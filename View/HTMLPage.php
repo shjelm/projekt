@@ -47,6 +47,8 @@ class HTMLPage{
 	 */	
 	private $messageString;
 	
+	private $membersToShow;
+	
 	/**
 	 * @return string HTML
 	 */	
@@ -130,54 +132,63 @@ class HTMLPage{
 	}
 
 	public function getAddMemberPage()
-		{
-			$value = null;
-	
-			if (isset($_POST[self::$USERNAME])) {
-				$value = $_POST[self::$USERNAME];
-			}
-			$this->html = $this->startOfHTML();
-			$this->html .="</div>
-						   <div id='content'>". $this->getBack();
-			$this->html .= "
-					<form action='?" . self::$REGISTRATE. "' method='post' enctype='multipart/form-data'>
-					<fieldset>
-						<legend>Registrera ny användare - Skriv in namn och lösenord</legend>
-						<p><label for='UserNameID' >Namn :</label>
-						<input type='text' size='20' name='" . self::$NAME . "' id='UserNameID' value='". $value ."' /></p>
-						<p><label for='PasswordID' >Personnummer  :</label>
-						<input type='text' size='20' name='" . self::$PERSONALNR . "' id='UserNameID' value='". $value ."' /></p>
-						<p><label for='PasswordID' >Adress  :</label>
-						<input type='text' size='20' name='" . self::$ADDRESS . "' id='UserNameID' value='". $value ."' /></p>
-						<p><label for='PasswordID' >Epost  :</label>
-						<input type='text' size='20' name='" . self::$EMAIL . "' id='UserNameID' value='". $value ."' /></p>
-						<p><label for='PasswordID' >Telefonnummer  :</label>
-						<input type='text' size='20' name='" . self::$PHONENR . "' id='UserNameID' value='". $value ."' /></p>
-						<p><label for='PasswordID' >Klass  :</label>
-						<input type='text' size='20' name='" . self::$CLASS . "' id='UserNameID' value='". $value ."' /></p>
-						<p><label for='PasswordID' >Betalat till  :</label>
-						<input type='text' size='20' name='" . self::$PAYDATE . "' id='UserNameID' value='". $value ."' /></p>
-						<input type='submit' name=''  value='Registrera' />
-					</fieldset>
-				</form>
-				</div>".
-				$this->getClock();
-				
-			echo $this->html;
-		}
+	{
+		$value = null;
 
-	public function getShowMemberPage()
-		{
-			$this->html = $this->startOfHTML();
-			$this->html .="</div>
-						   <div id='content'>". $this->getBack();
-			$this->html .= "
-					<p>Här ska alla medlemmar visas</p>
-				</div>".
-				$this->getClock();
-				
-			echo $this->html;
+		if (isset($_POST[self::$USERNAME])) {
+			$value = $_POST[self::$USERNAME];
 		}
+		$this->html = $this->startOfHTML();
+		$this->html .="</div>
+					   <div id='content'>". $this->getBack();
+		$this->html .= "
+				<form action='?" . self::$REGISTRATE. "' method='post' enctype='multipart/form-data'>
+				<fieldset>
+					<legend>Registrera ny användare - Skriv in namn och lösenord</legend>
+					<p><label for='UserNameID' >Namn :</label>
+					<input type='text' size='20' name='" . self::$NAME . "' id='UserNameID' value='". $value ."' /></p>
+					<p><label for='PasswordID' >Personnummer  :</label>
+					<input type='text' size='20' name='" . self::$PERSONALNR . "' id='UserNameID' value='". $value ."' /></p>
+					<p><label for='PasswordID' >Adress  :</label>
+					<input type='text' size='20' name='" . self::$ADDRESS . "' id='UserNameID' value='". $value ."' /></p>
+					<p><label for='PasswordID' >Epost  :</label>
+					<input type='text' size='20' name='" . self::$EMAIL . "' id='UserNameID' value='". $value ."' /></p>
+					<p><label for='PasswordID' >Telefonnummer  :</label>
+					<input type='text' size='20' name='" . self::$PHONENR . "' id='UserNameID' value='". $value ."' /></p>
+					<p><label for='PasswordID' >Klass  :</label>
+					<input type='text' size='20' name='" . self::$CLASS . "' id='UserNameID' value='". $value ."' /></p>
+					<p><label for='PasswordID' >Betalat till  :</label>
+					<input type='text' size='20' name='" . self::$PAYDATE . "' id='UserNameID' value='". $value ."' /></p>
+					<input type='submit' name=''  value='Registrera' />
+				</fieldset>
+			</form>
+			</div>".
+			$this->getClock();
+			
+		echo $this->html;
+	}
+
+	public function showMembers($members)
+	{			
+		for ($i=0; $i < count($members); $i++) {
+			$this->membersToShow .= $members[$i]."<br>";
+		} 		
+		
+		return $this->membersToShow;
+	}
+	
+	public function getShowMembersPage($members)
+	{	
+		$this->html = $this->startOfHTML();
+		$this->html .="</div>
+					   <div id='content'>". $this->getBack();
+		$this->html .= 
+				$this->showMembers($members)."
+			</div>".
+			$this->getClock();
+			
+		echo $this->html;
+	}
 	
 	/**
 	 * @return String HTML
@@ -204,8 +215,8 @@ class HTMLPage{
 		}
 	}
 	
-	public function getBack()
-	{
+	public function getBack(){
+		
 		$regString = "<p><a href='?" . self::$BACK . "'>Tillbaka</a></p>";
 		return $regString;
 	}

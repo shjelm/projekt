@@ -84,6 +84,8 @@ class loginController{
 	 */
 	private $browserUsed;
 	
+	private $members;
+	
 	public function __construct()
 	{
 		$this->loginView = new \view\loginView();
@@ -141,7 +143,6 @@ class loginController{
 		{
 			$this->loginView->destroyCredentials();
 		}
-		
 		$this->showPage();
 	}
 
@@ -155,6 +156,11 @@ class loginController{
 		$this->loginDAL->addUser($user);
 	}
 	
+	public function adminWantsToShowMembers()
+	{
+		$this->members = $this->loginDAL->getUsers();
+		
+	}
 	public function showPage()
 	{
 		if($this->logOut())
@@ -167,13 +173,15 @@ class loginController{
 			$this->HTMLPage->getLoggedInPage($this->message);
 			
 		}	
-		else if($this->loginView->isShowingMembers())
-		{
-			$this->HTMLPage->getShowMemberPage();
-		}	
 		else if($this->loginView->isAddingMember())
 		{
+			$this->adminWantsToAddMember();
 			$this->HTMLPage->getAddMemberPage();
+		}	
+		else if($this->loginView->isShowingMembers())
+		{
+			$this->adminWantsToShowMembers();
+			$this->HTMLPage->getShowMembersPage($this->members);
 		}	
 		else if($this->browser != true)
 		{

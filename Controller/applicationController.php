@@ -28,7 +28,6 @@ class ApplicationController{
 		try
 		{
 			$this->LoginController->userWantsToLogin();
-			$this->LoginController->adminWantsToAddMember();
 			 
 		}
 		catch(Exception $ex)
