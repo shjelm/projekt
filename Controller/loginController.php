@@ -6,7 +6,7 @@ require_once realpath(dirname(__DIR__)).'/View/loginView.php';
 require_once realpath(dirname(__DIR__)).'/View/HTMLPage.php';
 require_once realpath(dirname(__DIR__)).'/Model/loginModel.php';
 require_once realpath(dirname(__DIR__)).'/Model/loginDAL.php';
-require_once realpath(dirname(__DIR__)).'/Model/user.php';
+require_once realpath(dirname(__DIR__)).'/Model/member.php';
 
 class loginController{
 	/**
@@ -148,17 +148,23 @@ class loginController{
 
 	public function adminWantsToAddMember()
 	{
-		$newUser = $this->loginView->setUser();
-		$user = new \model\user($newUser[0], $newUser[1],
-								$newUser[2], $newUser[3],
-								$newUser[4], $newUser[5],
-								$newUser[6]);
-		$this->loginDAL->addUser($user);
+		$newMember = $this->loginView->setUser();
+		$member = new \model\member($newMember[0], $newMember[1],
+								$newMember[2], $newMember[3],
+								$newMember[4], $newMember[5],
+								$newMember[6]);
+								
+		$this->messageNr = $this->loginModel->checkUnvalidNewMember($member);
+		$this->message = $this->loginView->setMessage($this->messageNr);
+		if($this->loginModel->checkNewMemberValid($member)){
+			$this->loginDAL->addMember($member);
+		}
+		
 	}
 	
 	public function adminWantsToShowMembers()
 	{
-		$this->members = $this->loginDAL->getUsers();
+		$this->members = $this->loginDAL->getMembers();
 		
 	}
 	public function showPage()
@@ -176,7 +182,7 @@ class loginController{
 		else if($this->loginView->isAddingMember())
 		{
 			$this->adminWantsToAddMember();
-			$this->HTMLPage->getAddMemberPage();
+			$this->HTMLPage->getAddMemberPage($this->message);
 		}	
 		else if($this->loginView->isShowingMembers())
 		{

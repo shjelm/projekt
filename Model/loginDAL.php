@@ -11,9 +11,9 @@ class LoginDAL
 	
 	public function __construct() {
 
-		//$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
 		
-		//$this->createTable();
+		$this->createTable();
 	}
 	
 	public function createTable()
@@ -31,19 +31,17 @@ class LoginDAL
       	}
 	}
 	
-	public function addUser(user $user)
+	public function addMember(member $member)
 	{
-		$name = $user->getName();
-		$pnr = $user ->getPersonalNr();		
-		$address = $user->getAddres();
-		$phnr = $user->getPhoneNr();
-		$email = $user->getEmail();		
-		$class = $user->getClass();
-		$paydate = $user->getPayDate();
-		$username = $user->getUserName();
+		$name = $member->getName();
+		$pnr = $member ->getPersonalNr();		
+		$address = $member->getAddres();
+		$phnr = $member->getPhoneNr();
+		$email = $member->getEmail();		
+		$class = $member->getClass();
+		$paydate = $member->getPayDate();
+		$username = $member->getUserName();
 
-		if(!empty($name) &&!empty($pnr) &&!empty($address) &&!empty($phnr) &&
-			!empty($email) &&!empty($class) &&!empty($paydate) ){
 				$sql = "INSERT INTO ".self::$tableName."
 			(
 				Namn,
@@ -62,14 +60,10 @@ class LoginDAL
 			//$stmt->bind_param("sssssss",$name,$pnr,$class,$phnr,$email,$address,$paydate);
 			$stmt->execute();
 				
-			}
-		else
-		{
-			echo 'Du måste ange giltiga uppgifter, idiot.';
-		}
+			
     }
 	
-	public function getUsers()
+	public function getMembers()
 	{
 		$result = mysqli_query($this->con,"SELECT * FROM ".self::$tableName);
 		
@@ -95,4 +89,4 @@ class LoginDAL
 	  	
 		mysqli_close($this->con);
 	}
-}
+}}

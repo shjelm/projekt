@@ -4,6 +4,17 @@ namespace view;
 
 class loginView{
 		
+	CONST CORRECTUSERCREDENTIALS = 1;
+	CONST EMPTYUSERNAME = 2;
+	CONST EMPTYPASSWORD = 3;
+	CONST INCORRECTUSERCREDENTIALS = 4;
+	CONST USERLOGOUT = 5;
+	CONST SAVECREDENTIALS = 6;
+	CONST VALIDSAVEDCREDENTIALS = 7;
+	CONST EMPTYFORM = 14;
+	CONST UNVALIDPNR = 15;
+	CONST DEFAULTMSG = 999;
+	
 	private static $NAME = "name";
 	private static $PERSONALNR = "personalNr";
 	private static $ADDRESS = "address";
@@ -11,6 +22,7 @@ class loginView{
 	private static $PHONENR = "phoneNr";
 	private static $CLASS = "class";
 	private static $PAYDATE = "payDate";
+	
 	
 	
 	private $html;
@@ -92,10 +104,9 @@ class loginView{
 	public function setMessage($message)
 	{
 		if($_GET){
-
 			switch ($message) {
 				
-				case 'correctUserCredentials':
+				case self::CORRECTUSERCREDENTIALS:
 					$this->messageString = '<p class="alert alert-success">Inloggningen lyckades</p>';	
 					
 					if(self::checkAutoLogin())
@@ -104,28 +115,34 @@ class loginView{
 					}			
 					break;
 					
-				case 'emptyUsername': 
+				case self::EMPTYUSERNAME: 
 					$this->messageString = '<p class="alert alert-danger">Användarnamn saknas</p>';
 					break;
 	
-				case 'emptyPassword': 
+				case self::EMPTYPASSWORD: 
 					$this->messageString = '<p class="alert alert-danger">Lösenord saknas</p>';
 					break;		
 					
-				case 'incorrectUserCredentials':
+				case self::INCORRECTUSERCREDENTIALS:
 					$this->messageString = '<p class="alert alert-danger">Felaktigt användarnamn och/eller lösenord</p>';	
 					break;
 					
-				case 'userLogOut':
+				case self::USERLOGOUT:
 					$this->messageString = '<p class="alert alert-info">Du har nu loggat ut</p>';	
 					break;
 				
-				case 'saveCredentials':
+				case self::SAVECREDENTIALS:
 					$this->messageString = '<p class="alert alert-success">Inloggning lyckad med cookies</p>';	
 					break;
-				case 'validSavedCredentials':
+				case self::VALIDSAVEDCREDENTIALS:
 					$this->messageString = '<p class="alert alert-danger">Felaktig information i cookie</p>';	
 					break;
+				case self::EMPTYFORM:
+					$this->messageString = '<p class="alert alert-danger">Alla fält, förutom betalat till, måste fyllas i</p>';	
+					break;	
+				case self::UNVALIDPNR:
+					$this->messageString = '<p class="alert alert-danger">Du måste ange ett giltigt personnummer</p>';	
+					break;				
 				
 				default:
 					$this->messageString = '';

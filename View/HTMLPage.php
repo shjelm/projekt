@@ -133,7 +133,7 @@ class HTMLPage{
 		echo $this->html;
 	}
 
-	public function getAddMemberPage()
+	public function getAddMemberPage($messagestring)
 	{
 		$value = null;
 

@@ -4,6 +4,23 @@ namespace model;
 
 class loginModel{
 	
+	CONST CORRECTUSERCREDENTIALS = 1;
+	CONST EMPTYUSERNAME = 2;
+	CONST EMPTYPASSWORD = 3;
+	CONST INCORRECTUSERCREDENTIALS = 4;
+	CONST USERLOGOUT = 5;
+	CONST SAVECREDENTIALS = 6;
+	CONST VALIDSAVEDCREDENTIALS = 7;
+	CONST EMPTYNAME = 8;
+	CONST EMPTYPNR = 9;
+	CONST EMPTYADDRESS = 10;
+	CONST EMPTYEMAIL = 11;
+	CONST EMPTYPHNR = 12;
+	CONST EMPTYCLASS = 13;
+	CONST EMPTYFORM = 14;
+	CONST UNVALIDPNR = 15;
+	CONST DEFAULTMSG = 999;
+	
 	
 	/**
 	 * @var string
@@ -46,19 +63,6 @@ class loginModel{
 		return self::$password;
 	}
 	
-	public function defineConst()
-	{		
-		define("correctUserCredentials", 1);
-		define("emptyUsername", 2);
-		define("emptyPassword", 3);
-		define("incorrectUserCredentials", 4);
-		define("userLogOut", 5);
-		define("saveCredentials", 6);
-		define("validSavedCredentials", 7);
-		define("defaultMsg", 999);
-		
-	}
-	
 	/**
 	 * @param string $username
 	 * @param string $password
@@ -69,16 +73,73 @@ class loginModel{
 		if ($username == self::$username && $password == self::$password) {
 			
 			$_SESSION[self::$mySession] = true;	
-			return 'correctUserCredentials';
+			return self::CORRECTUSERCREDENTIALS;
 		} 
 		else if (empty($username)) {
-			return 'emptyUsername';
+			return self::EMPTYUSERNAME;
 		} 
 		else if (empty($password)) {
-			return 'emptyPassword';
+			return self::EMPTYPASSWORD;
 		} 
 		else {
-			 return 'incorrectUserCredentials';
+			 return self::INCORRECTUSERCREDENTIALS;
+		}
+	}
+	
+	public function checkUnvalidNewMember(member $member)
+	{
+		if(empty($name) || empty($pnr) || empty($address) || empty($phnr) ||
+			empty($email) || empty($class))
+		{
+			 return self::EMPTYFORM;
+		}
+		if(empty($name)) {
+			return 'EMPTYNAME';
+		}
+		if (empty($pnr))
+		{
+			return 'EMPTYNR';
+		}
+		if(empty($address)){
+			return 'EMPTYADRESS';
+		} 
+		if(empty($phnr)){
+			return 'EMPTYPHNR';
+		}
+		if(empty($email)){
+			return 'EMPTYEMAIL';
+		} 
+		if(empty($class)){
+			return 'EMPTYCLASS';
+		} 
+		if($this->unvalidPersonalnumber($pnr)){
+			return self::UNVALIDPNR;
+		}
+	}
+	
+	public function unvalidPersonalnumber($pnr)
+	{
+		//TODO: Validera pnr
+		
+	}
+	public function checkNewMemberValid(member $member)
+	{
+		$name = $member->getName();
+		$pnr = $member ->getPersonalNr();		
+		$address = $member->getAddres();
+		$phnr = $member->getPhoneNr();
+		$email = $member->getEmail();		
+		$class = $member->getClass();
+		$paydate = $member->getPayDate();
+		$username = $member->getUserName();
+
+		if(empty($name) || empty($pnr) || empty($address) || empty($phnr) ||
+			empty($email) || empty($class))
+		{
+			return false;
+		}
+		else{
+			return true;
 		}
 	}
 	
@@ -120,7 +181,7 @@ class loginModel{
 	 */
 	public function validSavedCredentialsMsg()
 	{
-			return 'validSavedCredentials';
+			return VALIDSAVEDCREDENTIALS;
 	}
 	
 	/**
@@ -128,7 +189,7 @@ class loginModel{
 	 */
 	public function noMsg()
 	{
-		return 'defaultMsg';
+		return DEFAULTMSG;
 	}
 	
 	/**
@@ -139,7 +200,7 @@ class loginModel{
 	{
 		if($logout)
 		{		
-			return 'userLogOut';
+			return USERLOGOUT;
 		}
 	}
 	
