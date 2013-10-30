@@ -11,9 +11,9 @@ class LoginDAL
 	
 	public function __construct() {
 
-		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		//$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
 		
-		$this->createTable();
+		//$this->createTable();
 	}
 	
 	public function createTable()

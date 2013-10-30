@@ -57,14 +57,15 @@ class HTMLPage{
 					   <html>
 							<head>
 								<title> SPIIK </title>
-								<link rel="Stylesheet" href="basic.css">
+								
+								<link rel="Stylesheet" href="bootstrap.css">
 								<link href="http://fonts.googleapis.com/css?family=Cutive+Mono|Fredericka+the+Great|Offside|Shadows+Into+Light+Two|Wallpoet" rel="stylesheet" type="text/css">
 								<meta charset="UTF-8">
 							</head>
 							<body>
 							<div id="wrapper">
 								<div id="header">
-									<img id="logga" src="pics/SPIIK2.png" alt="SPIIK logga"/>
+									<img id="logga" class="pull-right" src="pics/SPIIK2.png" alt="SPIIK logga"/>
 									<h1>Studentföreningen Prima Ingenjörer I Kalmar</h1>';	
 							
 	}
@@ -96,8 +97,8 @@ class HTMLPage{
 											<input type="text" name="UserName" id="UserName" value="' . $value . '">
 											<label for="Password">Lösenord: </label>
 											<input type="password" name="Password" id="Password" value="">
-											<label for="AutoLogin">Håll mig inloggad  :</label>
-											<input type="checkbox" name="AutoLogin" id="AutoLogin" />									
+											<label for="AutoLogin">Håll mig inloggad  :
+											<input type="checkbox" name="AutoLogin" id="AutoLogin" />	</label>								
 									      	<input type="submit" name="login" value="Logga in" />
 								    	</form>';
 	
@@ -140,7 +141,7 @@ class HTMLPage{
 		}
 		$this->html = $this->startOfHTML();
 		$this->html .="</div>
-					   <div id='content'>". $this->getBack();
+					   <div id='content' >". $this->getBack();
 		$this->html .= "
 				<form action='?" . self::$REGISTRATE. "' method='post' enctype='multipart/form-data'>
 				<fieldset>
