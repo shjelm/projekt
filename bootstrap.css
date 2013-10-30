@@ -6177,7 +6177,7 @@ a.badge:focus {
 /*Egen css*/
 
 #logga {
-	width:10%;
+	width:12%;
 	margin-top: -10px;
 }
 
@@ -6186,7 +6186,6 @@ a.badge:focus {
 }
 
 #header{
-	border: 10px outset #E23D28;
 	margin-bottom: 5%;
 	margin: -20px;
 	padding: 2%;
@@ -6204,3 +6203,8 @@ a.badge:focus {
 #content{
 	margin-top:3%;
 }
+
+.text-danger {
+	color: #d9534f;
+}
+

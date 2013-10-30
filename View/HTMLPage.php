@@ -64,9 +64,9 @@ class HTMLPage{
 							</head>
 							<body>
 							<div id="wrapper">
-								<div id="header">
+								<div class="page-header" id="header">
 									<img id="logga" class="pull-right" src="pics/SPIIK2.png" alt="SPIIK logga"/>
-									<h1>Studentföreningen Prima Ingenjörer I Kalmar</h1>';	
+									<h1>Studentföreningen Prima Ingenjörer I Kalmar</h1><h1><small>En av Kalmars äldsta studentföreningar</small></h1>';	
 							
 	}
 	
@@ -91,8 +91,8 @@ class HTMLPage{
 								<h2>Ej inloggad</h2>
 								
 								<fieldset>
-									<legend>Skriv in användarnamn och lösenord</legend>
-										<form method="post" action="?login">
+									<legend>Skriv in användarnamn och lösenord</legend>'.$messageString.'
+										<form class="form-horizontal" method="post" action="?login" role="form">
 											<label for="UserName">Användarnamn: </label>
 											<input type="text" name="UserName" id="UserName" value="' . $value . '">
 											<label for="Password">Lösenord: </label>
@@ -101,8 +101,6 @@ class HTMLPage{
 											<input type="checkbox" name="AutoLogin" id="AutoLogin" />	</label>								
 									      	<input type="submit" name="login" value="Logga in" />
 								    	</form>';
-	
-		$this->html .= $messageString;
 	
 		$this->html .= '</fieldset>
 				    	</div>'.
@@ -122,8 +120,11 @@ class HTMLPage{
 								<h2> Admin är inloggad </h2>
 								' . $messageString . '
 								<p>Vad vill du göra nu?</p>
-								<p><a href="?addMember">Registera medlem</a></p> 
-								<p><a href="?showMember">Visa medlem</a></p>
+								<ul class="nav nav-pills nav-stacked">
+								<li><p><a href="?addMember">Registera medlem</a></p></li> 
+								<li><p><a href="?showAllMembers">Visa alla medlemmar</a></p<></li>
+								<li><p><a href="?showMembers">Visa medlem</a></p></li>
+								</ul>
 								<form method="post" action="?logout">
 								<input type="submit" name="logout" value="Logga ut" /> 
 								</form>
@@ -143,9 +144,9 @@ class HTMLPage{
 		$this->html .="</div>
 					   <div id='content' >". $this->getBack();
 		$this->html .= "
-				<form action='?" . self::$REGISTRATE. "' method='post' enctype='multipart/form-data'>
+				<form class='form-horizontal' action='?" . self::$REGISTRATE. "' method='post' enctype='multipart/form-data'>
 				<fieldset>
-					<legend>Registrera ny användare - Skriv in namn och lösenord</legend>
+					<legend>Registrera ny användare - Skriv in namn och lösenord</legend>".$messagestring."
 					<p><label for='UserNameID' >Namn :</label>
 					<input type='text' size='20' name='" . self::$NAME . "' id='UserNameID' value='". $value ."' /></p>
 					<p><label for='PasswordID' >Personnummer  :</label>

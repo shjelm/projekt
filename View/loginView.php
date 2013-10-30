@@ -67,7 +67,7 @@ class loginView{
 	}
 	
 	public function isShowingMembers() {
-		if (isset($_GET["showMember"])) {
+		if (isset($_GET["showAllMembers"])) {
 			return true;
 		}
 	}
@@ -96,35 +96,35 @@ class loginView{
 			switch ($message) {
 				
 				case 'correctUserCredentials':
-					$this->messageString = '<p>Inloggningen lyckades</p>';	
+					$this->messageString = '<p class="alert alert-success">Inloggningen lyckades</p>';	
 					
 					if(self::checkAutoLogin())
 					{
-						$this->messageString = '<p>Inloggningen lyckades och vi kommer ihåg dig nästa gång</p>';
+						$this->messageString = '<p class="alert alert-success">Inloggningen lyckades och vi kommer ihåg dig nästa gång</p>';
 					}			
 					break;
 					
 				case 'emptyUsername': 
-					$this->messageString = '<p>Användarnamn saknas</p>';
+					$this->messageString = '<p class="alert alert-danger">Användarnamn saknas</p>';
 					break;
 	
 				case 'emptyPassword': 
-					$this->messageString = '<p>Lösenord saknas</p>';
+					$this->messageString = '<p class="alert alert-danger">Lösenord saknas</p>';
 					break;		
 					
 				case 'incorrectUserCredentials':
-					$this->messageString = '<p>Felaktigt användarnamn och/eller lösenord</p>';	
+					$this->messageString = '<p class="alert alert-danger">Felaktigt användarnamn och/eller lösenord</p>';	
 					break;
 					
 				case 'userLogOut':
-					$this->messageString = '<p>Du har nu loggat ut</p>';	
+					$this->messageString = '<p class="alert alert-info">Du har nu loggat ut</p>';	
 					break;
 				
 				case 'saveCredentials':
-					$this->messageString = '<p>Inloggning lyckad med cookies</p>';	
+					$this->messageString = '<p class="alert alert-success">Inloggning lyckad med cookies</p>';	
 					break;
 				case 'validSavedCredentials':
-					$this->messageString = '<p>Felaktig information i cookie</p>';	
+					$this->messageString = '<p class="alert alert-danger">Felaktig information i cookie</p>';	
 					break;
 				
 				default:
