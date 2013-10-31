@@ -86,6 +86,8 @@ class loginController{
 	
 	private $members;
 	
+	private $memberaList;
+	
 	public function __construct()
 	{
 		$this->loginView = new \view\loginView();
@@ -148,23 +150,36 @@ class loginController{
 
 	public function adminWantsToAddMember()
 	{
-		$newMember = $this->loginView->setUser();
+		$newMember = $this->loginView->setMember();
 		$member = new \model\member($newMember[0], $newMember[1],
 								$newMember[2], $newMember[3],
 								$newMember[4], $newMember[5],
 								$newMember[6]);
 								
-		$this->messageNr = $this->loginModel->checkUnvalidNewMember($member);
-		$this->message = $this->loginView->setMessage($this->messageNr);
-		if($this->loginModel->checkNewMemberValid($member)){
-			$this->loginDAL->addMember($member);
+		if($this->loginView->checkFormSent()){
+			$this->messageNr = $this->loginModel->checkUnvalidNewMember($member);
+			$this->message = $this->loginView->setMessage($this->messageNr);
 		}
 		
+		if($this->loginModel->checkNewMemberValid($member)){
+			$this->loginDAL->addMember($member);			
+		}		
 	}
 	
 	public function adminWantsToShowMembers()
 	{
-		$this->members = $this->loginDAL->getMembers();
+		$newRow = $this->loginView->getNewRow();
+		//$listOfUnfixedMembers= ;
+		
+		$newMember = $this->loginView->setMember();
+		$member = new \model\member($newMember[0], $newMember[1],
+								$newMember[2], $newMember[3],
+								$newMember[4], $newMember[5],
+								$newMember[6]);
+		
+		$this->members = $this->loginDAL->getMembers($newRow);
+		// $this->loginView->showMembers($listOfUnfixedMembers);
+		
 		
 	}
 	public function showPage()
@@ -174,7 +189,11 @@ class loginController{
 			$this->HTMLPage->getLogOutPage($this->message);				
 			
 		}
-		if($this->loginView->canSaveCredentials() && $this->loggedIn != true && $this->correctSavedCredentials())
+		if( $this->loginModel->checkIfUserCanLogIn($this->loginDAL->getUserName(),$this->loginView->getUsername(),
+		$this->loginView->getPassword())){
+			$this->HTMLPage->getLoggedInMemberPage();			
+		}
+		else if($this->loginView->canSaveCredentials() && $this->loggedIn != true && $this->correctSavedCredentials())
 		{
 			$this->HTMLPage->getLoggedInPage($this->message);
 			
@@ -183,6 +202,11 @@ class loginController{
 		{
 			$this->adminWantsToAddMember();
 			$this->HTMLPage->getAddMemberPage($this->message);
+		}	
+		else if($this->loginView->isShowingMember())
+		{
+			$this->adminWantsToAddMember();
+			$this->HTMLPage->getShowMemberPage();
 		}	
 		else if($this->loginView->isShowingMembers())
 		{

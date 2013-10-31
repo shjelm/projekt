@@ -13,6 +13,7 @@ class loginView{
 	CONST VALIDSAVEDCREDENTIALS = 7;
 	CONST EMPTYFORM = 14;
 	CONST UNVALIDPNR = 15;
+	CONST ADDINGMEMBERSUCCES = 16;
 	CONST DEFAULTMSG = 999;
 	
 	private static $NAME = "name";
@@ -57,7 +58,12 @@ class loginView{
 	 */
 	private static $endtme;
 	
-	
+	/**
+	 * @var array
+	 */
+	 private $fixedMembers;
+	 
+	 private $HTMLMemberTable;
 	
 	/**
 	 * @return string
@@ -84,6 +90,12 @@ class loginView{
 		}
 	}
 	
+	public function isShowingMember() {
+		if (isset($_GET["showMember"])) {
+			return true;
+		}
+	}
+	
 	/**
 	 * @return string
 	 */
@@ -93,7 +105,7 @@ class loginView{
 			if(isset($_POST[self::$password])){	
 				$password = $_POST[self::$password];
 			
-				return $password;
+				return md5($password."crypt");
 			}
 		}
 	}
@@ -143,7 +155,10 @@ class loginView{
 				case self::UNVALIDPNR:
 					$this->messageString = '<p class="alert alert-danger">Du måste ange ett giltigt personnummer</p>';	
 					break;				
-				
+				case self::ADDINGMEMBERSUCCES:
+					$this->messageString = '<p class="alert alert-success">Medlemmen har registrerats</p>';	
+					break;	
+					
 				default:
 					$this->messageString = '';
 			}
@@ -258,7 +273,7 @@ class loginView{
 		}
 	}
 	
-	public function setUser()
+	public function setMember()
 	{
 		if($_POST){
 			$name = $_POST[self::$NAME];
@@ -281,5 +296,41 @@ class loginView{
 		
 		}
 		return $array;
+	}
+	public function showMembers($members)
+	{
+		/**$this->HTMLMemberTable = array();
+		
+		array_push($this->HTMLMemberTable, '<table>'); 
+		array_push($this->HTMLMemberTable, '<tr>') ;
+		for ($i=0; $i < count($members) ; $i += 7) {
+		
+			array_push($this->HTMLMemberTable, '<td>'.$members[$i].'</td>');
+			
+			
+			
+		}
+		array_push($this->HTMLMemberTable, '</tr>') ;
+		array_push($this->HTMLMemberTable, '<tr>') ;
+		for ($i=1; $i < count($members); $i += 7) { 
+				array_push($this->HTMLMemberTable, '<td>'.$members[$i].'</td>');
+				
+				
+			}
+		array_push($this->HTMLMemberTable, '</tr>') ;
+		array_push($this->HTMLMemberTable, '<tr>') ;
+		for ($i=2; $i < count($members); $i += 7) { 
+					array_push($this->HTMLMemberTable, '<td>'.$members[$i].'</td>');
+				}
+		array_push($this->HTMLMemberTable, '</tr>') ;
+		array_push($this->HTMLMemberTable, '</table>'); 
+		var_dump($this->HTMLMemberTable);
+		return $this->HTMLMemberTable;*/
+		return $members;
+	}
+	
+	public function getNewRow()
+	{
+		return '<br>';
 	}
 }

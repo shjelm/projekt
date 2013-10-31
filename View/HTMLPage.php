@@ -123,7 +123,7 @@ class HTMLPage{
 								<ul class="nav nav-pills nav-stacked">
 								<li><p><a href="?addMember">Registera medlem</a></p></li> 
 								<li><p><a href="?showAllMembers">Visa alla medlemmar</a></p<></li>
-								<li><p><a href="?showMembers">Visa medlem</a></p></li>
+								<li><p><a href="?showMember">Visa medlem</a></p></li>
 								</ul>
 								<form method="post" action="?logout">
 								<input type="submit" name="logout" value="Logga ut" /> 
@@ -149,7 +149,7 @@ class HTMLPage{
 					<legend>Registrera ny användare - Skriv in namn och lösenord</legend>".$messagestring."
 					<p><label for='UserNameID' >Namn :</label>
 					<input type='text' size='20' name='" . self::$NAME . "' id='UserNameID' value='". $value ."' /></p>
-					<p><label for='PasswordID' >Personnummer  :</label>
+					<p><label for='PasswordID' >Personnummer (Anges på formatet XXXXX-XXXX)  :</label>
 					<input type='text' size='20' name='" . self::$PERSONALNR . "' id='UserNameID' value='". $value ."' /></p>
 					<p><label for='PasswordID' >Adress  :</label>
 					<input type='text' size='20' name='" . self::$ADDRESS . "' id='UserNameID' value='". $value ."' /></p>
@@ -169,6 +169,24 @@ class HTMLPage{
 			
 		echo $this->html;
 	}
+	
+	public function getLoggedInMemberPage()
+	{
+		//TODO: visa medlemmens uppgifter här
+	$this->html = $this->startOfHTML();
+		$this->html .="</div>
+					   <div id='content' >";
+		$this->html .= '
+				<h2>Grattis, du har loggat in. Vad vill du göra nu JENS?</h2>
+				<p>Här ska dina uppgifter visas. Så småningom.</p>
+				<form method="post" action="?logout">
+				<input type="submit" name="logout" value="Logga ut" /> 
+				</form>
+			</div>'.
+			$this->getClock();
+			
+		echo $this->html;
+		}
 
 	public function showMembers($members)
 	{			
@@ -192,6 +210,20 @@ class HTMLPage{
 		echo $this->html;
 	}
 	
+	public function getShowMemberPage()
+	{
+		//TODO: Visa en specifik medlem	
+		$this->html = $this->startOfHTML();
+		$this->html .="</div>
+					   <div id='content'>". $this->getBack();
+		$this->html .= "
+		<p>Här ska en specifik medlem och dess uppgifter visas</p>
+			</div>".
+			$this->getClock();
+			
+		echo $this->html;
+	}
+
 	/**
 	 * @return String HTML
 	 */

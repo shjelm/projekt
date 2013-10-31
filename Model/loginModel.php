@@ -19,6 +19,7 @@ class loginModel{
 	CONST EMPTYCLASS = 13;
 	CONST EMPTYFORM = 14;
 	CONST UNVALIDPNR = 15;
+	CONST ADDINGMEMBERSUCCES = 16;
 	CONST DEFAULTMSG = 999;
 	
 	
@@ -70,7 +71,7 @@ class loginModel{
 	 */	
 	public function checkMessageNr($username, $password)
 	{
-		if ($username == self::$username && $password == self::$password) {
+		if ($username == self::$username && $password == md5(self::$password."crypt")) {
 			
 			$_SESSION[self::$mySession] = true;	
 			return self::CORRECTUSERCREDENTIALS;
@@ -82,17 +83,16 @@ class loginModel{
 			return self::EMPTYPASSWORD;
 		} 
 		else {
+			echo'varför?';
 			 return self::INCORRECTUSERCREDENTIALS;
 		}
 	}
 	
 	public function checkUnvalidNewMember(member $member)
 	{
-		if(empty($name) || empty($pnr) || empty($address) || empty($phnr) ||
-			empty($email) || empty($class))
-		{
-			 return self::EMPTYFORM;
-		}
+		
+		/**
+		 
 		if(empty($name)) {
 			return 'EMPTYNAME';
 		}
@@ -111,15 +111,37 @@ class loginModel{
 		} 
 		if(empty($class)){
 			return 'EMPTYCLASS';
-		} 
+		} */
+		
 		if($this->unvalidPersonalnumber($pnr)){
+			
 			return self::UNVALIDPNR;
+		}
+		
+		else{
+			return self::ADDINGMEMBERSUCCES;
+		}
+		
+		if(empty($name) || empty($pnr) || empty($address) || empty($phnr) ||
+			empty($email) || empty($class))
+		{
+			 return self::EMPTYFORM;
+		}
+		else{
+			return self::ADDINGMEMBERSUCCES;
 		}
 	}
 	
 	public function unvalidPersonalnumber($pnr)
 	{
-		//TODO: Validera pnr
+		preg_match('/^[0-9]{6}-[0-9]{4}$/', $pnr, $matches);
+		
+		if($matches = 1){
+			return false;
+		}
+		else{
+			return true;
+		}
 		
 	}
 	public function checkNewMemberValid(member $member)
@@ -138,6 +160,9 @@ class loginModel{
 		{
 			return false;
 		}
+		else if ($this->unvalidPersonalnumber($pnr)){
+			return false;
+		}
 		else{
 			return true;
 		}
@@ -150,7 +175,7 @@ class loginModel{
 	 */	
 	public function checkLogin($username, $password)
 	{
-		if ($username == self::$username && $password == self::$password){
+		if ($username == self::$username && $password == md5(self::$password."crypt")){
 			
 			return true;
 		}
@@ -287,6 +312,17 @@ class loginModel{
 	{
 		$end = file_get_contents("endtime.txt");
 		return $end;
+	}
+	
+	public function checkIfUserCanLogIn($existingUsernames, $username, $pass)
+	{
+		//TODO: Skicka in ett lösenord från databasen istället
+		for($i = 0; $i<count($existingUsernames); $i++)
+			{
+				if($username == $existingUsernames[$i] && $pass == md5("Password"."crypt")) {
+					return true;
+				}
+			}
 	}
 	
 	/*Magical fix from Emil*/

@@ -41,6 +41,7 @@ class LoginDAL
 		$class = $member->getClass();
 		$paydate = $member->getPayDate();
 		$username = $member->getUserName();
+		$password = $member->getPassword();
 
 				$sql = "INSERT INTO ".self::$tableName."
 			(
@@ -51,10 +52,11 @@ class LoginDAL
 				Epostadress,
 				Adress,
 				Betalat_till,
-				Anvnamn
+				Anvnamn,
+				Losenord
 				
 			)
-			VALUES ('$name','$pnr','$class','$phnr','$email','$address','$paydate','$username');";
+			VALUES ('$name','$pnr','$class','$phnr','$email','$address','$paydate','$username','$password');";
 			
 			$stmt = $this->con->prepare($sql);
 			//$stmt->bind_param("sssssss",$name,$pnr,$class,$phnr,$email,$address,$paydate);
@@ -63,7 +65,7 @@ class LoginDAL
 			
     }
 	
-	public function getMembers()
+	public function getMembers($newRow)
 	{
 		$result = mysqli_query($this->con,"SELECT * FROM ".self::$tableName);
 		
@@ -77,16 +79,25 @@ class LoginDAL
 			  array_push($array,$row['Adress']);
 			  array_push($array,$row['Epostadress']);
 			  array_push($array,$row['Telefonnummer']);
-			  array_push($array,$row['Betalat_till']);
+			  array_push($array,$row['Betalat_till'].$newRow);
 		  }
-		  
-		/**for($i = 0; $i<count($array); $i++){
-			$members = array();
-			
-			array_push($members, $array[$i]);
-		}*/
 	  	return $array;
 	  	
 		mysqli_close($this->con);
 	}
-}}
+	
+	public function getUserName()
+	{
+		$result = mysqli_query($this->con,"SELECT Anvnamn FROM ".self::$tableName.";");
+		
+		$array = array();
+		
+		while($row = mysqli_fetch_array($result))
+		  {
+			array_push($array,$row['Anvnamn']);
+		  }
+		  
+	  	return $array;
+		mysqli_close($this->con);
+	}
+}
