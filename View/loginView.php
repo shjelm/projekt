@@ -24,6 +24,14 @@ class loginView{
 	private static $CLASS = "class";
 	private static $PAYDATE = "payDate";
 	
+	private static $NEWNAME = "newName";
+	private static $NEWPERSONALNR = "newPersonalNr";
+	private static $NEWADDRESS = "newAddress";
+	private static $NEWEMAIL = "newEmail";
+	private static $NEWPHONENR = "newPhoneNr";
+	private static $NEWCLASS = "newClass";
+	private static $NEWPAYDATE = "newPayDate";
+	
 	
 	
 	private $html;
@@ -58,12 +66,6 @@ class loginView{
 	 */
 	private static $endtme;
 	
-	/**
-	 * @var array
-	 */
-	 private $fixedMembers;
-	 
-	 private $HTMLMemberTable;
 	
 	/**
 	 * @return string
@@ -78,21 +80,141 @@ class loginView{
 		}
 	}
 	
+	/**
+	 * @return bool
+	 */
 	public function isAddingMember() {
 		if (isset($_GET["addMember"])) {
 			return true;
 		}
+		else{
+			return false;
+		}
 	}
 	
+	/**
+	 * @return bool
+	 */
 	public function isShowingMembers() {
 		if (isset($_GET["showAllMembers"])) {
 			return true;
 		}
+		else{
+			return false;
+		}
 	}
 	
+	/**
+	 * @return bool
+	 */
+	public function isSearchingMember() {
+		if (isset($_POST["searchMember"])) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return bool
+	 */
 	public function isShowingMember() {
 		if (isset($_GET["showMember"])) {
 			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isUpdatingMember() {
+		if (isset($_GET["updateMember"])) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	public function isUpdatingName()
+	{
+		if (!empty($_POST[self::$NEWNAME])) {
+			return true;
+		}
+		else{
+			return false;
+		}	
+	}
+	
+	
+	public function isUpdatingAddress()
+	{
+		if (!empty($_POST[self::$NEWADDRESS])) {
+			return true;
+		}
+		else{
+			return false;
+		}	
+	}
+	
+	public function isUpdatingEmail()
+	{
+		if (!empty($_POST[self::$NEWEMAIL])) {
+			return true;
+		}
+		else{
+			echo 'varför';
+			return false;
+		}	
+	}
+	
+	public function isUpdatingPhonenr()
+	{
+		if (!empty($_POST[self::$NEWPHONENR])) {
+			return true;
+		}
+		else{
+			return false;
+		}	
+	}
+	
+	public function isUpdatingClass()
+	{
+		if (!empty($_POST[self::$NEWCLASS])) {
+			return true;
+		}
+		else{
+			return false;
+		}	
+	}
+	
+	public function isUpdatingPaydate()
+	{
+		if (!empty($_POST[self::$NEWPAYDATE])) {
+			return true;
+		}
+		else{
+			return false;
+		}	
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getMemberAdminWantsToShow()
+	{
+		if(isset($_POST["searchMember"])){
+			return $_POST["searchMember"];
+		}	
+	}
+	
+	public function getMemberAdminWantsToUpdate(){
+		if(isset($_GET["updateMember"])){
+			return $_POST["searchMember"];
 		}
 	}
 	
@@ -108,6 +230,49 @@ class loginView{
 				return md5($password."crypt");
 			}
 		}
+	}
+	
+	public function getName()
+	{	if($_POST || $_GET){
+			if(isset($_POST[self::$NEWNAME])){
+				return $_POST[self::$NEWNAME];
+			}
+		}				
+	}
+	public function getAddress()
+	{	if($_POST || $_GET){
+			if(isset($_POST[self::$NEWADDRESS])){
+				return $_POST[self::$NEWADDRESS];
+			}
+		}				
+	}
+	public function getEmail()
+	{	if($_POST || $_GET){
+			if(isset($_POST[self::$NEWEMAIL])){
+				return $_POST[self::$NEWEMAIL];
+			}
+		}				
+	}
+	public function getPhonenr()
+	{	if($_POST || $_GET){
+			if(isset($_POST[self::$NEWPHONENR])){
+				return $_POST[self::$NEWPHONENR];
+			}
+		}				
+	}
+	public function getClasss()
+	{	if($_POST || $_GET){
+			if(isset($_POST[self::$NEWCLASS])){
+				return $_POST[self::$NEWCLASS];
+			}
+		}				
+	}
+	public function getPaydate()
+	{	if($_POST || $_GET){
+			if(isset($_POST[self::$NEWPAYDATE])){
+				return $_POST[self::$NEWPAYDATE];
+			}
+		}				
 	}
 	
 	/**
@@ -297,38 +462,10 @@ class loginView{
 		}
 		return $array;
 	}
-	public function showMembers($members)
-	{
-		/**$this->HTMLMemberTable = array();
-		
-		array_push($this->HTMLMemberTable, '<table>'); 
-		array_push($this->HTMLMemberTable, '<tr>') ;
-		for ($i=0; $i < count($members) ; $i += 7) {
-		
-			array_push($this->HTMLMemberTable, '<td>'.$members[$i].'</td>');
-			
-			
-			
-		}
-		array_push($this->HTMLMemberTable, '</tr>') ;
-		array_push($this->HTMLMemberTable, '<tr>') ;
-		for ($i=1; $i < count($members); $i += 7) { 
-				array_push($this->HTMLMemberTable, '<td>'.$members[$i].'</td>');
-				
-				
-			}
-		array_push($this->HTMLMemberTable, '</tr>') ;
-		array_push($this->HTMLMemberTable, '<tr>') ;
-		for ($i=2; $i < count($members); $i += 7) { 
-					array_push($this->HTMLMemberTable, '<td>'.$members[$i].'</td>');
-				}
-		array_push($this->HTMLMemberTable, '</tr>') ;
-		array_push($this->HTMLMemberTable, '</table>'); 
-		var_dump($this->HTMLMemberTable);
-		return $this->HTMLMemberTable;*/
-		return $members;
-	}
 	
+	/**
+	 * @return HTML string
+	 */
 	public function getNewRow()
 	{
 		return '<br>';

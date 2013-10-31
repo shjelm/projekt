@@ -83,7 +83,6 @@ class loginModel{
 			return self::EMPTYPASSWORD;
 		} 
 		else {
-			echo'varför?';
 			 return self::INCORRECTUSERCREDENTIALS;
 		}
 	}
@@ -134,7 +133,7 @@ class loginModel{
 	
 	public function unvalidPersonalnumber($pnr)
 	{
-		preg_match('/^[0-9]{6}-[0-9]{4}$/', $pnr, $matches);
+		preg_match('/^[0-9]{6}[0-9]{4}$/', $pnr, $matches);
 		
 		if($matches = 1){
 			return false;
@@ -265,6 +264,23 @@ class loginModel{
 		if(isset($_SESSION[self::$checkBrowser])){
 			unset($_SESSION[self::$checkBrowser]);
 		}
+	}
+	
+	public function savePnr($pnr)
+	{
+		if(isset($_SESSION[self::$mySession])){
+			$_SESSION[self::$mySession] = array();
+			$_SESSION[self::$mySession]["Pnr"] = $pnr;
+		}
+		
+	}
+	
+	public function getPnr()
+	{
+		if(isset($_SESSION[self::$mySession])){
+			return $_SESSION[self::$mySession]["Pnr"];
+		}
+		
 	}
 	
 	public function getBrowser()

@@ -4,9 +4,14 @@ namespace model;
 
 class LoginDAL
 {
+	/**
+	 * @var string
+	 */
  	private static $tableName = "member";
-	
-	private $mysqli;
+
+	/**
+	 * @var mysqli
+	 */
 	private $con;
 	
 	public function __construct() {
@@ -60,11 +65,13 @@ class LoginDAL
 			
 			$stmt = $this->con->prepare($sql);
 			//$stmt->bind_param("sssssss",$name,$pnr,$class,$phnr,$email,$address,$paydate);
-			$stmt->execute();
-				
+			$stmt->execute();				
 			
     }
 	
+	/**
+	 * @return array
+	 */
 	public function getMembers($newRow)
 	{
 		$result = mysqli_query($this->con,"SELECT * FROM ".self::$tableName);
@@ -86,6 +93,102 @@ class LoginDAL
 		mysqli_close($this->con);
 	}
 	
+	/**
+	 * @return array
+	 */
+	public function getMemberToShow($pnr)
+	{
+		$result = mysqli_query($this->con,"SELECT Personnummer FROM ".self::$tableName);
+		
+		$array = array();
+		
+		while($row = mysqli_fetch_array($result))
+		  {
+			  array_push($array,$row['Personnummer']);
+		  }
+	  	for ($i=0; $i <count($array) ; $i++) {
+			  if($pnr == $array[$i]){
+			  	return $array[$i];
+			  }
+		  }
+	  	
+		mysqli_close($this->con);
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getUserToShow($username)
+	{
+		$result = mysqli_query($this->con,"SELECT Anvnamn FROM ".self::$tableName);
+		
+		$array = array();
+		
+		while($row = mysqli_fetch_array($result))
+		  {
+			  array_push($array,$row['Anvnamn']);
+		  }
+	  	for ($i=0; $i <count($array) ; $i++) {
+			  if($username == $array[$i]){
+			  	return $array[$i];
+			  }
+		  }
+	  	
+		mysqli_close($this->con);
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getUserInfo($username)
+	{		
+		$result = mysqli_query($this->con,"SELECT * FROM ".self::$tableName." WHERE Anvnamn = "."'$username'");
+		
+		$array = array();
+		
+		
+		while($row = mysqli_fetch_array($result))
+		  {
+			  array_push($array,$row['Personnummer']);
+			  array_push($array,$row['Namn']);
+			  array_push($array,$row['Klass']);
+			  array_push($array,$row['Adress']);
+			  array_push($array,$row['Epostadress']);
+			  array_push($array,$row['Telefonnummer']);
+			  array_push($array,$row['Betalat_till']);
+		  }
+	  	return $array;
+		mysqli_close($this->con);
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getMember($pnr)
+	{
+		$result = mysqli_query($this->con,"SELECT * FROM ".self::$tableName." WHERE Personnummer = ".$pnr);
+		
+		$array = array();
+		
+		while($row = mysqli_fetch_array($result))
+		  {
+			  array_push($array,$row['Personnummer']);
+			  array_push($array,$row['Namn']);
+			  array_push($array,$row['Klass']);
+			  array_push($array,$row['Adress']);
+			  array_push($array,$row['Epostadress']);
+			  array_push($array,$row['Telefonnummer']);
+			  array_push($array,$row['Betalat_till']);
+		  }
+		  
+	  	return $array;
+		mysqli_close($this->con);
+		
+	}
+	
+	/**
+	 * @return array
+	 */
 	public function getUserName()
 	{
 		$result = mysqli_query($this->con,"SELECT Anvnamn FROM ".self::$tableName.";");
@@ -99,5 +202,66 @@ class LoginDAL
 		  
 	  	return $array;
 		mysqli_close($this->con);
+	}
+	
+	public function updateNameMember($pnr, $name)
+	{	
+		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$sql = " UPDATE ".self::$tableName." SET Namn = ? WHERE Personnummer = ".$pnr.";";
+		
+		$stmt = $this->con->prepare($sql);
+		$stmt->bind_param('s', $name);
+		$stmt->execute();	
+		$stmt->close();					
+	}
+	public function updateAddressMember($pnr, $address)
+	{	
+		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$sql = " UPDATE ".self::$tableName." SET Adress = ? WHERE Personnummer = ".$pnr.";";
+		
+		$stmt = $this->con->prepare($sql);
+		$stmt->bind_param('s', $address);
+		$stmt->execute();	
+		$stmt->close();					
+	}
+	public function updateEmailMember($pnr, $email)
+	{	
+		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$sql = " UPDATE ".self::$tableName." SET Epostadress = ? WHERE Personnummer = ".$pnr.";";
+		
+		$stmt = $this->con->prepare($sql);
+		$stmt->bind_param('s', $email);
+		$stmt->execute();	
+		$stmt->close();					
+	}
+	public function updatePhonenrMember($pnr, $phonenr)
+	{	
+		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$sql = " UPDATE ".self::$tableName." SET Telefonnummer = ? WHERE Personnummer = ".$pnr.";";
+		
+		$stmt = $this->con->prepare($sql);
+		$stmt->bind_param('s', $phonenr);
+		$stmt->execute();	
+		$stmt->close();					
+	}
+	public function updateClassMember($pnr, $class)
+	{	
+		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$sql = " UPDATE ".self::$tableName." SET Klass = ? WHERE Personnummer = ".$pnr.";";
+		
+		$stmt = $this->con->prepare($sql);
+		$stmt->bind_param('s', $class);
+		$stmt->execute();	
+		$stmt->close();					
+	}
+	public function updatePaydateMember($pnr, $paydate)
+	{	
+		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$sql = " UPDATE ".self::$tableName." SET Betalat_till = ? WHERE Personnummer = ".$pnr.";";
+		
+		$stmt = $this->con->prepare($sql);
+		$stmt->bind_param('s', $paydate);
+		$stmt->execute();	
+		$stmt->close();					
 	}
 }

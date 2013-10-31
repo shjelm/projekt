@@ -85,7 +85,10 @@ Medlemmen måste logga in för att kunna se dem.
 Medlemmens uppgifter visas då den loggar in
 
 ===================================
+AF7. Logga in reggad medlem
+En nyreggad medlem vill kunna logga in. Medlemmen skriver in användarnamn och lösenord och loggas in.
 
-AF7. Visa alla medlemmar i en enkel lista (för andra medlemmar)
+===================================
+AF8. Visa alla medlemmar i en enkel lista (för andra medlemmar)
 
 

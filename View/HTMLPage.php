@@ -21,6 +21,14 @@ class HTMLPage{
 	private static $PHONENR = "phoneNr";
 	private static $CLASS = "class";
 	private static $PAYDATE = "payDate";
+	private static $UPDATE ="updateMember";
+	private static $NEWNAME = "newName";
+	private static $NEWPERSONALNR = "newPersonalNr";
+	private static $NEWADDRESS = "newAddress";
+	private static $NEWEMAIL = "newEmail";
+	private static $NEWPHONENR = "newPhoneNr";
+	private static $NEWCLASS = "newClass";
+	private static $NEWPAYDATE = "newPayDate";
 	
 	/**
 	 * @var $string HTML
@@ -47,6 +55,9 @@ class HTMLPage{
 	 */	
 	private $messageString;
 	
+	/**
+	 * @var String 
+	 */	
 	private $membersToShow;
 	
 	/**
@@ -133,6 +144,10 @@ class HTMLPage{
 		echo $this->html;
 	}
 
+	/**  
+	 * @param string, message
+	 * @return String HTML
+	 */
 	public function getAddMemberPage($messagestring)
 	{
 		$value = null;
@@ -149,7 +164,7 @@ class HTMLPage{
 					<legend>Registrera ny användare - Skriv in namn och lösenord</legend>".$messagestring."
 					<p><label for='UserNameID' >Namn :</label>
 					<input type='text' size='20' name='" . self::$NAME . "' id='UserNameID' value='". $value ."' /></p>
-					<p><label for='PasswordID' >Personnummer (Anges på formatet XXXXX-XXXX)  :</label>
+					<p><label for='PasswordID' >Personnummer (Anges på formatet XXXXXXXXX)  :</label>
 					<input type='text' size='20' name='" . self::$PERSONALNR . "' id='UserNameID' value='". $value ."' /></p>
 					<p><label for='PasswordID' >Adress  :</label>
 					<input type='text' size='20' name='" . self::$ADDRESS . "' id='UserNameID' value='". $value ."' /></p>
@@ -170,15 +185,19 @@ class HTMLPage{
 		echo $this->html;
 	}
 	
-	public function getLoggedInMemberPage()
+	/**  
+	 * @param string
+	 * @return String HTML
+	 */
+	public function getLoggedInMemberPage($userString, $userInfo)
 	{
 		//TODO: visa medlemmens uppgifter här
 	$this->html = $this->startOfHTML();
 		$this->html .="</div>
 					   <div id='content' >";
 		$this->html .= '
-				<h2>Grattis, du har loggat in. Vad vill du göra nu JENS?</h2>
-				<p>Här ska dina uppgifter visas. Så småningom.</p>
+				<h2>'.$userString.' är inloggad</h2>
+				<p>'.$this->showMembers($userInfo).'</p>
 				<form method="post" action="?logout">
 				<input type="submit" name="logout" value="Logga ut" /> 
 				</form>
@@ -188,6 +207,10 @@ class HTMLPage{
 		echo $this->html;
 		}
 
+	/**  
+	 * @param array
+	 * @return string
+	 */
 	public function showMembers($members)
 	{			
 		for ($i=0; $i < count($members); $i++) {
@@ -197,8 +220,12 @@ class HTMLPage{
 		return $this->membersToShow;
 	}
 	
+	/**  
+	 * @param array
+	 * @return String HTML
+	 */
 	public function getShowMembersPage($members)
-	{	
+	{
 		$this->html = $this->startOfHTML();
 		$this->html .="</div>
 					   <div id='content'>". $this->getBack();
@@ -210,18 +237,64 @@ class HTMLPage{
 		echo $this->html;
 	}
 	
-	public function getShowMemberPage()
+	/**  
+	 * @param array
+	 * @return String HTML
+	 */
+	public function getShowMemberPage($member)
 	{
-		//TODO: Visa en specifik medlem	
 		$this->html = $this->startOfHTML();
 		$this->html .="</div>
 					   <div id='content'>". $this->getBack();
 		$this->html .= "
-		<p>Här ska en specifik medlem och dess uppgifter visas</p>
+		<form class='form-horizontal' action='?searchMember' method='post' enctype='multipart/form-data'>
+				<fieldset>
+					<legend>Visa en medlem - Sök på personnummer</legend>
+					<p><label for='searchID' >Ange personnummer :</label>
+					<input type='text' size='20' name='searchMember' id='searchID' value='' /></p>
+					<input type='submit' name=''  value='Sök' />
+				</fieldset>
+			</form>
+			<p>".$this->showMembers($member)."</p>
+			<p><a href='?updateMember'>Ändra medlem</a></p>
 			</div>".
 			$this->getClock();
 			
 		echo $this->html;
+	}
+	
+	public function getUpdateMemberPage($member)
+	{
+		$this->html = $this->startOfHTML();
+		$this->html .="</div>
+					   <div id='content'>". $this->getBack();
+					   //TODO: skicka in pnr för att kunna veta vilken medlem du uppdaterar osv
+		$this->html .= "
+			<h2>Personnummer : ".$member."</h2>
+			<form class='form-horizontal' action='?" . self::$UPDATE. "' method='post' enctype='multipart/form-data'>
+				<fieldset>
+					<legend>Uppdatera medlem</legend>".$messagestring."
+					<p><label for='UserNameID' >Namn :</label>
+					<input type='text' size='20' name='" . self::$NEWNAME . "' id='UserNameID' value='". $value ."' /></p>					
+					<p><label for='PasswordID' >Adress  :</label>
+					<input type='text' size='20' name='" . self::$NEWADDRESS . "' id='UserNameID' value='". $value ."' /></p>
+					<p><label for='PasswordID' >Epost  :</label>
+					<input type='text' size='20' name='" . self::$NEWEMAIL . "' id='UserNameID' value='". $value ."' /></p>
+					<p><label for='PasswordID' >Telefonnummer  :</label>
+					<input type='text' size='20' name='" . self::$NEWPHONENR . "' id='UserNameID' value='". $value ."' /></p>
+					<p><label for='PasswordID' >Klass  :</label>
+					<input type='text' size='20' name='" . self::$NEWCLASS . "' id='UserNameID' value='". $value ."' /></p>
+					<p><label for='PasswordID' >Betalat till  :</label>
+					<input type='text' size='20' name='" . self::$NEWPAYDATE . "' id='UserNameID' value='". $value ."' /></p>
+					<input type='submit' name=''  value='Registrera' />
+				</fieldset>
+			</form>
+			<p>".$this->showMembers($member)."</p>
+			</div>".
+			$this->getClock();
+			
+		echo $this->html;
+		
 	}
 
 	/**
@@ -249,6 +322,9 @@ class HTMLPage{
 		}
 	}
 	
+	/**
+	 * @return string
+	 */
 	public function getBack(){
 		
 		$regString = "<p><a href='?" . self::$BACK . "'>Tillbaka</a></p>";
