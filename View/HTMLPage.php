@@ -133,7 +133,7 @@ class HTMLPage{
 								<p>Vad vill du göra nu?</p>
 								<ul class="nav nav-pills nav-stacked">
 								<li><p><a href="?addMember">Registera medlem</a></p></li> 
-								<li><p><a href="?showAllMembers">Visa alla medlemmar</a></p<></li>
+								<li><p><a href="?showAllMembers">Visa alla medlemmar</a></p></li>
 								<li><p><a href="?showMember">Visa medlem</a></p></li>
 								</ul>
 								<form method="post" action="?logout">
@@ -150,10 +150,22 @@ class HTMLPage{
 	 */
 	public function getAddMemberPage($messagestring)
 	{
-		$value = null;
+		$nameValue;
+		$pnrValue;
+		$addressValue;
+		$emailValue;
+		$phnrValue;
+		$classValue;
+		$paydateValue;
 
-		if (isset($_POST[self::$USERNAME])) {
-			$value = $_POST[self::$USERNAME];
+		if (isset($_POST[self::$NAME])) {
+			$nameValue = $_POST[self::$NAME];
+			$pnrValue= $_POST[self::$PERSONALNR];
+			$addressValue= $_POST[self::$ADDRESS];
+			$emailValue= $_POST[self::$EMAIL];
+			$phnrValue= $_POST[self::$PHONENR];
+			$classValue= $_POST[self::$CLASS];
+			$paydateValue= $_POST[self::$PAYDATE];
 		}
 		$this->html = $this->startOfHTML();
 		$this->html .="</div>
@@ -163,19 +175,19 @@ class HTMLPage{
 				<fieldset>
 					<legend>Registrera ny användare - Skriv in namn och lösenord</legend>".$messagestring."
 					<p><label for='UserNameID' >Namn :</label>
-					<input type='text' size='20' name='" . self::$NAME . "' id='UserNameID' value='". $value ."' /></p>
+					<input type='text' size='20' name='" . self::$NAME . "' id='UserNameID' value='". $nameValue ."' /></p>
 					<p><label for='PasswordID' >Personnummer (Anges på formatet XXXXXXXXX)  :</label>
-					<input type='text' size='20' name='" . self::$PERSONALNR . "' id='UserNameID' value='". $value ."' /></p>
+					<input type='text' size='20' name='" . self::$PERSONALNR . "' id='UserNameID' value='". $pnrValue ."' /></p>
 					<p><label for='PasswordID' >Adress  :</label>
-					<input type='text' size='20' name='" . self::$ADDRESS . "' id='UserNameID' value='". $value ."' /></p>
+					<input type='text' size='20' name='" . self::$ADDRESS . "' id='UserNameID' value='". $addressValue ."' /></p>
 					<p><label for='PasswordID' >Epost  :</label>
-					<input type='text' size='20' name='" . self::$EMAIL . "' id='UserNameID' value='". $value ."' /></p>
+					<input type='text' size='20' name='" . self::$EMAIL . "' id='UserNameID' value='". $emailValue ."' /></p>
 					<p><label for='PasswordID' >Telefonnummer  :</label>
-					<input type='text' size='20' name='" . self::$PHONENR . "' id='UserNameID' value='". $value ."' /></p>
-					<p><label for='PasswordID' >Klass  :</label>
-					<input type='text' size='20' name='" . self::$CLASS . "' id='UserNameID' value='". $value ."' /></p>
+					<input type='text' size='20' name='" . self::$PHONENR . "' id='UserNameID' value='". $phnrValue ."' /></p>
+					<p><label for='PasswordID' >Klass (Om passiv medlem skriv ange '-' som klass) :</label>
+					<input type='text' size='20' name='" . self::$CLASS . "' id='UserNameID' value='". $classValue ."' /></p>
 					<p><label for='PasswordID' >Betalat till  :</label>
-					<input type='text' size='20' name='" . self::$PAYDATE . "' id='UserNameID' value='". $value ."' /></p>
+					<input type='text' size='20' name='" . self::$PAYDATE . "' id='UserNameID' value='". $paydateValue ."' /></p>
 					<input type='submit' name=''  value='Registrera' />
 				</fieldset>
 			</form>
@@ -198,6 +210,7 @@ class HTMLPage{
 		$this->html .= '
 				<h2>'.$userString.' är inloggad</h2>
 				<p>'.$this->showMembers($userInfo).'</p>
+				<p><a href="?showAllMembersSimple">Visa alla medlemmar</a></p>
 				<form method="post" action="?logout">
 				<input type="submit" name="logout" value="Logga ut" /> 
 				</form>
@@ -241,7 +254,7 @@ class HTMLPage{
 	 * @param array
 	 * @return String HTML
 	 */
-	public function getShowMemberPage($member)
+	public function getShowMemberPage($messagestring,$member)
 	{
 		$this->html = $this->startOfHTML();
 		$this->html .="</div>
@@ -249,7 +262,7 @@ class HTMLPage{
 		$this->html .= "
 		<form class='form-horizontal' action='?searchMember' method='post' enctype='multipart/form-data'>
 				<fieldset>
-					<legend>Visa en medlem - Sök på personnummer</legend>
+					<legend>Visa en medlem - Sök på personnummer</legend>".$messagestring."
 					<p><label for='searchID' >Ange personnummer :</label>
 					<input type='text' size='20' name='searchMember' id='searchID' value='' /></p>
 					<input type='submit' name=''  value='Sök' />
@@ -263,12 +276,11 @@ class HTMLPage{
 		echo $this->html;
 	}
 	
-	public function getUpdateMemberPage($member)
+	public function getUpdateMemberPage($messagestring, $member)
 	{
 		$this->html = $this->startOfHTML();
 		$this->html .="</div>
 					   <div id='content'>". $this->getBack();
-					   //TODO: skicka in pnr för att kunna veta vilken medlem du uppdaterar osv
 		$this->html .= "
 			<h2>Personnummer : ".$member."</h2>
 			<form class='form-horizontal' action='?" . self::$UPDATE. "' method='post' enctype='multipart/form-data'>
@@ -286,10 +298,9 @@ class HTMLPage{
 					<input type='text' size='20' name='" . self::$NEWCLASS . "' id='UserNameID' value='". $value ."' /></p>
 					<p><label for='PasswordID' >Betalat till  :</label>
 					<input type='text' size='20' name='" . self::$NEWPAYDATE . "' id='UserNameID' value='". $value ."' /></p>
-					<input type='submit' name=''  value='Registrera' />
+					<input type='submit' name='update'  value='Uppdatera' />
 				</fieldset>
 			</form>
-			<p>".$this->showMembers($member)."</p>
 			</div>".
 			$this->getClock();
 			

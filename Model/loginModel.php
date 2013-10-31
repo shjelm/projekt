@@ -20,6 +20,9 @@ class loginModel{
 	CONST EMPTYFORM = 14;
 	CONST UNVALIDPNR = 15;
 	CONST ADDINGMEMBERSUCCES = 16;
+	CONST UNEXISTINGPNR = 17;
+	CONST EXISTINGPNR = 18;
+	CONST UPDATEDMEMBER = 19;
 	CONST DEFAULTMSG = 999;
 	
 	
@@ -76,11 +79,11 @@ class loginModel{
 			$_SESSION[self::$mySession] = true;	
 			return self::CORRECTUSERCREDENTIALS;
 		} 
-		else if (empty($username)) {
-			return self::EMPTYUSERNAME;
-		} 
-		else if (empty($password)) {
+		else if ($password == md5(''."crypt")) {
 			return self::EMPTYPASSWORD;
+		}
+		else if (empty($username)) {
+			return self::EMPTYUSERNAME; 
 		} 
 		else {
 			 return self::INCORRECTUSERCREDENTIALS;
@@ -89,36 +92,18 @@ class loginModel{
 	
 	public function checkUnvalidNewMember(member $member)
 	{
-		
-		/**
-		 
-		if(empty($name)) {
-			return 'EMPTYNAME';
-		}
-		if (empty($pnr))
-		{
-			return 'EMPTYNR';
-		}
-		if(empty($address)){
-			return 'EMPTYADRESS';
-		} 
-		if(empty($phnr)){
-			return 'EMPTYPHNR';
-		}
-		if(empty($email)){
-			return 'EMPTYEMAIL';
-		} 
-		if(empty($class)){
-			return 'EMPTYCLASS';
-		} */
+		$name = $member->getName();
+		$pnr = $member ->getPersonalNr();		
+		$address = $member->getAddres();
+		$phnr = $member->getPhoneNr();
+		$email = $member->getEmail();		
+		$class = $member->getClass();
+		$paydate = $member->getPayDate();
+		$username = $member->getUserName();
 		
 		if($this->unvalidPersonalnumber($pnr)){
 			
 			return self::UNVALIDPNR;
-		}
-		
-		else{
-			return self::ADDINGMEMBERSUCCES;
 		}
 		
 		if(empty($name) || empty($pnr) || empty($address) || empty($phnr) ||
@@ -129,13 +114,19 @@ class loginModel{
 		else{
 			return self::ADDINGMEMBERSUCCES;
 		}
+		
+	}
+	
+	public function alreadyExistingPnr()
+	{
+		return self::EXISTINGPNR;
 	}
 	
 	public function unvalidPersonalnumber($pnr)
 	{
-		preg_match('/^[0-9]{6}[0-9]{4}$/', $pnr, $matches);
-		
-		if($matches = 1){
+		preg_match('/^[0-9]{10}$/', $pnr, $matches);
+		$valid = count($matches);
+		if($valid == 1){
 			return false;
 		}
 		else{
@@ -143,6 +134,12 @@ class loginModel{
 		}
 		
 	}
+	
+	public function unexistingPnr()
+	{
+		return self::UNEXISTINGPNR;
+	}
+	
 	public function checkNewMemberValid(member $member)
 	{
 		$name = $member->getName();
@@ -184,6 +181,19 @@ class loginModel{
 		}
 	}
 	
+	public function checkMemberLoggedIn($user, $pass)
+	{
+		//TODO: Hur fan ska jag kolla om medlemmen har loggat in med korrekta uppgifter för att kunna hållas inloggad?
+		/**if ($username == self::$username && $password == md5(self::$password."crypt")){
+			
+			return true;
+		}
+		else
+		{
+			return false;
+		}*/
+	}
+	
 	/**
 	 * @param bool $logout
 	 * @return bool
@@ -205,7 +215,7 @@ class loginModel{
 	 */
 	public function validSavedCredentialsMsg()
 	{
-			return VALIDSAVEDCREDENTIALS;
+			return self::VALIDSAVEDCREDENTIALS;
 	}
 	
 	/**
@@ -213,7 +223,7 @@ class loginModel{
 	 */
 	public function noMsg()
 	{
-		return DEFAULTMSG;
+		return self::DEFAULTMSG;
 	}
 	
 	/**
@@ -224,7 +234,7 @@ class loginModel{
 	{
 		if($logout)
 		{		
-			return USERLOGOUT;
+			return self::USERLOGOUT;
 		}
 	}
 	
@@ -273,6 +283,11 @@ class loginModel{
 			$_SESSION[self::$mySession]["Pnr"] = $pnr;
 		}
 		
+	}
+	
+	public function memberUpdated()
+	{
+		return self::UPDATEDMEMBER;
 	}
 	
 	public function getPnr()

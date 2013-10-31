@@ -14,6 +14,9 @@ class loginView{
 	CONST EMPTYFORM = 14;
 	CONST UNVALIDPNR = 15;
 	CONST ADDINGMEMBERSUCCES = 16;
+	CONST UNEXISTINGPNR = 17;
+	CONST EXISTINGPNR = 18;
+	CONST UPDATEDMEMBER = 19;
 	CONST DEFAULTMSG = 999;
 	
 	private static $NAME = "name";
@@ -103,6 +106,18 @@ class loginView{
 			return false;
 		}
 	}
+	/**
+	 * @return bool
+	 */
+	public function isShowingMembersSimple() {
+		if (isset($_GET["showAllMembersSimple"])) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
 	
 	/**
 	 * @return bool
@@ -140,6 +155,20 @@ class loginView{
 		}
 	}
 	
+	/**
+	 * @return bool
+	 */
+	public function isSavingUpdatedMember() {
+		if (isset($_POST["update"])) {
+			
+		echo 'hejhej';
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
 	public function isUpdatingName()
 	{
 		if (!empty($_POST[self::$NEWNAME])) {
@@ -167,7 +196,6 @@ class loginView{
 			return true;
 		}
 		else{
-			echo 'varför';
 			return false;
 		}	
 	}
@@ -260,7 +288,7 @@ class loginView{
 			}
 		}				
 	}
-	public function getClasss()
+	public function getClass()
 	{	if($_POST || $_GET){
 			if(isset($_POST[self::$NEWCLASS])){
 				return $_POST[self::$NEWCLASS];
@@ -323,7 +351,17 @@ class loginView{
 				case self::ADDINGMEMBERSUCCES:
 					$this->messageString = '<p class="alert alert-success">Medlemmen har registrerats</p>';	
 					break;	
+				case self::UNEXISTINGPNR:
+					$this->messageString = '<p class="alert alert-danger">Personnumret är ej registrerat</p>';	
+					break;
+				case self::EXISTINGPNR:
+					$this->messageString = '<p class="alert alert-danger">Personnumret är redan registrerat</p>';	
+					break;	
+				case self::UPDATEDMEMBER:
+					$this->messageString = '<p class="alert alert-success">Medlemmen har uppdaterats</p>';	
+					break;	
 					
+							
 				default:
 					$this->messageString = '';
 			}
@@ -453,9 +491,9 @@ class loginView{
 			
 			array_push($array, $name);
 			array_push($array, $personalnr);		
-			array_push($array, $class);
-			array_push($array, $email);
+			array_push($array, $class);			
 			array_push($array, $phonenr);
+			array_push($array, $email);
 			array_push($array, $address);
 			array_push($array, $paydate);
 		

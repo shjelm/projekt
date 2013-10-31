@@ -163,13 +163,20 @@ class loginController{
 								$newMember[2], $newMember[3],
 								$newMember[4], $newMember[5],
 								$newMember[6]);
-								
-		if($this->loginView->checkFormSent()){
+		
+		$pnr = $member->getPersonalNr();
+		$existingPnr = $this->loginDAL->getMemberToShow($pnr);
+		
+		if($this->loginView->checkFormSent() && !isset($existingPnr)){
 			$this->messageNr = $this->loginModel->checkUnvalidNewMember($member);
 			$this->message = $this->loginView->setMessage($this->messageNr);
 		}
+		else if($this->loginView->checkFormSent() && isset($existingPnr)){
+			$this->messageNr = $this->loginModel->alreadyExistingPnr();
+			$this->message = $this->loginView->setMessage($this->messageNr);
+		}
 		
-		if($this->loginModel->checkNewMemberValid($member)){
+		if($this->loginModel->checkNewMemberValid($member) && !isset($existingPnr)){
 			$this->loginDAL->addMember($member);			
 		}		
 	}
@@ -181,26 +188,36 @@ class loginController{
 		
 	}
 	
+	public function memberWantsToShowMembers()
+	{
+		$newRow = $this->loginView->getNewRow();		
+		$this->members = $this->loginDAL->getMembersSimple($newRow);
+	}
+	
 	public function adminWantsToShowMember()
 	{							
 		$pnr = $this->loginView->getMemberAdminWantsToShow();
 		$correctPnr = $this->loginDAL->getMemberToShow($pnr);
-		$this->memberToShow = $this->loginDAL->getMember($correctPnr);
-		
-		$this->loginModel->savePnr($correctPnr);
+		if(isset($correctPnr)){
+			$this->memberToShow = $this->loginDAL->getMember($correctPnr);
+			
+			$this->loginModel->savePnr($correctPnr);
+		}
+		else{
+			$this->messageNr = $this->loginModel->unexistingPnr();
+			$this->message = $this->loginView->setMessage($this->messageNr);
+		}
 	}
 	
 	public function adminWantsToUpdateMember()
 	{							
 		$pnr = $this->loginModel->getPnr();
-		var_dump($pnr);
+		
 		if ($this->loginView->isUpdatingName()){
-		echo 'uppdatera namn';	
 			$value = $this->loginView->getName();
 			$this->memberToUpdate = $this->loginDAL->updateNameMember($pnr, $value);
 		}
 		if ($this->loginView->isUpdatingAddress()){
-			echo 'meh';
 			$value = $this->loginView->getAddress();
 			$this->memberToUpdate = $this->loginDAL->updateAddressMember($pnr, $value);
 		}
@@ -219,7 +236,13 @@ class loginController{
 		if ($this->loginView->isUpdatingPaydate()){
 			$value = $this->loginView->getPaydate();
 			$this->memberToUpdate = $this->loginDAL->updatePaydateMember($pnr, $value);
-		}				
+		}		
+		
+		if($this->loginView->isSavingUpdatedMember())
+		{
+			$this->messageNr = $this->loginModel->memberUpdated();
+			$this->message = $this->loginView->setMessage($this->messageNr);	
+		}
 	}
 	
 	/**
@@ -240,7 +263,7 @@ class loginController{
 			
 		}
 		if( $this->loginModel->checkIfUserCanLogIn($this->loginDAL->getUserName(),$this->loginView->getUsername(),
-		$this->loginView->getPassword())){
+		$this->loginView->getPassword()) || $this->memberStayLoggedIn()){
 			$userInfo = $this->getUserInfoToShow();
 			$this->HTMLPage->getLoggedInMemberPage($this->loginView->getUserName(), $userInfo);			
 		}
@@ -254,26 +277,32 @@ class loginController{
 			$this->adminWantsToAddMember();
 			$this->HTMLPage->getAddMemberPage($this->message);
 		}	
-		else if($this->loginView->isShowingMember())
+		else if($this->loginView->isShowingMember()&& $this->stayLoggedin())
 		{
-			$this->HTMLPage->getShowMemberPage('');
+			$this->HTMLPage->getShowMemberPage($this->message,'');
 		}	
 		else if($this->loginView->isShowingMembers() && $this->stayLoggedin())
 		{
 			$this->adminWantsToShowMembers();
 			$this->HTMLPage->getShowMembersPage($this->members);
 		}	
+		else if($this->loginView->isShowingMembersSimple())
+		{
+			$this->memberWantsToShowMembers();
+			$this->HTMLPage->getShowMembersPage($this->members);
+		}	
 		else if($this->loginView->isSearchingMember() && $this->stayLoggedin())
 		{
-			$this->adminWantsToShowMember();
-			$this->HTMLPage->getShowMemberPage($this->memberToShow);
+			$this->adminWantsToShowMember();			
+			$this->HTMLPage->getShowMemberPage($this->message, $this->memberToShow);
 			
 		}	
 		else if($this->loginView->isUpdatingMember() && $this->stayLoggedin()){
 					
 				$this->adminWantsToUpdateMember();
 				$pnr = $this->loginModel->getPnr();
-				$this->HTMLPage->getUpdateMemberPage($pnr);	
+				$this->HTMLPage->getUpdateMemberPage($this->message, $pnr);	
+				
 		} 
 		else if($this->browser != true)
 		{
@@ -286,6 +315,10 @@ class loginController{
 		else if($this->stayLoggedin())
 		{
 			$this->HTMLPage->getLoggedInPage($this->message);
+		}
+		else if($this->memberStayLoggedIn())
+		{
+			$this->HTMLPage->getLoggedInMemberPage($this->message);
 		}
 		else 
 		{	
@@ -314,6 +347,10 @@ class loginController{
 		return $this->loginModel->checkLoggedIn();
 	}
 	
+	public function memberStayLoggedIn()
+	{		
+		return $this->loginModel->checkMemberLoggedIn($this->loginView->getUserName(), $this->loginView->getPassword());
+	}
 	public function checkStayLoggedIn()
 	{
 		$autoLogin = $this->loginView->checkAutoLogin();

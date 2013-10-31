@@ -38,6 +38,9 @@ class LoginDAL
 	
 	public function addMember(member $member)
 	{
+		//TODO: ska jag verkligen öppna con varje gång såhär?
+		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		
 		$name = $member->getName();
 		$pnr = $member ->getPersonalNr();		
 		$address = $member->getAddres();
@@ -47,6 +50,7 @@ class LoginDAL
 		$paydate = $member->getPayDate();
 		$username = $member->getUserName();
 		$password = $member->getPassword();
+		
 
 				$sql = "INSERT INTO ".self::$tableName."
 			(
@@ -92,6 +96,26 @@ class LoginDAL
 	  	
 		mysqli_close($this->con);
 	}
+	/**
+	 * @return array
+	 */
+	public function getMembersSimple($newRow)
+	{
+		$result = mysqli_query($this->con,"SELECT Namn, Klass, Epostadress FROM ".self::$tableName);
+		
+		$array = array();
+		
+		while($row = mysqli_fetch_array($result))
+		  {
+			  array_push($array,$row['Namn']);
+			  array_push($array,$row['Klass']);
+			  array_push($array,$row['Epostadress'].$newRow);
+		  }
+	  	return $array;
+	  	
+		mysqli_close($this->con);
+	}
+	
 	
 	/**
 	 * @return array
