@@ -95,6 +95,8 @@ class loginController{
 	private $memberToShow;
 	
 	private $memberToUpdate;
+		
+	private $numberOfMembers; 
 	
 	public function __construct()
 	{
@@ -183,8 +185,28 @@ class loginController{
 	
 	public function adminWantsToShowMembers()
 	{
+		
+		$this->numberOfMembers = $this->loginDAL->getNumberOfMembers($this->members);
 		$newRow = $this->loginView->getNewRow();		
 		$this->members = $this->loginDAL->getMembers($newRow);
+		
+	}
+	
+	public function adminWantsToShowPayingMembers()
+	{
+		
+		$this->numberOfMembers = $this->loginDAL->getNumberOfMembers($this->members);
+		$newRow = $this->loginView->getNewRow();		
+		$this->members = $this->loginDAL->getPayingMembers($newRow);
+		
+	}
+	
+	public function adminWantsToShowNotPayingMembers()
+	{
+		
+		$this->numberOfMembers = $this->loginDAL->getNumberOfMembers($this->members);
+		$newRow = $this->loginView->getNewRow();		
+		$this->members = $this->loginDAL->getNotPayingMembers($newRow);
 		
 	}
 	
@@ -251,8 +273,47 @@ class loginController{
 	public function getUserInfoToShow()
 	{
 		$user = $this->loginView->getUserName();
-		$this->loginDAL->getUserToShow($user);
-		return $this->loginDAL->getUserInfo($user);
+		
+		if($this->loginView->checkFormSent()){
+			$this->loginModel->saveUsername($user);
+		}
+		
+		$user = $this->loginModel->getUsername();
+		$username =  $this->loginDAL->getUserToShow($user);
+		
+		return $this->loginDAL->getUserInfo($username);
+	}
+	
+	public function checkIfUserCanLogIn($correctUsername, $username, $password)
+	{
+		if($this->loginModel->checkIfUserExists($correctUsername ,$username, $password)){
+			$this->loginModel->userCanLogIn();
+			return true;
+		}
+		
+	}
+	
+	public function changePassword()
+	{
+		
+		$username = $this->loginModel->getUsername();
+		$newpassword = $this->loginView->getNewPassword();
+		$repeatedpassword = $this->loginView->getRepeatedNewPassword();
+		
+		if($this->matchingPasswords($newpassword, $repeatedpassword)){
+			$this->messageNr = $this->loginModel->correctChangeOfPasswords();
+			
+			$this->loginDAL->updatePassword($username, $newpassword);
+		}
+		else{
+			$this->messageNr = $this->loginModel->incorrectChangeOfPasswords();
+		}
+		$this->message = $this->loginView->setMessage($this->messageNr);
+	}
+	
+	public function matchingPasswords($newpass, $repeatedpass)
+	{
+		return $this->loginModel->comparePasswords($newpass, $repeatedpass);	
 	}
 	
 	public function showPage()
@@ -262,10 +323,11 @@ class loginController{
 			$this->HTMLPage->getLogOutPage($this->message);				
 			
 		}
-		if( $this->loginModel->checkIfUserCanLogIn($this->loginDAL->getUserName(),$this->loginView->getUsername(),
-		$this->loginView->getPassword()) || $this->memberStayLoggedIn()){
+		if($this->checkIfUserCanLogIn($this->loginDAL->getUserName(),$this->loginView->getUsername(),
+		$this->loginView->getPassword()) && $this->memberStayLoggedIn() ){
 			$userInfo = $this->getUserInfoToShow();
-			$this->HTMLPage->getLoggedInMemberPage($this->loginView->getUserName(), $userInfo);			
+			$username = $this->loginModel->getUsername();
+			$this->HTMLPage->getLoggedInMemberPage($username, $userInfo);		
 		}
 		else if($this->loginView->canSaveCredentials() && $this->loggedIn != true && $this->correctSavedCredentials())
 		{
@@ -279,22 +341,41 @@ class loginController{
 		}	
 		else if($this->loginView->isShowingMember()&& $this->stayLoggedin())
 		{
-			$this->HTMLPage->getShowMemberPage($this->message,'');
+			$this->HTMLPage->getShowMemberPage($this->message,'', 'false');
+		}	
+		else if($this->loginView->isShowingPayingMembers() && $this->stayLoggedin())
+		{
+			$this->adminWantsToShowPayingMembers();
+			$this->HTMLPage->getShowMembersPage($this->numberOfMembers, $this->members);
+		}
+		else if($this->loginView->isShowingNotPayingMembers() && $this->stayLoggedin())
+		{
+			$this->adminWantsToShowNotPayingMembers();
+			$this->HTMLPage->getShowMembersPage($this->numberOfMembers, $this->members);
 		}	
 		else if($this->loginView->isShowingMembers() && $this->stayLoggedin())
 		{
 			$this->adminWantsToShowMembers();
-			$this->HTMLPage->getShowMembersPage($this->members);
-		}	
-		else if($this->loginView->isShowingMembersSimple())
+			$this->HTMLPage->getShowMembersPage($this->numberOfMembers,$this->members);
+		}
+		
+		else if($this->loginView->isShowingMembersSimple() && $this->memberStayLoggedIn())
 		{
 			$this->memberWantsToShowMembers();
-			$this->HTMLPage->getShowMembersPage($this->members);
+			$this->HTMLPage->getShowSimpleMembersPage($this->members);
 		}	
+		else if($this->loginView->isChangingPassword() && $this->memberStayLoggedIn()){
+			$this->changePassword();
+			$this->HTMLPage->getChangePasswordPage($this->message);
+		}
+		else if($this->loginView->isShowingChangingPassword() && $this->memberStayLoggedIn())
+		{
+			$this->HTMLPage->getChangePasswordPage('');
+		}
 		else if($this->loginView->isSearchingMember() && $this->stayLoggedin())
 		{
 			$this->adminWantsToShowMember();			
-			$this->HTMLPage->getShowMemberPage($this->message, $this->memberToShow);
+			$this->HTMLPage->getShowMemberPage($this->message, $this->memberToShow, 'true');
 			
 		}	
 		else if($this->loginView->isUpdatingMember() && $this->stayLoggedin()){
@@ -304,6 +385,11 @@ class loginController{
 				$this->HTMLPage->getUpdateMemberPage($this->message, $pnr);	
 				
 		} 
+		else if ($this->memberStayLoggedIn()){			
+			$userInfo = $this->getUserInfoToShow();
+			$username = $this->loginModel->getUsername();
+			$this->HTMLPage->getLoggedInMemberPage($username, $userInfo);	
+		}
 		else if($this->browser != true)
 		{
 			$this->HTMLPage->getPage($this->message);
@@ -315,10 +401,6 @@ class loginController{
 		else if($this->stayLoggedin())
 		{
 			$this->HTMLPage->getLoggedInPage($this->message);
-		}
-		else if($this->memberStayLoggedIn())
-		{
-			$this->HTMLPage->getLoggedInMemberPage($this->message);
 		}
 		else 
 		{	
@@ -348,8 +430,8 @@ class loginController{
 	}
 	
 	public function memberStayLoggedIn()
-	{		
-		return $this->loginModel->checkMemberLoggedIn($this->loginView->getUserName(), $this->loginView->getPassword());
+	{
+		return $this->loginModel->checkMemberLoggedIn();
 	}
 	public function checkStayLoggedIn()
 	{

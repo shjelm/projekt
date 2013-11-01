@@ -67,7 +67,7 @@ class Member{
 		$this->address = $address;
 		$this->paydate = $paydate;
 		$this->username = $this->generateUsername($name, $personalnr);
-		$this->password = md5($this->generatePassword($name, $pnr, $address))."crypt";
+		$this->password = $this->generateDefaultPassword();
 		
 	}
 	
@@ -157,11 +157,9 @@ class Member{
 	/**
 	 * @return string
 	 */
-	public function generatePassword($name, $pnr, $address)
+	public function generateDefaultPassword()
 	{
-		$un = substr($name, 0,3);
-		$un .= substr($pnr, 0,6);
-		$un .= substr($address, 0,2);
+		$un = md5('Password'."crypt");
 		
 		$this->password = $un;
 		return $un;

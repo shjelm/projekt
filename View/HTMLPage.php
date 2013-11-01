@@ -9,26 +9,130 @@ require_once realpath(dirname(__DIR__)).'/View/loginView.php';
 
 class HTMLPage{
 	
+	/**
+	 * @var string
+	 */
 	private static $USERNAME = "username";
+	
+	/**
+	 * @var string
+	 */
 	private static $PASSWORD = "password";
+	
+	/**
+	 * @var string
+	 */
 	private static $REPEATPASSWORD = "repeatPassword";
+	
+	/**
+	 * @var string
+	 */
 	private static $REGISTRATE ="addMember";
+	
+	/**
+	 * @var string
+	 */
 	private static $BACK = "getBack";	
+	
+	/**
+	 * @var string
+	 */
 	private static $NAME = "name";
+	
+	/**
+	 * @var string
+	 */
 	private static $PERSONALNR = "personalNr";
+	
+	/**
+	 * @var string
+	 */
 	private static $ADDRESS = "address";
+	
+	/**
+	 * @var string
+	 */
 	private static $EMAIL = "email";
+	
+	/**
+	 * @var string
+	 */
 	private static $PHONENR = "phoneNr";
+	
+	/**
+	 * @var string
+	 */
 	private static $CLASS = "class";
+	
+	/**
+	 * @var date
+	 */
 	private static $PAYDATE = "payDate";
+	
+	/**
+	 * @var string
+	 */
 	private static $UPDATE ="updateMember";
+	
+	/**
+	 * @var string
+	 */
 	private static $NEWNAME = "newName";
+	
+	/**
+	 * @var string
+	 */
 	private static $NEWPERSONALNR = "newPersonalNr";
+	
+	/**
+	 * @var string
+	 */
 	private static $NEWADDRESS = "newAddress";
+	
+	/**
+	 * @var string
+	 */
 	private static $NEWEMAIL = "newEmail";
+	
+	/**
+	 * @var string
+	 */
 	private static $NEWPHONENR = "newPhoneNr";
+	
+	/**
+	 * @var string
+	 */
 	private static $NEWCLASS = "newClass";
+	
+	/**
+	 * @var date
+	 */
 	private static $NEWPAYDATE = "newPayDate";
+	
+	/**
+	 * @var string
+	 */
+	private static $showAllMembersSimple = "showAllMembersSimple";
+	
+	/**
+	 * @var string
+	 */
+	private static $showMember = "showMember";
+	
+	/**
+	 * @var string
+	 */
+	private static $showAllMembers = "showAllMembers";
+	
+	/**
+	 * @var string
+	 */
+	private static $addMember = "addMember";
+	
+	/**
+	 * @var string
+	 */
+	private static $changePassword = "changePassword";
 	
 	/**
 	 * @var $string HTML
@@ -108,10 +212,12 @@ class HTMLPage{
 											<input type="text" name="UserName" id="UserName" value="' . $value . '">
 											<label for="Password">Lösenord: </label>
 											<input type="password" name="Password" id="Password" value="">
-											<label for="AutoLogin">Håll mig inloggad  :
-											<input type="checkbox" name="AutoLogin" id="AutoLogin" />	</label>								
-									      	<input type="submit" name="login" value="Logga in" />
-								    	</form>';
+											<p><input type="submit" name="login" value="Logga in" /></p>
+										</form>';
+											//<label for="AutoLogin">Håll mig inloggad  :
+											 //<input type="checkbox" name="AutoLogin" id="AutoLogin" />	</label>								
+									      	
+								    	
 	
 		$this->html .= '</fieldset>
 				    	</div>'.
@@ -132,9 +238,9 @@ class HTMLPage{
 								' . $messageString . '
 								<p>Vad vill du göra nu?</p>
 								<ul class="nav nav-pills nav-stacked">
-								<li><p><a href="?addMember">Registera medlem</a></p></li> 
-								<li><p><a href="?showAllMembers">Visa alla medlemmar</a></p></li>
-								<li><p><a href="?showMember">Visa medlem</a></p></li>
+								<li><p><a href="?'.self::$addMember.'">Registera medlem</a></p></li> 
+								<li><p><a href="?'.self::$showAllMembers.'">Visa alla medlemmar</a></p></li>
+								<li><p><a href="?'.self::$showMember.'">Visa medlem</a></p></li>
 								</ul>
 								<form method="post" action="?logout">
 								<input type="submit" name="logout" value="Logga ut" /> 
@@ -210,7 +316,8 @@ class HTMLPage{
 		$this->html .= '
 				<h2>'.$userString.' är inloggad</h2>
 				<p>'.$this->showMembers($userInfo).'</p>
-				<p><a href="?showAllMembersSimple">Visa alla medlemmar</a></p>
+				<p><a href="?'.self::$changePassword.'">Ändra lösenord</a></p>
+				<p><a href="?'.self::$showAllMembersSimple.'">Visa alla medlemmar</a></p>
 				<form method="post" action="?logout">
 				<input type="submit" name="logout" value="Logga ut" /> 
 				</form>
@@ -218,7 +325,28 @@ class HTMLPage{
 			$this->getClock();
 			
 		echo $this->html;
-		}
+	}
+
+	public function getChangePasswordPage($messagestring)
+	{
+		$this->html = $this->startOfHTML();
+		$this->html .="</div>
+					   <div id='content' >". $this->getBack();
+		$this->html .= "
+			<form class='form-horizontal' action='?changePassword' method='post' enctype='multipart/form-data'>
+				<fieldset>
+					<legend>Ändra lösenord</legend>".$messagestring."
+					<p><label for='changeID' >Ange nytt lösenord :</label>
+					<input  type='password' size='20' name='changePasswordField' id='changeID' value='' /></p>
+					<p><label for='changeAgainID' >Repetera lösenord :</label>
+					<input type='password' size='20' name='repeatPasswordField' id='changeAgainID' value='' /></p>
+					<input type='submit' name='changePass'  value='Bekräfta ändring' />
+				</fieldset>
+			</form>".
+			$this->getClock();
+			
+		echo $this->html;
+	}
 
 	/**  
 	 * @param array
@@ -237,7 +365,26 @@ class HTMLPage{
 	 * @param array
 	 * @return String HTML
 	 */
-	public function getShowMembersPage($members)
+	public function getShowMembersPage($nr, $members)
+	{
+		$this->html = $this->startOfHTML();
+		$this->html .="</div>
+					   <div id='content'>". $this->getBack();
+		$this->html .= "
+			<p><a href='?payingMembers'>Visa betalande medlemmar </a><a href='?notPayingMembers'> Visa icke betalande medlemmar </a><a href='?".self::$showAllMembers."'> Visa alla medlemmar</a></p>".
+			"<p>Totalt antal medlemmar i registret: ".$nr."</p>".
+				$this->showMembers($members)."
+			</div>".
+			$this->getClock();
+			
+		echo $this->html;
+	}
+	
+	/**  
+	 * @param array
+	 * @return String HTML
+	 */
+	public function getShowSimpleMembersPage($members)
 	{
 		$this->html = $this->startOfHTML();
 		$this->html .="</div>
@@ -254,7 +401,7 @@ class HTMLPage{
 	 * @param array
 	 * @return String HTML
 	 */
-	public function getShowMemberPage($messagestring,$member)
+	public function getShowMemberPage($messagestring,$member,$clickable)
 	{
 		$this->html = $this->startOfHTML();
 		$this->html .="</div>
@@ -269,13 +416,16 @@ class HTMLPage{
 				</fieldset>
 			</form>
 			<p>".$this->showMembers($member)."</p>
-			<p><a href='?updateMember'>Ändra medlem</a></p>
+			<p><a href='?updateMember' onclick='return ".$clickable."' >Ändra medlem</a></p>
 			</div>".
 			$this->getClock();
 			
 		echo $this->html;
 	}
 	
+	/**
+	 * @return String HTML
+	 */
 	public function getUpdateMemberPage($messagestring, $member)
 	{
 		$this->html = $this->startOfHTML();

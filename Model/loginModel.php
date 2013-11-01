@@ -23,6 +23,8 @@ class loginModel{
 	CONST UNEXISTINGPNR = 17;
 	CONST EXISTINGPNR = 18;
 	CONST UPDATEDMEMBER = 19;
+	CONST CORRECTCHANGE = 20;
+	CONST INCORRECTCHANGE = 21;
 	CONST DEFAULTMSG = 999;
 	
 	
@@ -30,6 +32,11 @@ class loginModel{
 	 * @var string
 	 */
 	private static $mySession = "mySession";
+	
+	/**
+	 * @var string
+	 */
+	private static $memberSession = "memberSession";
 	
 	/**
 	 * @var string
@@ -51,6 +58,13 @@ class loginModel{
 	 */
 	private static $browser = "browser";
 	
+	private $loginDAL;
+	
+	
+	public function __construct()
+	{
+		$this->loginDAL = new \model\loginDAL();
+	}
 	/**
 	 * @return string
 	 */
@@ -135,6 +149,16 @@ class loginModel{
 		
 	}
 	
+	public function correctChangeOfPasswords()
+	{
+		return self::CORRECTCHANGE;
+	}
+	
+	public function incorrectChangeOfPasswords()
+	{
+		return self::INCORRECTCHANGE;
+	}
+	
 	public function unexistingPnr()
 	{
 		return self::UNEXISTINGPNR;
@@ -172,7 +196,6 @@ class loginModel{
 	public function checkLogin($username, $password)
 	{
 		if ($username == self::$username && $password == md5(self::$password."crypt")){
-			
 			return true;
 		}
 		else
@@ -181,17 +204,16 @@ class loginModel{
 		}
 	}
 	
-	public function checkMemberLoggedIn($user, $pass)
+	public function checkMemberLoggedIn()
 	{
 		//TODO: Hur fan ska jag kolla om medlemmen har loggat in med korrekta uppgifter för att kunna hållas inloggad?
-		/**if ($username == self::$username && $password == md5(self::$password."crypt")){
-			
+		if (isset($_SESSION[self::$memberSession])){
 			return true;
 		}
 		else
 		{
 			return false;
-		}*/
+		}
 	}
 	
 	/**
@@ -274,6 +296,9 @@ class loginModel{
 		if(isset($_SESSION[self::$checkBrowser])){
 			unset($_SESSION[self::$checkBrowser]);
 		}
+		if(isset($_SESSION[self::$memberSession])){
+			unset($_SESSION[self::$memberSession]);
+		}
 	}
 	
 	public function savePnr($pnr)
@@ -283,6 +308,21 @@ class loginModel{
 			$_SESSION[self::$mySession]["Pnr"] = $pnr;
 		}
 		
+	}
+	
+	public function saveUsername($username)
+	{
+		if(isset($_SESSION[self::$memberSession])){
+			$_SESSION[self::$memberSession] = array();
+			$_SESSION[self::$memberSession]["Username"] = $username;
+		}
+	}
+	
+	public function getUsername()
+	{
+		if(isset($_SESSION[self::$memberSession]["Username"])){
+			return $_SESSION[self::$memberSession]["Username"];
+		}
 	}
 	
 	public function memberUpdated()
@@ -345,15 +385,38 @@ class loginModel{
 		return $end;
 	}
 	
-	public function checkIfUserCanLogIn($existingUsernames, $username, $pass)
+	public function checkIfUserExists($existingUsernames, $username, $pass)
 	{
+		$passFromDb = $this->loginDAL->getPassword($username);
+		$valid = false;
 		//TODO: Skicka in ett lösenord från databasen istället
-		for($i = 0; $i<count($existingUsernames); $i++)
+		for($i = 0; $i < count($existingUsernames); $i++)
 			{
-				if($username == $existingUsernames[$i] && $pass == md5("Password"."crypt")) {
+				if($username == $existingUsernames[$i] && $pass == $passFromDb[0]) {
 					return true;
 				}
 			}
+		return false;
+	}
+	
+	public function cryptPassword($pass)
+	{
+		return md5($pass."crypt");
+	}
+	
+	public function comparePasswords($newpass, $repeatedpass)
+	{
+		if($newpass == $repeatedpass){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	public function userCanLogIn()
+	{
+		$_SESSION[self::$memberSession] = true;
 	}
 	
 	/*Magical fix from Emil*/

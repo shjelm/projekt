@@ -96,6 +96,24 @@ class LoginDAL
 	  	
 		mysqli_close($this->con);
 	}
+	
+	/**
+	 * @return array
+	 */
+	public function getNumberOfMembers()
+	{
+		$result = mysqli_query($this->con,"SELECT * FROM ".self::$tableName);
+		
+		$array = array();
+		
+		while($row = mysqli_fetch_array($result))
+		  {
+			  array_push($array,$row['Personnummer']);
+		  }
+	  	return count($array);
+	  	
+		mysqli_close($this->con);
+	}
 	/**
 	 * @return array
 	 */
@@ -228,6 +246,79 @@ class LoginDAL
 		mysqli_close($this->con);
 	}
 	
+	/**
+	 * @return array
+	 */
+	public function getPassword($username)
+	{
+		$result = mysqli_query($this->con,"SELECT Losenord FROM ".self::$tableName." WHERE Anvnamn = "."'$username'".";");
+		
+		$array = array();
+		
+		while($row = mysqli_fetch_array($result))
+		  {
+			array_push($array,$row['Losenord']);
+		  }
+		  
+	  	return $array;
+		mysqli_close($this->con);
+	}
+	
+	public function getPayingMembers($newRow)
+	{
+		$today = date('Y-m-d');
+		
+		$result = mysqli_query($this->con,"SELECT * FROM ".self::$tableName." WHERE Betalat_till >= "."'$today'".";");
+		
+		$array = array();
+		
+		while($row = mysqli_fetch_array($result))
+		  {
+			array_push($array,$row['Personnummer']);
+			array_push($array,$row['Namn']);
+			array_push($array,$row['Klass']);
+			array_push($array,$row['Adress']);
+			array_push($array,$row['Epostadress']);
+			array_push($array,$row['Telefonnummer']);
+			array_push($array,$row['Betalat_till'].$newRow);
+		  }
+	  	return $array;
+		mysqli_close($this->con);
+	}
+	
+	public function getNotPayingMembers($newRow)
+	{
+		$today = date('Y-m-d');
+		
+		$result = mysqli_query($this->con,"SELECT * FROM ".self::$tableName." WHERE Betalat_till < "."'$today'".";");
+		
+		$array = array();
+		
+		while($row = mysqli_fetch_array($result))
+		  {
+			array_push($array,$row['Personnummer']);
+			array_push($array,$row['Namn']);
+			array_push($array,$row['Klass']);
+			array_push($array,$row['Adress']);
+			array_push($array,$row['Epostadress']);
+			array_push($array,$row['Telefonnummer']);
+			array_push($array,$row['Betalat_till'].$newRow);
+		  }
+	  	return $array;
+		mysqli_close($this->con);
+	}
+	
+	public function updatePassword($username, $newpassword)
+	{
+		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$sql = " UPDATE ".self::$tableName." SET Losenord = ? WHERE Anvnamn = "."'$username'".";";
+		
+		$stmt = $this->con->prepare($sql);
+		$stmt->bind_param('s', $newpassword);
+		$stmt->execute();	
+		$stmt->close();	
+	}
+	
 	public function updateNameMember($pnr, $name)
 	{	
 		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
@@ -288,4 +379,10 @@ class LoginDAL
 		$stmt->execute();	
 		$stmt->close();					
 	}
+	
+	private function format_date($original='', $format="%m/%d/%Y") 
+	{ 
+	    $format = ($format=='mysql-date' ? "%Y-%m-%d" : $format); 
+		return (!empty($original) ? strftime($format, strtotime($original)) : "" ); 
+	} 
 }
