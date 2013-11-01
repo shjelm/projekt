@@ -25,6 +25,7 @@ class loginModel{
 	CONST UPDATEDMEMBER = 19;
 	CONST CORRECTCHANGE = 20;
 	CONST INCORRECTCHANGE = 21;
+	CONST DELETEDMEMBER = 22;
 	CONST DEFAULTMSG = 999;
 	
 	
@@ -328,6 +329,11 @@ class loginModel{
 	public function memberUpdated()
 	{
 		return self::UPDATEDMEMBER;
+	}
+	
+	public function memberDeleted()
+	{
+		return self::DELETEDMEMBER;
 	}
 	
 	public function getPnr()

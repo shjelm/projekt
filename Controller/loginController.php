@@ -267,6 +267,13 @@ class loginController{
 		}
 	}
 	
+	public function adminWantsToDeleteMember()
+	{
+		$pnr = $this->loginModel->getPnr();
+		$this->messageNr = $this->loginModel->memberDeleted();
+		$this->message = $this->loginView->setMessage($this->messageNr);
+		$this->loginDAL->deleteMember($pnr);
+	}
 	/**
 	 * @return array
 	 */
@@ -374,8 +381,13 @@ class loginController{
 		}
 		else if($this->loginView->isSearchingMember() && $this->stayLoggedin())
 		{
-			$this->adminWantsToShowMember();			
-			$this->HTMLPage->getShowMemberPage($this->message, $this->memberToShow, 'true');
+			$this->adminWantsToShowMember();
+			if($this->messageNr == 17){ 			
+				$this->HTMLPage->getShowMemberPage($this->message, $this->memberToShow, 'false');
+			}
+			else{
+				$this->HTMLPage->getShowMemberPage($this->message, $this->memberToShow, 'true');
+			}
 			
 		}	
 		else if($this->loginView->isUpdatingMember() && $this->stayLoggedin()){
@@ -384,6 +396,18 @@ class loginController{
 				$pnr = $this->loginModel->getPnr();
 				$this->HTMLPage->getUpdateMemberPage($this->message, $pnr);	
 				
+		} 
+		else if($this->loginView->isDeletingMember() && $this->stayLoggedin()){
+					
+				$this->adminWantsToDeleteMember();
+				$pnr = $this->loginModel->getPnr();
+				$this->HTMLPage->getLoggedInPage($this->message);
+				
+		} 
+		else if($this->loginView->isWantingDeletingMember() && $this->stayLoggedin()){
+					
+				$pnr = $this->loginModel->getPnr();				
+				$this->HTMLPage->getDeleteMemberPage($this->message, $pnr);	
 		} 
 		else if ($this->memberStayLoggedIn()){			
 			$userInfo = $this->getUserInfoToShow();

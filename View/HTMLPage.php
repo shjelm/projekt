@@ -32,6 +32,12 @@ class HTMLPage{
 	/**
 	 * @var string
 	 */
+	private static $DELETE ="deleteMember";
+	
+	
+	/**
+	 * @var string
+	 */
 	private static $BACK = "getBack";	
 	
 	/**
@@ -416,7 +422,8 @@ class HTMLPage{
 				</fieldset>
 			</form>
 			<p>".$this->showMembers($member)."</p>
-			<p><a href='?updateMember' onclick='return ".$clickable."' >Ändra medlem</a></p>
+			<p><a href='?updateMember' onclick='return ".$clickable."'>Ändra medlem</a></p>
+			<p><a href='?deleteMember' onclick='return ".$clickable."'>Radera medlem</a></p>
 			</div>".
 			$this->getClock();
 			
@@ -433,7 +440,7 @@ class HTMLPage{
 					   <div id='content'>". $this->getBack();
 		$this->html .= "
 			<h2>Personnummer : ".$member."</h2>
-			<form class='form-horizontal' action='?" . self::$UPDATE. "' method='post' enctype='multipart/form-data'>
+			<form class='form-horizontal' action='?".self::$UPDATE."' method='post' enctype='multipart/form-data'>
 				<fieldset>
 					<legend>Uppdatera medlem</legend>".$messagestring."
 					<p><label for='UserNameID' >Namn :</label>
@@ -456,6 +463,25 @@ class HTMLPage{
 			
 		echo $this->html;
 		
+	}
+	
+	public function getDeleteMemberPage($messagestring, $member)
+	{
+		$this->html = $this->startOfHTML();
+		$this->html .="</div>
+					   <div id='content'>". $this->getBack();
+		$this->html .= "
+			<h2>Personnummer : ".$member."</h2>
+			<form class='form-horizontal' action='?" . self::$DELETE. "' method='post' enctype='multipart/form-data'>
+				<fieldset>
+					<legend>Radera medlem</legend>".$messagestring."
+					<input type='submit' name='delete'  value='Radera medlem' />
+				</fieldset>
+			</form>
+			</div>".
+			$this->getClock();
+			
+		echo $this->html;
 	}
 
 	/**

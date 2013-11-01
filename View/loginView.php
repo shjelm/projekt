@@ -19,6 +19,7 @@ class loginView{
 	CONST UPDATEDMEMBER = 19;
 	CONST CORRECTCHANGE = 20;
 	CONST INCORRECTCHANGE = 21;
+	CONST DELETEDMEMBER = 22;
 	CONST DEFAULTMSG = 999;
 	
 	/**
@@ -222,6 +223,25 @@ class loginView{
 		}
 	}
 	
+	public function isWantingDeletingMember()
+	{
+		if (isset($_GET["deleteMember"])) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	public function isDeletingMember()
+	{
+		if (isset($_POST["delete"])) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 	/**
 	 * @return bool
 	 */
@@ -557,6 +577,10 @@ class loginView{
 				
 				case self::INCORRECTCHANGE:
 					$this->messageString = '<p class="alert alert-danger">Lösenorden måste stämma överens</p>';	
+					break;	
+					
+				case self::DELETEDMEMBER:
+					$this->messageString = '<p class="alert alert-success">Medlemmen har raderats</p>';	
 					break;						
 					
 				default:

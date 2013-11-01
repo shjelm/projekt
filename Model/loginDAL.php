@@ -78,7 +78,7 @@ class LoginDAL
 	 */
 	public function getMembers($newRow)
 	{
-		$result = mysqli_query($this->con,"SELECT * FROM ".self::$tableName);
+		$result = mysqli_query($this->con,"SELECT * FROM ".self::$tableName." ORDER BY Personnummer DESC");
 		
 		$array = array();
 		
@@ -92,6 +92,8 @@ class LoginDAL
 			  array_push($array,$row['Telefonnummer']);
 			  array_push($array,$row['Betalat_till'].$newRow);
 		  }
+		  
+		  
 	  	return $array;
 	  	
 		mysqli_close($this->con);
@@ -119,7 +121,7 @@ class LoginDAL
 	 */
 	public function getMembersSimple($newRow)
 	{
-		$result = mysqli_query($this->con,"SELECT Namn, Klass, Epostadress FROM ".self::$tableName);
+		$result = mysqli_query($this->con,"SELECT Namn, Klass, Epostadress FROM ".self::$tableName." ORDER BY Namn DESC");
 		
 		$array = array();
 		
@@ -268,7 +270,7 @@ class LoginDAL
 	{
 		$today = date('Y-m-d');
 		
-		$result = mysqli_query($this->con,"SELECT * FROM ".self::$tableName." WHERE Betalat_till >= "."'$today'".";");
+		$result = mysqli_query($this->con,"SELECT * FROM ".self::$tableName." WHERE Betalat_till >= "."'$today'"." ORDER BY Personnummer DESC ;");
 		
 		$array = array();
 		
@@ -290,7 +292,7 @@ class LoginDAL
 	{
 		$today = date('Y-m-d');
 		
-		$result = mysqli_query($this->con,"SELECT * FROM ".self::$tableName." WHERE Betalat_till < "."'$today'".";");
+		$result = mysqli_query($this->con,"SELECT * FROM ".self::$tableName." WHERE Betalat_till < "."'$today'"." ORDER BY Personnummer DESC ;");
 		
 		$array = array();
 		
@@ -380,9 +382,14 @@ class LoginDAL
 		$stmt->close();					
 	}
 	
-	private function format_date($original='', $format="%m/%d/%Y") 
-	{ 
-	    $format = ($format=='mysql-date' ? "%Y-%m-%d" : $format); 
-		return (!empty($original) ? strftime($format, strtotime($original)) : "" ); 
-	} 
+	public function deleteMember($pnr)
+	{
+		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$sql = " DELETE FROM ".self::$tableName." WHERE Personnummer = ".$pnr.";";
+		
+		$stmt = $this->con->prepare($sql);
+		$stmt->execute();	
+		$stmt->close();	
+	}
+	
 }
