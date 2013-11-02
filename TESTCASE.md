@@ -17,6 +17,7 @@ TF 1.3 Logga in admin med fel användarnamn
 2. Skriv in "Adminas" och "Password"
 3. Klicka på logga in
 4. Felmeddelande "Felaktigt användarnamn och/eller lösenord" visas
+5. Användarnamnet förblir ifyllt
 
 TF 1.3 Logga in admin med fel lösenord	
 1. Testfall 1.1 Navigera till sida
@@ -45,14 +46,14 @@ TF 1.6 Logga in admin utan lösenord
 ===================================
 
 TF 2.1 Visa medlem
-1. Testfall 1.1 Navigera till sida
+1. TF 1.2 Logga in admin	
 2. Klicka på visa medlem
 3. Ange personnummer
 4. Klicka på sök
 5. Medlem visas
 
 TF 2.2 Visa medlem, ogiltigt personnummer
-1. Testfall 1.1 Navigera till sida
+1. TF 1.2 Logga in admin	
 2. Klicka på visa medlem
 3. Ange ett ej registrerat personnummer
 4. Klicka på sök
@@ -81,7 +82,7 @@ TF 2.5 Radera medlem
 ===================================
 
 TF 3.1 Visa alla medlemmar
-1. Testfall 1.1 Navigera till sida
+1. TF 1.2 Logga in admin	
 2. Klicka på visa alla medlemmar
 3. Alla medlemmar visas
 
@@ -100,7 +101,7 @@ TF 3.3 Visa alla medlemmar som ej har betalat
 TF 4.1 Registrera medlem
 1. TF 1.2 Logga in admin
 2. Klicka på registrera medlem
-3. Skriva in korrekta uppgifter
+3. Skriva in korrekta uppgifter i alla fält
 4. Klicka på registrera
 5. Rättmeddelande visas
 
@@ -111,7 +112,7 @@ TF 4.2 Registrera medlem, med tomma fält
 4. Klicka på registrera
 5. Felmeddelande visas
 
-TF 4.3 Registrera medlem, med tomma fält
+TF 4.3 Registrera medlem, med tomt betalningsfält
 1. TF 1.2 Logga in admin
 2. Klicka på registrera medlem
 3. Skriva in uppgifter men lämna betalningsdatum tomt
@@ -121,7 +122,14 @@ TF 4.3 Registrera medlem, med tomma fält
 TF 4.4 Registrera medlem, med ogiltigt personnummer
 1. TF 1.2 Logga in admin
 2. Klicka på registrera medlem
-3. Skriva in uppgifter men ange ett ogiltigt personnummer
+3. Skriva in uppgifter men ange ett ogiltigt personnummer (121232)
+4. Klicka på registrera
+5. Felmeddalnde visas
+
+TF 4.5 Registrera medlem, med redan registrerat personnummer
+1. TF 1.2 Logga in admin
+2. Klicka på registrera medlem
+3. Skriva in uppgifter men ange ett personnummer som redan är registrerat (9103014565)
 4. Klicka på registrera
 5. Felmeddalnde visas
 
@@ -131,7 +139,7 @@ TF 5.1 Logga in medlem
 1. TF 1.1 Navigera till sida
 2. Skriva in korrekt användarnamn ("Ras910301") och lösenord ("Losenord")
 3. Klicka på logga in
-4. Medlemmen loggas in (och rättmeddelande?)
+4. Medlemmen loggas in och rättmeddelande visas
 
 TF 5.2 Logga in medlem med fel användarnamn	
 1. Testfall 1.1 Navigera till sida
@@ -178,6 +186,30 @@ TF 6.2 Ändra lösenord, misslyckat försök
 2. Klicka på ändra lösenord
 3. Ange ett nytt lösenord ("Losenord")
 4. Reptera lösenord ("Losen")
+5. Klicka på bekräfta ändring
+6. Felmeddelande visas
+
+TF 6.3 Ändra lösenord, misslyckat försök med "Ange nytt lösenord" tomt 
+1. TF 5.1 Logga in medlem
+2. Klicka på ändra lösenord
+3. Lämna ange ett nytt lösenord tomt
+4. Reptera lösenord ("Losen")
+5. Klicka på bekräfta ändring
+6. Felmeddelande visas
+
+TF 6.4 Ändra lösenord, misslyckat försök med "Repetera lösenord" tomt 
+1. TF 5.1 Logga in medlem
+2. Klicka på ändra lösenord
+3. Ange ett nytt lösenord ("Losenord")
+4. Lämna reptera lösenord tomt
+5. Klicka på bekräfta ändring
+6. Felmeddelande visas
+
+TF 6.5 Ändra lösenord, misslyckat försök med tomma fält
+1. TF 5.1 Logga in medlem
+2. Klicka på ändra lösenord
+3. Lämna ange ett nytt lösenord tomt
+4. Lämna reptera lösenord tomt
 5. Klicka på bekräfta ändring
 6. Felmeddelande visas
 
