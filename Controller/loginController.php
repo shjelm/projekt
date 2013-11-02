@@ -7,6 +7,7 @@ require_once realpath(dirname(__DIR__)).'/View/HTMLPage.php';
 require_once realpath(dirname(__DIR__)).'/Model/loginModel.php';
 require_once realpath(dirname(__DIR__)).'/Model/loginDAL.php';
 require_once realpath(dirname(__DIR__)).'/Model/member.php';
+require_once realpath(dirname(__DIR__)).'/Model/event.php';
 
 class loginController{
 	/**
@@ -97,6 +98,11 @@ class loginController{
 	private $memberToUpdate;
 		
 	private $numberOfMembers; 
+	
+	private $notClickable = 'false';
+	private $clickable = 'true';
+	
+	private $events;
 	
 	public function __construct()
 	{
@@ -209,6 +215,21 @@ class loginController{
 		$this->members = $this->loginDAL->getNotPayingMembers($newRow);
 		
 	}
+	public function adminWantsToAddEvent()
+	{
+		$newEvent = $this->loginView->setEvent();
+		$event = new \model\event($newEvent[0], $newEvent[1],
+								$newEvent[2]);
+			
+		if($this->loginView->checkFormSent()){
+			$this->messageNr = $this->loginModel->checkUnvalidEvent($event);
+			$this->message = $this->loginView->setMessage($this->messageNr);
+		}
+		if($this->loginModel->checkValidEvent($event)){
+			$this->loginDAL->addEvent($event);
+		}
+	}
+	
 	
 	public function memberWantsToShowMembers()
 	{
@@ -323,6 +344,12 @@ class loginController{
 		return $this->loginModel->comparePasswords($newpass, $repeatedpass);	
 	}
 	
+	public function showEvents()
+	{
+		$newRow = $this->loginView->getNewRow();	
+		$this->events = $this->loginDAL->getEvents($newRow);
+	}
+	
 	public function showPage()
 	{
 		if($this->logOut())
@@ -334,7 +361,7 @@ class loginController{
 		$this->loginView->getPassword()) && $this->memberStayLoggedIn() ){
 			$userInfo = $this->getUserInfoToShow();
 			$username = $this->loginModel->getUsername();
-			$this->HTMLPage->getLoggedInMemberPage($username, $userInfo);		
+			$this->HTMLPage->getLoggedInMemberPage($username, $userInfo, $this->message);		
 		}
 		else if($this->loginView->canSaveCredentials() && $this->loggedIn != true && $this->correctSavedCredentials())
 		{
@@ -346,9 +373,33 @@ class loginController{
 			$this->adminWantsToAddMember();
 			$this->HTMLPage->getAddMemberPage($this->message);
 		}	
+		else if($this->loginView->isShowingEvents()&& $this->stayLoggedin())
+		{
+			$this->showEvents();
+			$this->HTMLPage->getShowEventsPage($this->events);
+		}
+		else if($this->loginView->isAddingEvent() && $this->stayLoggedin())
+		{
+			$this->adminWantsToAddEvent();
+			
+			$newEvent = $this->loginView->setEvent();
+			$event = new \model\event($newEvent[0], $newEvent[1],
+								$newEvent[2]);
+								
+			if($this->loginModel->checkValidEvent($event) == false){
+				$this->HTMLPage->getAddEventPage($this->message);
+			}
+			else{
+				$this->HTMLPage->getLoggedInPage($this->message);
+			}
+		}
+		else if($this->loginView->isWantingToAddEvent()&& $this->stayLoggedin())
+		{
+			$this->HTMLPage->getAddEventPage($this->message);
+		}
 		else if($this->loginView->isShowingMember()&& $this->stayLoggedin())
 		{
-			$this->HTMLPage->getShowMemberPage($this->message,'', 'false');
+			$this->HTMLPage->getShowMemberPage('','', 'false');
 		}	
 		else if($this->loginView->isShowingPayingMembers() && $this->stayLoggedin())
 		{
@@ -382,11 +433,11 @@ class loginController{
 		else if($this->loginView->isSearchingMember() && $this->stayLoggedin())
 		{
 			$this->adminWantsToShowMember();
-			if($this->messageNr == 17){ 			
-				$this->HTMLPage->getShowMemberPage($this->message, $this->memberToShow, 'false');
+			if($this->messageNr == 17){			
+				$this->HTMLPage->getShowMemberPage($this->message,$this->memberToShow, $this->notClickable);
 			}
 			else{
-				$this->HTMLPage->getShowMemberPage($this->message, $this->memberToShow, 'true');
+				$this->HTMLPage->getShowMemberPage($this->message, $this->memberToShow, $this->clickable);
 			}
 			
 		}	
@@ -412,7 +463,7 @@ class loginController{
 		else if ($this->memberStayLoggedIn()){			
 			$userInfo = $this->getUserInfoToShow();
 			$username = $this->loginModel->getUsername();
-			$this->HTMLPage->getLoggedInMemberPage($username, $userInfo);	
+			$this->HTMLPage->getLoggedInMemberPage($username, $userInfo, $this->message);	
 		}
 		else if($this->browser != true)
 		{

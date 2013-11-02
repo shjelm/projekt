@@ -139,7 +139,7 @@ TF 5.1 Logga in medlem
 1. TF 1.1 Navigera till sida
 2. Skriva in korrekt användarnamn ("Ras910301") och lösenord ("Losenord")
 3. Klicka på logga in
-4. Medlemmen loggas in och rättmeddelande visas
+4. Medlemmen loggas in 
 
 TF 5.2 Logga in medlem med fel användarnamn	
 1. Testfall 1.1 Navigera till sida

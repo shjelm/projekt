@@ -26,6 +26,8 @@ class loginModel{
 	CONST CORRECTCHANGE = 20;
 	CONST INCORRECTCHANGE = 21;
 	CONST DELETEDMEMBER = 22;
+	CONST UNVALIDDATEFORMAT = 23;
+	CONST EMPTYFORMEVENT = 24;
 	CONST DEFAULTMSG = 999;
 	
 	
@@ -89,17 +91,17 @@ class loginModel{
 	 */	
 	public function checkMessageNr($username, $password)
 	{
-		if ($username == self::$username && $password == md5(self::$password."crypt")) {
+		if ($username == self::$username && $password == md5(self::$password."crypt") || $this->checkLogin($username,$password)) {
 			
 			$_SESSION[self::$mySession] = true;	
 			return self::CORRECTUSERCREDENTIALS;
 		} 
-		else if ($password == md5(''."crypt")) {
-			return self::EMPTYPASSWORD;
-		}
 		else if (empty($username)) {
 			return self::EMPTYUSERNAME; 
 		} 
+		else if ($password == md5(''."crypt")) {
+			return self::EMPTYPASSWORD;
+		}
 		else {
 			 return self::INCORRECTUSERCREDENTIALS;
 		}
@@ -116,6 +118,10 @@ class loginModel{
 		$paydate = $member->getPayDate();
 		$username = $member->getUserName();
 		
+		if($this->unvalidDateFormat($paydate)){
+			return self::UNVALIDDATEFORMAT;
+		}
+		
 		if($this->unvalidPersonalnumber($pnr)){
 			
 			return self::UNVALIDPNR;
@@ -130,6 +136,32 @@ class loginModel{
 			return self::ADDINGMEMBERSUCCES;
 		}
 		
+	}
+	
+	public function checkValidEvent(event $event)
+	{
+		$title = $event->getTitle();
+		$dateTime = $event ->getDateTime();		
+		$info = $event->getInfo();
+		
+		if(empty($title) || empty($dateTime) || empty($info) )
+		{
+			 return false;
+		}		
+		else {
+			return true;
+		}
+	}
+	public function checkUnvalidEvent(event $event)
+	{
+		$title = $event->getTitle();
+		$dateTime = $event ->getDateTime();		
+		$info = $event->getInfo();
+		
+		if(empty($title) || empty($dateTime) || empty($info) )
+		{
+			 return self::EMPTYFORMEVENT;
+		}		
 	}
 	
 	public function alreadyExistingPnr()
@@ -148,6 +180,19 @@ class loginModel{
 			return true;
 		}
 		
+	}
+	
+	public function unvalidDateFormat($date)
+	{
+		preg_match('/^([1-2]{1}[0-9]{3})-([0-1]{1}[0-9]{1})-([0-1]{1}[0-9]{1})$/', $date, $matches);
+		$valid = count($matches);
+		if($valid == 4){
+			return false;
+		}
+		else{
+			return true;
+		}
+				
 	}
 	
 	public function correctChangeOfPasswords()
@@ -179,6 +224,9 @@ class loginModel{
 		if(empty($name) || empty($pnr) || empty($address) || empty($phnr) ||
 			empty($email) || empty($class))
 		{
+			return false;
+		}
+		else if ($this->unvalidDateFormat($paydate)){
 			return false;
 		}
 		else if ($this->unvalidPersonalnumber($pnr)){
@@ -412,11 +460,18 @@ class loginModel{
 	
 	public function comparePasswords($newpass, $repeatedpass)
 	{
-		if($newpass == $repeatedpass){
-			return true;
+		$emptyPass = md5(''."crypt");
+		
+		if($newpass == $emptyPass|| $repeatedpass == $emptyPass){
+			return false;			
 		}
 		else{
-			return false;
+			if($newpass == $repeatedpass){
+				return true;
+			}
+			else{
+				return false;
+			}
 		}
 	}
 	

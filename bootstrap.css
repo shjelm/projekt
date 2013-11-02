@@ -6203,8 +6203,9 @@ a.badge:focus {
 #content{
 	margin-top:3%;
 }
-
-.text-danger {
-	color: #d9534f;
+textarea{
+	max-width: 50%;
+	min-height: 100px;
+	max-height: 200px;
 }
 

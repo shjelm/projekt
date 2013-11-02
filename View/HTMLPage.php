@@ -171,6 +171,13 @@ class HTMLPage{
 	private $membersToShow;
 	
 	/**
+	 * @var String 
+	 */	
+	private $eventsToShow;
+	
+	
+	
+	/**
 	 * @return string HTML
 	 */	
 	private function startOfHTML(){
@@ -247,6 +254,8 @@ class HTMLPage{
 								<li><p><a href="?'.self::$addMember.'">Registera medlem</a></p></li> 
 								<li><p><a href="?'.self::$showAllMembers.'">Visa alla medlemmar</a></p></li>
 								<li><p><a href="?'.self::$showMember.'">Visa medlem</a></p></li>
+								<li><p><a href="?showEvents">Visa evenemang</a></p></li>
+								<li><p><a href="?wantsToAddEvent">Lägg till evenemang</a></p></li>
 								</ul>
 								<form method="post" action="?logout">
 								<input type="submit" name="logout" value="Logga ut" /> 
@@ -311,6 +320,7 @@ class HTMLPage{
 	
 	/**  
 	 * @param string
+	 * @param array
 	 * @return String HTML
 	 */
 	public function getLoggedInMemberPage($userString, $userInfo)
@@ -318,7 +328,7 @@ class HTMLPage{
 		//TODO: visa medlemmens uppgifter här
 	$this->html = $this->startOfHTML();
 		$this->html .="</div>
-					   <div id='content' >";
+					   <div id='content' >". $this->getBack();
 		$this->html .= '
 				<h2>'.$userString.' är inloggad</h2>
 				<p>'.$this->showMembers($userInfo).'</p>
@@ -332,6 +342,53 @@ class HTMLPage{
 			
 		echo $this->html;
 	}
+
+	/**  
+	 * @return String HTML
+	 */
+	public function getShowEventsPage($events)
+	{
+		//TODO: Visa evenemang
+		$this->html = $this->startOfHTML();
+		$this->html .="</div>
+					   <div id='content' >". $this->getBack();
+		$this->html .= '
+				<h2>Evenemang</h2>'.$this->showEvents($events).'
+			</div>'.
+			$this->getClock();
+			
+		echo $this->html;
+	}
+	
+	/**  
+	 * @return String HTML
+	 */
+	public function getAddEventPage($messagestring)
+	{
+		
+		$this->html = $this->startOfHTML();
+		$this->html .="</div>
+					   <div id='content' >". $this->getBack();
+		$this->html .= "
+				<h2>Evenemang</h2>
+				<form class='form-horizontal' action='?changePassword' method='post' enctype='multipart/form-data'>
+					<fieldset>
+						<legend>Lägg till evenemang</legend>".$messagestring."
+						<p><label for='titleID' >Titel :</label>
+						<input  type='text' size='20' name='eventTitle' id='titleID' value='' /></p>
+						<p><label for='dateID' >Datum och tid :</label>
+						<input type='text' size='50' name='eventDate' id='dateID' value='' /></p>
+						<p><label for='infoID' >Beskrivning :</label>
+						<textarea rows='3'size='250' name='eventInfo' id='infoID' value=''></textarea></p>
+						<input type='submit' name='addEvent'  value='Spara' />
+					</fieldset>
+				</form>
+			</div>".
+			$this->getClock();
+			
+		echo $this->html;
+	}
+
 
 	public function getChangePasswordPage($messagestring)
 	{
@@ -365,6 +422,19 @@ class HTMLPage{
 		} 		
 		
 		return $this->membersToShow;
+	}
+	
+	/**  
+	 * @param array
+	 * @return string
+	 */
+	public function showEvents($events)
+	{			
+		for ($i=0; $i < count($events); $i++) {
+			$this->eventsToShow .= $events[$i]."<br>";
+		} 		
+		
+		return $this->eventsToShow;
 	}
 	
 	/**  

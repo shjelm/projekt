@@ -16,20 +16,43 @@ class LoginDAL
 	
 	public function __construct() {
 
-		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$this->openCon();
 		
-		$this->createTable();
+		$this->createMemberTable();
+		$this->createEventsTable();
 	}
 	
-	public function createTable()
+	public function openCon()
+	{
+		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+	}
+	private function createMemberTable()
 	{
 		$sql ="CREATE TABLE IF NOT EXISTS ".self::$tableName."
 		(
-			pk INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-			user VARCHAR(25),
-			password VARCHAR(20)		
-		)
-		ENGINE = MyISAM;";
+			Namn VARCHAR(60) NOT NULL ,
+	 		Personnummer VARCHAR(20) NOT NULL ,
+			Klass VARCHAR(5) NOT NULL ,
+	 		Telefonnummer VARCHAR(20) NOT NULL ,
+	 		Epostadress VARCHAR(50) NOT NULL ,
+	 		Adress VARCHAR(100) NOT NULL ,
+	 		Betalat_till DATE,
+	 		Anvnamn VARCHAR(10) NOT NULL ,
+	 		Losenord VARCHAR(50) NOT NULL			
+		);";
+		
+		if ($this->con->query($sql) === FALSE) {
+          throw new \Exception("'$sql' failed " . $this->con->error);
+      	}
+	}
+	private function createEventsTable()
+	{
+		$sql ="CREATE TABLE IF NOT EXISTS event
+		(
+			Titel VARCHAR(100) NOT NULL ,
+	 		Datum VARCHAR(50) NOT NULL ,
+			Info VARCHAR(500) NOT NULL 			
+		);";
 		
 		if ($this->con->query($sql) === FALSE) {
           throw new \Exception("'$sql' failed " . $this->con->error);
@@ -38,8 +61,7 @@ class LoginDAL
 	
 	public function addMember(member $member)
 	{
-		//TODO: ska jag verkligen öppna con varje gång såhär?
-		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$this->openCon();
 		
 		$name = $member->getName();
 		$pnr = $member ->getPersonalNr();		
@@ -79,7 +101,7 @@ class LoginDAL
 	public function getMembers($newRow)
 	{
 		$result = mysqli_query($this->con,"SELECT * FROM ".self::$tableName." ORDER BY Personnummer DESC");
-		
+            
 		$array = array();
 		
 		while($row = mysqli_fetch_array($result))
@@ -312,7 +334,7 @@ class LoginDAL
 	
 	public function updatePassword($username, $newpassword)
 	{
-		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$this->openCon();
 		$sql = " UPDATE ".self::$tableName." SET Losenord = ? WHERE Anvnamn = "."'$username'".";";
 		
 		$stmt = $this->con->prepare($sql);
@@ -323,7 +345,7 @@ class LoginDAL
 	
 	public function updateNameMember($pnr, $name)
 	{	
-		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$this->openCon();
 		$sql = " UPDATE ".self::$tableName." SET Namn = ? WHERE Personnummer = ".$pnr.";";
 		
 		$stmt = $this->con->prepare($sql);
@@ -333,7 +355,7 @@ class LoginDAL
 	}
 	public function updateAddressMember($pnr, $address)
 	{	
-		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$this->openCon();
 		$sql = " UPDATE ".self::$tableName." SET Adress = ? WHERE Personnummer = ".$pnr.";";
 		
 		$stmt = $this->con->prepare($sql);
@@ -343,7 +365,7 @@ class LoginDAL
 	}
 	public function updateEmailMember($pnr, $email)
 	{	
-		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$this->openCon();
 		$sql = " UPDATE ".self::$tableName." SET Epostadress = ? WHERE Personnummer = ".$pnr.";";
 		
 		$stmt = $this->con->prepare($sql);
@@ -353,7 +375,7 @@ class LoginDAL
 	}
 	public function updatePhonenrMember($pnr, $phonenr)
 	{	
-		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$this->openCon();
 		$sql = " UPDATE ".self::$tableName." SET Telefonnummer = ? WHERE Personnummer = ".$pnr.";";
 		
 		$stmt = $this->con->prepare($sql);
@@ -363,7 +385,7 @@ class LoginDAL
 	}
 	public function updateClassMember($pnr, $class)
 	{	
-		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$this->openCon();
 		$sql = " UPDATE ".self::$tableName." SET Klass = ? WHERE Personnummer = ".$pnr.";";
 		
 		$stmt = $this->con->prepare($sql);
@@ -373,7 +395,7 @@ class LoginDAL
 	}
 	public function updatePaydateMember($pnr, $paydate)
 	{	
-		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$this->openCon();
 		$sql = " UPDATE ".self::$tableName." SET Betalat_till = ? WHERE Personnummer = ".$pnr.";";
 		
 		$stmt = $this->con->prepare($sql);
@@ -384,7 +406,7 @@ class LoginDAL
 	
 	public function deleteMember($pnr)
 	{
-		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
+		$this->openCon();
 		$sql = " DELETE FROM ".self::$tableName." WHERE Personnummer = ".$pnr.";";
 		
 		$stmt = $this->con->prepare($sql);
@@ -392,4 +414,43 @@ class LoginDAL
 		$stmt->close();	
 	}
 	
+	public function addEvent(event $event)
+	{
+		$this->openCon();
+		
+		$title = $event->getTitle();
+		$dateTime = $event ->getDateTime();		
+		$info = $event->getInfo();
+
+			$sql = "INSERT INTO event
+			(
+				Titel,
+				Datum,
+				Info
+				
+			)
+			VALUES ('$title','$dateTime','$info');";
+			
+			$stmt = $this->con->prepare($sql);
+			$stmt->execute();				
+	}
+	
+	public function getEvents($newRow)
+	{
+		$result = mysqli_query($this->con,"SELECT * FROM event ORDER BY Datum ASC");
+            
+		$array = array();
+		
+		while($row = mysqli_fetch_array($result))
+		  {
+			  array_push($array,$row['Titel']);
+			  array_push($array,$row['Datum']);
+			  array_push($array,$row['Info'].$newRow);
+		  }
+		  
+		  
+	  	return $array;
+	  	
+		mysqli_close($this->con);
+	}
 }

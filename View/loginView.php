@@ -20,6 +20,8 @@ class loginView{
 	CONST CORRECTCHANGE = 20;
 	CONST INCORRECTCHANGE = 21;
 	CONST DELETEDMEMBER = 22;
+	CONST UNVALIDDATEFORMAT = 23;
+	CONST EMPTYFORMEVENT = 24;
 	CONST DEFAULTMSG = 999;
 	
 	/**
@@ -168,6 +170,42 @@ class loginView{
 	 */
 	public function isShowingMembers() {
 		if (isset($_GET["showAllMembers"])) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isShowingEvents() {
+		if (isset($_GET["showEvents"])) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isWantingToAddEvent() {
+		if (isset($_GET["wantsToAddEvent"])) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isAddingEvent() {
+		if (isset($_POST["addEvent"])) {
 			return true;
 		}
 		else{
@@ -576,12 +614,20 @@ class loginView{
 					break;						
 				
 				case self::INCORRECTCHANGE:
-					$this->messageString = '<p class="alert alert-danger">Lösenorden måste stämma överens</p>';	
+					$this->messageString = '<p class="alert alert-danger">Lösenorden måste stämma överens och får ej vara tomma</p>';	
 					break;	
 					
 				case self::DELETEDMEMBER:
 					$this->messageString = '<p class="alert alert-success">Medlemmen har raderats</p>';	
 					break;						
+				
+				case self::UNVALIDDATEFORMAT:
+					$this->messageString = '<p class="alert alert-danger">Ange ett giltigt datum</p>';	
+					break;		
+					
+				case self::EMPTYFORMEVENT:
+					$this->messageString = '<p class="alert alert-danger">Alla fält måste fyllas i</p>';	
+					break;		
 					
 				default:
 					$this->messageString = '';
@@ -725,6 +771,27 @@ class loginView{
 		}
 		return $array;
 	}
+	/**
+	 * @return array
+	 */
+	public function setEvent()
+	{
+		if($_POST){
+			$title = $_POST["eventTitle"];
+			$dateTime = $_POST["eventDate"];
+			$info = $_POST["eventInfo"];
+		
+			$array = array();
+			
+			array_push($array, $title);
+			array_push($array, $dateTime);		
+			array_push($array, $info);		
+		
+		}
+		return $array;
+	}
+	
+	
 	
 	/**
 	 * @return HTML string

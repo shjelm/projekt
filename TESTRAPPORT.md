@@ -48,7 +48,7 @@ TF 4.5 Registrera medlem, med redan registrerat personnummer - Uppfylls
 
 ===================================
 
-TF 5.1 Logga in medlem  - Uppfylls ej (rättmeddelande saknas)
+TF 5.1 Logga in medlem  - Uppfylls 
 
 TF 5.2 Logga in medlem med fel användarnamn	- Uppfylls
 
@@ -62,22 +62,22 @@ TF 5.6 Logga in medlem utan lösenord - Uppfylls
 
 ===================================
 
-TF 6.1 Ändra lösenord
+TF 6.1 Ändra lösenord - Uppfylls	
 
-TF 6.2 Ändra lösenord, misslyckat försök
+TF 6.2 Ändra lösenord, misslyckat försök - Uppfylls	
 
-TF 6.3 Ändra lösenord, misslyckat försök med "Ange nytt lösenord" tomt 
+TF 6.3 Ändra lösenord, misslyckat försök med "Ange nytt lösenord" tomt - Uppfylls	
 
-TF 6.4 Ändra lösenord, misslyckat försök med "Repetera lösenord" tomt 
+TF 6.4 Ändra lösenord, misslyckat försök med "Repetera lösenord" tomt - Uppfylls	
 
-TF 6.5 Ändra lösenord, misslyckat försök med tomma fält
+TF 6.5 Ändra lösenord, misslyckat försök med tomma fält - Uppfylls ej, lösenordet ändras till ""	
 
-
-===================================
-
-TF 7.1. Visa alla medlemmar, enkel lista
 
 ===================================
-TF 8.1 Logga ut medlem
 
-TF 8.2 Logga ut admin
+TF 7.1. Visa alla medlemmar, enkel lista - Uppfylls	
+
+===================================
+TF 8.1 Logga ut medlem - Uppfylls	
+
+TF 8.2 Logga ut admin - Uppfylls	
