@@ -25,9 +25,7 @@ class Event{
 	private $eventTime;
 	
 	public function __construct($title, $eventDate, $eventTime , $info)
-	{
-		$this->loginDAL = new \model\LoginDAL;
-		
+	{		
 		$this->title = $title;
 		$this->eventDate = $eventDate;		
 		$this->eventTime = $eventTime;

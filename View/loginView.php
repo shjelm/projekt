@@ -1046,3 +1046,4 @@ class loginView{
 		return '<br>';
 	}
 }
+

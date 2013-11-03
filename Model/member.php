@@ -38,12 +38,7 @@ class Member{
 	 * @var date
 	 */
 	private $paydate;
-	
-	/**
-	 * @var \model\loginDAL
-	 */
-	private $loginDAL;
-	
+		
 	/**
 	 * @var string
 	 */
@@ -57,7 +52,6 @@ class Member{
 	
 	public function __construct($name, $personalnr, $class, $phonenr, $email, $address, $paydate)
 	{
-		$this->loginDAL = new \model\LoginDAL;
 		
 		$this->name = $name;
 		$this->personalnr = $personalnr;
@@ -148,9 +142,11 @@ class Member{
 	 */
 	public function generateUsername($name, $pnr)
 	{
-		$un = substr($name, 0,3);
-		$un .= substr($pnr, 0,6);
-		return $un;
+		$name = preg_replace('/\s+/', '', $name);
+		$username = substr($name, 0,3);
+		$username .= substr($pnr, 0,6);
+		
+		return $username;
 	}
 	
 	
@@ -159,10 +155,11 @@ class Member{
 	 */
 	public function generateDefaultPassword()
 	{
-		$un = md5('Password'."crypt");
+		$password = md5('Password'."crypt");
 		
-		$this->password = $un;
-		return $un;
+		$this->password = $password;
+		
+		return $password;
 		
 	}
 }

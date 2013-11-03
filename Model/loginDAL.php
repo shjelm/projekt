@@ -31,6 +31,7 @@ class LoginDAL
 	{
 		$this->con = mysqli_connect("register-185594.mysql.binero.se", "185594_zh40528", "lolipoP19", "185594-register");
 	}
+	
 	private function createMemberTable()
 	{
 		$sql ="CREATE TABLE IF NOT EXISTS ".self::$tableName."
@@ -52,7 +53,7 @@ class LoginDAL
 	}
 	private function createEventsTable()
 	{
-		$sql ="CREATE TABLE IF NOT EXISTS event
+		$sql ="CREATE TABLE IF NOT EXISTS ".self::$eventTableName."
 		(
 			Titel VARCHAR(100) NOT NULL ,
 	 		Datum DATE NOT NULL ,
@@ -65,6 +66,9 @@ class LoginDAL
       	}
 	}
 	
+	/**
+	 * @param /model/member
+	 */
 	public function addMember(member $member)
 	{
 		$this->openCon();
@@ -102,6 +106,7 @@ class LoginDAL
     }
 	
 	/**
+	 * @param string
 	 * @return array
 	 */
 	public function getMembers($newRow)
@@ -146,6 +151,7 @@ class LoginDAL
 	}
 	
 	/**
+	 * @param string
 	 * @return array
 	 */
 	public function getMembersSimple($newRow)
@@ -167,6 +173,7 @@ class LoginDAL
 	
 	
 	/**
+	 * @param string
 	 * @return array
 	 */
 	public function getMemberToShow($pnr)
@@ -189,11 +196,12 @@ class LoginDAL
 	}
 	
 	/**
+	 * @param string
 	 * @return array
 	 */
 	public function getEventToShow($title)
 	{
-		$result = mysqli_query($this->con,"SELECT * FROM event");
+		$result = mysqli_query($this->con,"SELECT * FROM ".self::$eventTableName);
 		$array = array();
 		
 		while($row = mysqli_fetch_array($result))
@@ -211,11 +219,12 @@ class LoginDAL
 	}
 	
 	/**
+	 * @param date
 	 * @return array
 	 */
 	public function getEventDateToShow($date)
 	{
-		$result = mysqli_query($this->con,"SELECT * FROM event");
+		$result = mysqli_query($this->con,"SELECT * FROM ".self::$eventTableName);
 		$array = array();
 		
 		while($row = mysqli_fetch_array($result))
@@ -233,11 +242,12 @@ class LoginDAL
 	}
 	
 	/**
+	 * @param string
 	 * @return array
 	 */
 	public function getEvent($title)
 	{
-		$result = mysqli_query($this->con,"SELECT * FROM event WHERE Titel = "."'$title'");
+		$result = mysqli_query($this->con,"SELECT * FROM ".self::$eventTableName." WHERE Titel = "."'$title'");
 		
 		$array = array();
 		
@@ -256,6 +266,7 @@ class LoginDAL
 	
 	
 	/**
+	 * @param string
 	 * @return array
 	 */
 	public function getUserToShow($username)
@@ -278,6 +289,7 @@ class LoginDAL
 	}
 	
 	/**
+	 * @param string
 	 * @return array
 	 */
 	public function getUserInfo($username)
@@ -302,6 +314,7 @@ class LoginDAL
 	}
 	
 	/**
+	 * @param string
 	 * @return array
 	 */
 	public function getMember($pnr)
@@ -344,6 +357,7 @@ class LoginDAL
 	}
 	
 	/**
+	 * @param string
 	 * @return array
 	 */
 	public function getPassword($username)
@@ -362,6 +376,7 @@ class LoginDAL
 	}
 	
 	/**
+	 * @param string
 	 * @return array
 	 */
 	public function getPayingMembers($newRow)
@@ -387,6 +402,7 @@ class LoginDAL
 	}
 	
 	/**
+	 * @param string
 	 * @return array
 	 */
 	public function getNotPayingMembers($newRow)
@@ -411,6 +427,10 @@ class LoginDAL
 		mysqli_close($this->con);
 	}
 	
+	/**
+	 * @param string
+	 * @param string
+	 */
 	public function updatePassword($username, $newpassword)
 	{
 		$this->openCon();
@@ -422,6 +442,10 @@ class LoginDAL
 		$stmt->close();	
 	}
 	
+	/**
+	 * @param string
+	 * @param string
+	 */
 	public function updateNameMember($pnr, $name)
 	{	
 		$this->openCon();
@@ -432,6 +456,11 @@ class LoginDAL
 		$stmt->execute();	
 		$stmt->close();					
 	}
+	
+	/**
+	 * @param string
+	 * @param string
+	 */
 	public function updateAddressMember($pnr, $address)
 	{	
 		$this->openCon();
@@ -442,6 +471,11 @@ class LoginDAL
 		$stmt->execute();	
 		$stmt->close();					
 	}
+	
+	/**
+	 * @param string
+	 * @param string
+	 */
 	public function updateEmailMember($pnr, $email)
 	{	
 		$this->openCon();
@@ -452,6 +486,11 @@ class LoginDAL
 		$stmt->execute();	
 		$stmt->close();					
 	}
+	
+	/**
+	 * @param string
+	 * @param string
+	 */
 	public function updatePhonenrMember($pnr, $phonenr)
 	{	
 		$this->openCon();
@@ -462,6 +501,11 @@ class LoginDAL
 		$stmt->execute();	
 		$stmt->close();					
 	}
+	
+	/**
+	 * @param string
+	 * @param string
+	 */
 	public function updateClassMember($pnr, $class)
 	{	
 		$this->openCon();
@@ -472,6 +516,11 @@ class LoginDAL
 		$stmt->execute();	
 		$stmt->close();					
 	}
+	
+	/**
+	 * @param string
+	 * @param date
+	 */
 	public function updatePaydateMember($pnr, $paydate)
 	{	
 		$this->openCon();
@@ -494,6 +543,10 @@ class LoginDAL
 		$stmt->close();	
 	}
 	
+	/**
+	 * @param string
+	 * @param time
+	 */
 	public function updateTimeEvent($title, $time)
 	{
 		$this->openCon();
@@ -505,6 +558,10 @@ class LoginDAL
 		$stmt->close();	
 	}
 	
+	/**
+	 * @param string
+	 * @param string
+	 */
 	public function updateInfoEvent($title, $info)
 	{
 		$this->openCon();
@@ -516,6 +573,10 @@ class LoginDAL
 		$stmt->close();	
 	}
 	
+	/**
+	 * @param string
+	 * @param string
+	 */
 	public function deleteMember($pnr)
 	{
 		$this->openCon();
@@ -526,6 +587,10 @@ class LoginDAL
 		$stmt->close();	
 	}
 	
+	/**
+	 * @param string
+	 * @param string
+	 */
 	public function deleteEvent($title)
 	{
 		$this->openCon();
@@ -537,6 +602,9 @@ class LoginDAL
 		
 	}
 	
+	/**
+	 * @param /model/event
+	 */
 	public function addEvent(event $event)
 	{
 		$this->openCon();
@@ -546,7 +614,7 @@ class LoginDAL
 		$eventTime = $event->getEventTime();	
 		$info = $event->getInfo();
 
-			$sql = "INSERT INTO event
+			$sql = "INSERT INTO ".self::$eventTableName."
 			(
 				Titel,
 				Datum,
@@ -561,11 +629,12 @@ class LoginDAL
 	}
 	
 	/**
+	 * @param string
 	 * @return array
 	 */
 	public function getEvents($newRow)
 	{
-		$result = mysqli_query($this->con,"SELECT * FROM event ORDER BY Datum ASC");
+		$result = mysqli_query($this->con,"SELECT * FROM ".self::$eventTableName." ORDER BY Datum ASC");
             
 		$array = array();
 		
@@ -576,7 +645,6 @@ class LoginDAL
 			  array_push($array, $row['Tid']);
 			  array_push($array,$row['Info'].$newRow);
 		  }
-		  
 		  
 	  	return $array;
 	  	

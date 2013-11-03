@@ -188,7 +188,7 @@ class HTMLPage{
 								
 								<link rel="Stylesheet" href="bootstrap.css">
 								<link href="http://fonts.googleapis.com/css?family=Cutive+Mono|Fredericka+the+Great|Offside|Shadows+Into+Light+Two|Wallpoet" rel="stylesheet" type="text/css">
-								<meta charset="UTF-8">
+								<meta charset="utf-8">
 							</head>
 							<body>
 							<div id="wrapper">
@@ -199,7 +199,7 @@ class HTMLPage{
 	}
 	
 	/**  
-	 * @param string, a message
+	 * @param string
 	 * @return String HTML
 	 */
 	public function getPage($messageString) {
@@ -229,14 +229,14 @@ class HTMLPage{
 										</form>';											    	
 	
 		$this->html .= '</fieldset>
-				    	</div>'.
-						$this->getClock();
+				    </div>'.
+				$this->getClock();
 	
 		echo $this->html;
 	}
 
 	/**  
-	 * @param string, message
+	 * @param string
 	 * @return String HTML
 	 */
 	public function getLoggedInPage($messageString) {
@@ -254,7 +254,7 @@ class HTMLPage{
 								<ul class="nav nav-pills nav-stacked">
 								<li><p><a href="?wantsToAddEvent">Skapa evenemang</a></p></li>
 								<li><p><a href="?wantsToUpdateEvent">Ändra evenemang</a></p></li>
-								<li><p><a href="?showEvents">Visa evenemang</a></p></li>
+								<li><p><a href="?showEvents">Visa alla evenemang</a></p></li>
 								</ul>
 								<form method="post" action="?logout">
 								<input type="submit" name="logout" value="Logga ut" /> 
@@ -265,7 +265,7 @@ class HTMLPage{
 	}
 
 	/**  
-	 * @param string, message
+	 * @param string
 	 * @return String HTML
 	 */
 	public function getAddMemberPage($messagestring)
@@ -296,7 +296,7 @@ class HTMLPage{
 					<legend>Registrera ny användare - Skriv in namn och lösenord</legend>".$messagestring."
 					<p><label for='UserNameID' >Namn :</label>
 					<input type='text' size='20' name='" . self::$NAME . "' id='UserNameID' value='". $nameValue ."' /></p>
-					<p><label for='PasswordID' >Personnummer (Anges på formatet XXXXXXXXX)  :</label>
+					<p><label for='PasswordID' >Personnummer (Anges på formatet ÅÅMMDDXXXX)  :</label>
 					<input type='text' size='20' name='" . self::$PERSONALNR . "' id='UserNameID' value='". $pnrValue ."' /></p>
 					<p><label for='PasswordID' >Adress  :</label>
 					<input type='text' size='20' name='" . self::$ADDRESS . "' id='UserNameID' value='". $addressValue ."' /></p>
@@ -306,7 +306,7 @@ class HTMLPage{
 					<input type='text' size='20' name='" . self::$PHONENR . "' id='UserNameID' value='". $phnrValue ."' /></p>
 					<p><label for='PasswordID' >Klass (Om passiv medlem skriv ange '-' som klass) :</label>
 					<input type='text' size='20' name='" . self::$CLASS . "' id='UserNameID' value='". $classValue ."' /></p>
-					<p><label for='PasswordID' >Betalat till  :</label>
+					<p><label for='PasswordID' >Betalat till (Anges på formatet ÅÅÅÅ-MM-DD) :</label>
 					<input type='text' size='20' name='" . self::$PAYDATE . "' id='UserNameID' value='". $paydateValue ."' /></p>
 					<input type='submit' name=''  value='Registrera' />
 				</fieldset>
@@ -332,7 +332,7 @@ class HTMLPage{
 				<p>'.$this->showMembers($userInfo).'</p>
 				<p><a href="?'.self::$changePassword.'">Ändra lösenord</a></p>
 				<p><a href="?'.self::$showAllMembersSimple.'">Visa alla medlemmar</a></p>
-				<p><a href="?showEvents">Visa evenemang</a></p>
+				<p><a href="?showEvents">Visa alla evenemang</a></p>
 				<form method="post" action="?logout">
 				<input type="submit" name="logout" value="Logga ut" /> 
 				</form>
@@ -343,6 +343,7 @@ class HTMLPage{
 	}
 
 	/**  
+	 * @param string
 	 * @return String HTML
 	 */
 	public function getShowEventsPage($events)
@@ -359,6 +360,7 @@ class HTMLPage{
 	}
 	
 	/**  
+	 * @param string
 	 * @return String HTML
 	 */
 	public function getAddEventPage($messagestring)
@@ -385,7 +387,7 @@ class HTMLPage{
 						<legend>Lägg till evenemang</legend>".$messagestring."
 						<p><label for='titleID' >Titel :</label>
 						<input  type='text' size='20' name='eventTitle' id='titleID' value='".$titleValue."' /></p>
-						<p><label for='dateID' >Datum (YYYY-MM-DD) :</label>
+						<p><label for='dateID' >Datum (ÅÅÅÅ-MM-DD) :</label>
 						<input type='text' size='50' name='eventDate' id='dateID' value='".$dateValue."' /></p>
 						<p><label for='timeID' >Tid (HH:MM) :</label>
 						<input type='text' size='50' name='eventTime' id='timeID' value='".$timeValue."' /></p>
@@ -400,8 +402,10 @@ class HTMLPage{
 		echo $this->html;
 	}
 
-		/**  
+	/**
+	 * @param string  
 	 * @param array
+	 * @param string
 	 * @return String HTML
 	 */
 	public function getShowEventPage($messagestring,$event,$clickable)
@@ -428,6 +432,8 @@ class HTMLPage{
 	}
 	
 	/**
+	 * @param string
+	 * @param array
 	 * @return String HTML
 	 */
 	public function getUpdateEventPage($messagestring, $event)
@@ -440,9 +446,9 @@ class HTMLPage{
 			<form class='form-horizontal' action='?updateEvent' method='post' enctype='multipart/form-data'>
 				<fieldset>
 					<legend>Uppdatera event</legend>".$messagestring."
-					<p><label for='newDateID' >Datum :</label>
+					<p><label for='newDateID' >Datum (ÅÅÅÅ-MM-DD):</label>
 					<input type='text' size='20' name='newDate' id='newDateID' value='' /></p>					
-					<p><label for='newTimeID' >Tid  :</label>
+					<p><label for='newTimeID' >Tid  (HH:MM):</label>
 					<input type='text' size='20' name='newTime' id='newTimeID' value='' /></p>
 					<p><label for='newInfoID' >Beskrivning  :</label>
 					<input type='text' size='20' name='newInfo' id='newInfoID' value='' /></p>
@@ -457,6 +463,8 @@ class HTMLPage{
 	}
 	
 	/**
+	 * @param string
+	 * @param array
 	 * @return String HTML
 	 */
 	public function getDeleteEventPage($messagestring, $event)
@@ -479,6 +487,7 @@ class HTMLPage{
 	}
 
 	/**
+	 * @param string
 	 * @return String HTML
 	 */
 	public function getChangePasswordPage($messagestring)
@@ -529,6 +538,7 @@ class HTMLPage{
 	}
 	
 	/**  
+	 * @param int
 	 * @param array
 	 * @return String HTML
 	 */
@@ -565,7 +575,9 @@ class HTMLPage{
 	}
 	
 	/**  
+	 * @param string  
 	 * @param array
+	 * @param string
 	 * @return String HTML
 	 */
 	public function getShowMemberPage($messagestring,$member,$clickable)
@@ -592,6 +604,8 @@ class HTMLPage{
 	}
 	
 	/**
+	 * @param string
+	 * @param array
 	 * @return String HTML
 	 */
 	public function getUpdateMemberPage($messagestring, $member)
@@ -627,6 +641,8 @@ class HTMLPage{
 	}
 	
 	/**
+	 * @param string
+	 * @param array
 	 * @return String HTML
 	 */
 	public function getDeleteMemberPage($messagestring, $member)
@@ -649,6 +665,7 @@ class HTMLPage{
 	}
 
 	/**
+	 * @param string
 	 * @return String HTML
 	 */
 	public function getLogOutPage($messageString) {
@@ -686,13 +703,12 @@ class HTMLPage{
 	 * @return String HTML with time
 	 */
 	private function getClock() {
-		setlocale(LC_ALL, "swedish");
+		setlocale(LC_ALL, "sv_SE.utf-8");
 		
 		/**
 		 * @var string 
 		 */
 		$time = strftime('%A, den %d %B år %Y. Klockan är: [%H:%M:%S] ');
-		
 		return '					<div id="footer">	
 										<p class="time">' . $time . '</p>
 									</div>
