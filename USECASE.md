@@ -107,6 +107,15 @@ Medlemmen loggar in och väljer att ändra lösenord.
 Lösenordet uppdateras i databasen.
 
 ===================================
-AF9. Visa alla medlemmar i en enkel lista (för andra medlemmar)
+AF 9. Visa alla medlemmar i en enkel lista (för andra medlemmar)
+
+===================================
+AF 10. Admin ska kunna lägga till evenemang och se dem i en lista
+
+===================================
+AF 11. Admin ska kunna radera och ändra evenemang
+
+===================================
+AF 12. Medlem ska kunna visa evenemangen
 
 

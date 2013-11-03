@@ -2,7 +2,7 @@ Projekt PHP, 1dv408
 ===================================
 Checklista för release
 
-1. Databas
+1. Databaser
 - Skapa en databas, ändra till rätt databas, användare, lösenord i  funktionen openCon() i LoginDAL
 - Databasen ska ha en tabell med namnet member och
   member ska ha 9 fält:
@@ -15,6 +15,13 @@ Checklista för release
 	- Betalat_till, date
 	- Anvnamn, varchar(10), not null
 	- Losenord, varchar(50), not null
+  
+- Databasen ska ha en till tabell med namnet event och
+  member ska ha 4 fält:
+	- Titel, varchar(100), not null
+	- Datum, date, not null
+	- Tid, time, not null
+	- Info, varchar(500), not null
   men detta skapas automatiskt om tabellen member ej existerar.
   
 2. Lägg upp hela mappen PHPProjekt på webbhotellet

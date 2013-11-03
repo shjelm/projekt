@@ -43,6 +43,11 @@ TF 1.6 Logga in admin utan lösenord
 3. Klicka på logga in
 4. Felmeddelande "Lösenord saknas" visas
 
+TF 1.7 Inloggad vid omladdning av sida
+1. TF 1.2 Logga in admin	
+2. Uppdatera sidan (markera url och enter)
+3. Admin är fortfarande inloggad
+
 ===================================
 
 TF 2.1 Visa medlem
@@ -230,3 +235,72 @@ TF 8.2 Logga ut admin
 1. TF 1.2 Logga in admin
 2. Klicka på logga ut
 3. Admin loggas ut och rättmeddelande visas
+
+===================================
+TF 9.1 Lägg till evenemang
+1. TF 1.2 Logga in admin
+2. Klicka på skapa evenemang
+3. Fyll i titel, tidpunkt och beskrvning
+4. Klicka på spara
+5. Eventet sparas och rättmeddelande visas
+
+TF 9.2 Lägg till evenemang, tomma fält
+1. TF 1.2 Logga in admin
+2. Klicka på skapa evenemang
+3. Fyll i titel och tidpunkt
+4. Klicka på spara
+5. Felmeddelande visas
+
+TF 9.3 Visa evenemang, admin
+1. TF 1.2 Logga in admin
+2. Klicka på visa evenemang 
+3. Alla evenemang visas
+
+TF 9.4 Visa evenemang, medlem
+1. TF 5.1 Logga in medlem
+2. Klicka på visa evenemang 
+3. Alla evenemang visas
+
+TF 9.5 Ändra evenemang
+1. TF 1.2 Logga in admin
+2. Klicka på ändra evenemang
+3. Ange titel
+4. Sök 
+5. Klicka på ändra event
+6. Fyll i uppgifter
+7. Klicka på uppdatera
+8. Rättmeddelande visas
+
+TF 9.6 Ändra evenemang, misslyckat datum
+1. TF 1.2 Logga in admin
+2. Klicka på ändra evenemang
+3. Ange titel
+4. Sök 
+5. Klicka på ändra event
+6. Fyll i ogiltigt datum
+7. Klicka på uppdatera
+8. Felmeddelande visas
+
+TF 9.7 Ändra evenemang, misslyckat tid
+1. TF 1.2 Logga in admin
+2. Klicka på ändra evenemang
+3. Ange titel
+4. Sök 
+5. Klicka på ändra event
+6. Fyll i ogiltig tid
+7. Klicka på uppdatera
+8. Felmeddelande visas
+
+TF 9.8 Radera evenemang
+1. TF 1.2 Logga in admin
+2. Klicka på ändra evenemang
+3. Ange titel
+4. Sök 
+5. Klicka på radera event
+8. Rättmeddelande visas
+
+TF 9.9 Lägg till redan registrerat evenemang
+1. TF 1.2 Logga in admin
+2. Klicka på skapa evenemang
+3. Fyll i redan existerande titel
+4. Felmeddelande visas 
