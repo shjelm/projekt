@@ -25,14 +25,6 @@ class ApplicationController{
 	
 	public function runApplication()
 	{
-		try
-		{
 			$this->LoginController->userWantsToLogin();
-			 
-		}
-		catch(Exception $ex)
-		{
-			echo "Something went wrong.";
-		}
 	}
 }

@@ -10,22 +10,27 @@ class Event{
 	private $title;
 	
 	/**
-	 * @var string
+	 * @var date
 	 */
-	private $dateTime;
+	private $eventDate;
 	
 	/**
 	 * @var string
 	 */
 	private $info;
 	
+	/**
+	 * @var time
+	 */
+	private $eventTime;
 	
-	public function __construct($title, $dateTime, $info)
+	public function __construct($title, $eventDate, $eventTime , $info)
 	{
 		$this->loginDAL = new \model\LoginDAL;
 		
 		$this->title = $title;
-		$this->dateTime = $dateTime;
+		$this->eventDate = $eventDate;		
+		$this->eventTime = $eventTime;
 		$this->info = $info;
 		
 	}
@@ -39,11 +44,11 @@ class Event{
 	}
 	
 	/**
-	 * @return string
+	 * @return date
 	 */
-	public function getDateTime()
+	public function getEventDate()
 	{
-		return $this->dateTime;
+		return $this->eventDate;
 	}
 	
 	/**
@@ -52,5 +57,13 @@ class Event{
 	public function getInfo()
 	{
 		return $this->info;
+	}
+	
+	/**
+	 * @return time
+	 */
+	public function getEventTime()
+	{
+		return $this->eventTime;
 	}
 }

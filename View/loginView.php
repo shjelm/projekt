@@ -3,7 +3,10 @@
 namespace view;
 
 class loginView{
-		
+	
+	/** 
+	 * Konstanter för hantering av fel-/rättmeddelanden
+	 */	
 	CONST CORRECTUSERCREDENTIALS = 1;
 	CONST EMPTYUSERNAME = 2;
 	CONST EMPTYPASSWORD = 3;
@@ -22,6 +25,12 @@ class loginView{
 	CONST DELETEDMEMBER = 22;
 	CONST UNVALIDDATEFORMAT = 23;
 	CONST EMPTYFORMEVENT = 24;
+	CONST UNVALIDTIMEFORMAT = 25;
+	CONST ADDINGEVENTSUCCES = 26;
+	CONST UPDATEDEVENT = 27;
+	CONST EXISTINGEVENT = 28;
+	CONST DELETEDEVENT = 29;
+	CONST UNEXISTINGTITLE = 30;
 	CONST DEFAULTMSG = 999;
 	
 	/**
@@ -139,6 +148,135 @@ class loginView{
 	 */
 	private static $showAllMembersSimple = "showAllMembersSimple";
 	
+	/**
+	 * @var string
+	 */
+	private static $deleteEvent = "deleteEvent";
+	
+	/**
+	 * @var string
+	 */
+	private static $addMember = "addMember";
+	
+	
+	/**
+	 * @var string
+	 */
+	private static $showAllMembers = "showAllMembers";
+	
+	/**
+	 * @var string
+	 */
+	private static $showEvents = "showEvents";
+	
+	/**
+	 * @var string
+	 */
+	private static $wantsToAddEvent = "wantsToAddEvent";
+	
+	/**
+	 * @var string
+	 */
+	private static $addEvent = "addEvent";
+	
+	/**
+	 * @var string
+	 */
+	private static $wantsToUpdateEvent = "wantsToUpdateEvent";
+	
+	/**
+	 * @var string
+	 */
+	private static $updateEvent = "updateEvent";
+	
+	/**
+	 * @var string
+	 */
+	private static $updateThisEvent = "updateThisEvent";
+	
+	/**
+	 * @var string
+	 */
+	private static $searchByEvent = "searchByEvent";
+	
+	/**
+	 * @var string
+	 */
+	private static $payingMembers = "payingMembers";
+	
+	/**
+	 * @var string
+	 */
+	private static $notPayingMembers = "notPayingMembers";
+	
+	/**
+	 * @var string
+	 */
+	private static $searchMember = "searchMember";
+	
+	/**
+	 * @var string
+	 */
+	private static $searchEvent = "searchEvent";
+	
+	/**
+	 * @var string
+	 */
+	private static $updateMember = "updateMember";
+
+	/**
+	 * @var string
+	 */
+	private static $changePasswordField = "changePasswordField";
+	
+	/**
+	 * @var string
+	 */
+	private static $repeatPasswordField = "repeatPasswordField";
+	
+	/**
+	 * @var string
+	 */
+	private static $newDate = "newDate";
+	
+	/**
+	 * @var string
+	 */
+	private static $newTime = "newTime";
+	
+	/**
+	 * @var string
+	 */
+	private static $newInfo = "newInfo";
+	
+	/**
+	 * @var string
+	 */
+	private static $changePassword = "changePassword";
+	
+	/**
+	 * @var string
+	 */
+	private static $changePass = "changePass";
+
+	/**
+	 * @var string
+	 */
+	private static $eventTitle = "eventTitle";
+	/**
+	 * @var string
+	 */
+	private static $eventDate = "eventDate";
+	
+	/**
+	 * @var string
+	 */
+	private static $eventTime = "eventTime";
+	
+	/**
+	 * @var string
+	 */
+	private static $eventInfo = "eventInfo";
 	
 	/**
 	 * @return string
@@ -157,7 +295,7 @@ class loginView{
 	 * @return bool
 	 */
 	public function isAddingMember() {
-		if (isset($_GET["addMember"])) {
+		if (isset($_GET[self::$addMember])) {
 			return true;
 		}
 		else{
@@ -169,7 +307,7 @@ class loginView{
 	 * @return bool
 	 */
 	public function isShowingMembers() {
-		if (isset($_GET["showAllMembers"])) {
+		if (isset($_GET[self::$showAllMembers])) {
 			return true;
 		}
 		else{
@@ -181,7 +319,7 @@ class loginView{
 	 * @return bool
 	 */
 	public function isShowingEvents() {
-		if (isset($_GET["showEvents"])) {
+		if (isset($_GET[self::$showEvents])) {
 			return true;
 		}
 		else{
@@ -193,7 +331,7 @@ class loginView{
 	 * @return bool
 	 */
 	public function isWantingToAddEvent() {
-		if (isset($_GET["wantsToAddEvent"])) {
+		if (isset($_GET[self::$wantsToAddEvent])) {
 			return true;
 		}
 		else{
@@ -205,7 +343,7 @@ class loginView{
 	 * @return bool
 	 */
 	public function isAddingEvent() {
-		if (isset($_POST["addEvent"])) {
+		if (isset($_POST[self::$addEvent])) {
 			return true;
 		}
 		else{
@@ -216,8 +354,57 @@ class loginView{
 	/**
 	 * @return bool
 	 */
+	public function isWantingToUpdateEvent() {
+		if (isset($_GET[self::$wantsToUpdateEvent])) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isUpdatingEvent() {
+		if (isset($_GET[self::$updateEvent])) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isSavingUpdatedEvent() {
+		if (isset($_POST[self::$updateThisEvent])) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isSearchingEvent() {
+		if (isset($_POST[self::$searchByEvent])) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	
+	/**
+	 * @return bool
+	 */
 	public function isShowingPayingMembers() {
-		if (isset($_GET["payingMembers"])) {
+		if (isset($_GET[self::$payingMembers])) {
 			return true;
 		}
 		else{
@@ -229,7 +416,7 @@ class loginView{
 	 * @return bool
 	 */
 	public function isShowingNotPayingMembers() {
-		if (isset($_GET["notPayingMembers"])) {
+		if (isset($_GET[self::$notPayingMembers])) {
 			return true;
 		}
 		else{
@@ -253,7 +440,7 @@ class loginView{
 	 * @return bool
 	 */
 	public function isSearchingMember() {
-		if (isset($_POST["searchMember"])) {
+		if (isset($_POST[self::$searchMember])) {
 			return true;
 		}
 		else{
@@ -261,6 +448,9 @@ class loginView{
 		}
 	}
 	
+	/**
+	 * @return bool
+	 */
 	public function isWantingDeletingMember()
 	{
 		if (isset($_GET["deleteMember"])) {
@@ -271,15 +461,45 @@ class loginView{
 		}
 	}
 	
+	/**
+	 * @return bool
+	 */
 	public function isDeletingMember()
 	{
-		if (isset($_POST["delete"])) {
+		if (isset($_POST["deleteThisMember"])) {
 			return true;
 		}
 		else{
 			return false;
 		}
 	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isWantingDeletingEvent()
+	{
+		if (isset($_GET[self::$deleteEvent])) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isDeletingEvent()
+	{
+		if (isset($_GET[self::$deleteEvent])) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
 	/**
 	 * @return bool
 	 */
@@ -296,7 +516,7 @@ class loginView{
 	 * @return bool
 	 */
 	public function isUpdatingMember() {
-		if (isset($_GET["updateMember"])) {
+		if (isset($_GET[self::$updateMember])) {
 			return true;
 		}
 		else{
@@ -308,7 +528,7 @@ class loginView{
 	 * @return bool
 	 */
 	public function isSavingUpdatedMember() {
-		if (isset($_POST[self::$UPDATE])) {
+		if (isset($_POST["updateThisMember"])) {
 			return true;
 		}
 		else{
@@ -393,12 +613,49 @@ class loginView{
 			return false;
 		}	
 	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isUpdatingDate()
+	{
+		if (!empty($_POST[self::$newDate])) {
+			return true;
+		}
+		else{
+			return false;
+		}	
+	}
+	/**
+	 * @return bool
+	 */
+	public function isUpdatingTime()
+	{
+		if (!empty($_POST[self::$newTime])) {
+			return true;
+		}
+		else{
+			return false;
+		}	
+	}
+	/**
+	 * @return bool
+	 */
+	public function isUpdatingInfo()
+	{
+		if (!empty($_POST[self::$newInfo])) {
+			return true;
+		}
+		else{
+			return false;
+		}	
+	}
 	/**
 	 * @return bool
 	 */
 	public function isShowingChangingPassword()
 	{
-		if (isset($_GET["changePassword"])) {
+		if (isset($_GET[self::$changePassword])) {
 			return true;
 		}
 		else{
@@ -411,7 +668,7 @@ class loginView{
 	 */
 	public function isChangingPassword()
 	{
-		if (isset($_POST["changePass"])) {
+		if (isset($_POST[self::$changePass])) {
 			return true;
 		}
 		else{
@@ -425,8 +682,18 @@ class loginView{
 	 */
 	public function getMemberAdminWantsToShow()
 	{
-		if(isset($_POST["searchMember"])){
-			return $_POST["searchMember"];
+		if(isset($_POST[self::$searchMember])){
+			return $_POST[self::$searchMember];
+		}	
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getEventAdminWantsToShow()
+	{
+		if(isset($_POST[self::$searchEvent])){
+			return $_POST[self::$searchEvent];
 		}	
 	}
 	
@@ -434,10 +701,11 @@ class loginView{
 	 * @return string
 	 */
 	public function getMemberAdminWantsToUpdate(){
-		if(isset($_GET["updateMember"])){
-			return $_POST["searchMember"];
+		if(isset($_GET[self::$updateMember])){
+			return $_POST[self::$searchMember];
 		}
 	}
+	
 	
 	/**
 	 * @return string
@@ -458,8 +726,8 @@ class loginView{
 	public function getNewPassword()
 	{
 		if($_POST || $_GET){
-			if(isset($_POST["changePasswordField"])){	
-				$password = $_POST["changePasswordField"];	
+			if(isset($_POST[self::$changePasswordField])){	
+				$password = $_POST[self::$changePasswordField];	
 				return md5($password."crypt");
 			}
 		}
@@ -471,8 +739,8 @@ class loginView{
 	public function getRepeatedNewPassword()
 	{
 		if($_POST || $_GET){
-			if(isset($_POST["repeatPasswordField"])){	
-				$password = $_POST["repeatPasswordField"];	
+			if(isset($_POST[self::$repeatPasswordField])){	
+				$password = $_POST[self::$repeatPasswordField];	
 				return md5($password."crypt");
 			}
 		}
@@ -547,18 +815,44 @@ class loginView{
 	/**
 	 * @return string
 	 */
+	public function getDate()
+	{	if($_POST || $_GET){
+			if(isset($_POST[self::$newDate])){
+				return $_POST[self::$newDate];
+			}
+		}				
+	}
+	/**
+	 * @return string
+	 */
+	public function getTime()
+	{	if($_POST || $_GET){
+			if(isset($_POST[self::$newTime])){
+				return $_POST[self::$newTime];
+			}
+		}				
+	}
+	/**
+	 * @return string
+	 */
+	public function getInfo()
+	{	if($_POST || $_GET){
+			if(isset($_POST[self::$newInfo])){
+				return $_POST[self::$newInfo];
+			}
+		}				
+	}
+	
+	/**
+	 * @return string
+	 */
 	public function setMessage($message)
 	{
 		if($_GET){
 			switch ($message) {
 				
 				case self::CORRECTUSERCREDENTIALS:
-					$this->messageString = '<p class="alert alert-success">Inloggningen lyckades</p>';	
-					
-					if(self::checkAutoLogin())
-					{
-						$this->messageString = '<p class="alert alert-success">Inloggningen lyckades och vi kommer ihåg dig nästa gång</p>';
-					}			
+					$this->messageString = '<p class="alert alert-success">Inloggningen lyckades</p>';			
 					break;
 					
 				case self::EMPTYUSERNAME: 
@@ -597,6 +891,10 @@ class loginView{
 					$this->messageString = '<p class="alert alert-success">Medlemmen har registrerats</p>';	
 					break;	
 					
+				case self::ADDINGEVENTSUCCES:
+					$this->messageString = '<p class="alert alert-success">Evenemanget har skapats</p>';	
+					break;	
+					
 				case self::UNEXISTINGPNR:
 					$this->messageString = '<p class="alert alert-danger">Personnumret är ej registrerat</p>';	
 					break;
@@ -607,7 +905,11 @@ class loginView{
 					
 				case self::UPDATEDMEMBER:
 					$this->messageString = '<p class="alert alert-success">Medlemmen har uppdaterats</p>';	
-					break;	
+					break;
+				
+				case self::UPDATEDEVENT:
+					$this->messageString = '<p class="alert alert-success">Evenemanget har uppdaterats</p>';	
+					break;		
 					
 				case self::CORRECTCHANGE:
 					$this->messageString = '<p class="alert alert-success">Lösenordet har ändrats</p>';	
@@ -623,11 +925,28 @@ class loginView{
 				
 				case self::UNVALIDDATEFORMAT:
 					$this->messageString = '<p class="alert alert-danger">Ange ett giltigt datum</p>';	
+					break;
+				
+				case self::UNVALIDTIMEFORMAT:
+					$this->messageString = '<p class="alert alert-danger">Ange en giltig tidpunkt</p>';	
 					break;		
 					
 				case self::EMPTYFORMEVENT:
 					$this->messageString = '<p class="alert alert-danger">Alla fält måste fyllas i</p>';	
-					break;		
+					break;
+				
+				case self::EXISTINGEVENT:
+					$this->messageString = '<p class="alert alert-danger">Evenemanget är redan registrerat</p>';	
+					break;	
+
+				case self::DELETEDEVENT:
+					$this->messageString = '<p class="alert alert-success">Evenemanget har raderats</p>';	
+					break;	
+				
+				case self::UNEXISTINGTITLE:
+					$this->messageString = '<p class="alert alert-danger">Evenemanget är ej registrerat</p>';	
+					break;	
+					
 					
 				default:
 					$this->messageString = '';
@@ -664,84 +983,10 @@ class loginView{
 		}
 	}
 	
-	/**
-	 * @return bool
-	 */
-	public function checkAutologin()
-	{
-		if($_GET){
-			if(isset($_POST[self::$autoLogin])){
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-	}
-	
 	public function destroyCredentials()
 	{
 		setcookie(self::$username, "",time()-3600);
 		setcookie(self::$password, "",time()-3600);
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function canSaveCredentials()
-	{
-		if (isset($_COOKIE[self::$username]) && isset($_COOKIE[self::$password]))
-		{
-			return true;
-		}
-		else 
-		{
-			return false;	
-		}
-	}
-	
-	/**
-	 * @param string $username 
-	 * @param int $end
-	 * @return bool
-	 */	
-	public function correctSavedCredentials($username, $end)
-	{//TODO: KUnna funka med cookie
-		if(self::canSaveCredentials()){
-			var_dump($_COOKIE[self::$password], md5(self::$password."crypt"));
-			if($_COOKIE[self::$username] == $username  &&  $_COOKIE[self::$password] == md5(self::$password."crypt") 
-				&& $end > time())
-			{
-				return true;
-			}
-			else 
-			{
-				return false;
-			}
-		}
-	}
-	
-	/**
-	 * @param string $username
-	 * @param string $password
-	 * @param int $end
-	 */
-	public function autoLogin($username, $password, $endtime){
-		
-		setcookie(self::$username, $username, $endtime);
-		$this->cryptedPassword = md5($password . "crypt");
-		setcookie(self::$password, $this->cryptedPassword, $endtime);	
-	}
-	
-	
-	/**
-	 * @return string
-	 */
-	public function getCryptedPassword()
-	{
-		if(isset($_COOKIE[self::$password])){	
-			return $this->cryptedPassword; 
-		}
 	}
 	
 	/**
@@ -771,27 +1016,27 @@ class loginView{
 		}
 		return $array;
 	}
+	
 	/**
 	 * @return array
 	 */
 	public function setEvent()
 	{
 		if($_POST){
-			$title = $_POST["eventTitle"];
-			$dateTime = $_POST["eventDate"];
-			$info = $_POST["eventInfo"];
+			$title = $_POST[self::$eventTitle];
+			$eventDate = $_POST[self::$eventDate];
+			$eventTime = $_POST[self::$eventTime];
+			$info = $_POST[self::$eventInfo];
 		
 			$array = array();
 			
 			array_push($array, $title);
-			array_push($array, $dateTime);		
+			array_push($array, $eventDate);	
+			array_push($array, $eventTime);		
 			array_push($array, $info);		
-		
 		}
 		return $array;
 	}
-	
-	
 	
 	/**
 	 * @return HTML string

@@ -4,6 +4,9 @@ namespace model;
 
 class loginModel{
 	
+	/** 
+	 * Konstanter för hantering av fel-/rättmeddelanden
+	 */	
 	CONST CORRECTUSERCREDENTIALS = 1;
 	CONST EMPTYUSERNAME = 2;
 	CONST EMPTYPASSWORD = 3;
@@ -28,6 +31,12 @@ class loginModel{
 	CONST DELETEDMEMBER = 22;
 	CONST UNVALIDDATEFORMAT = 23;
 	CONST EMPTYFORMEVENT = 24;
+	CONST UNVALIDTIMEFORMAT = 25;
+	CONST ADDINGEVENTSUCCES = 26;
+	CONST UPDATEDEVENT = 27;
+	CONST EXISTINGEVENT = 28;
+	CONST DELETEDEVENT = 29;
+	CONST UNEXISTINGTITLE = 30;
 	CONST DEFAULTMSG = 999;
 	
 	
@@ -61,6 +70,9 @@ class loginModel{
 	 */
 	private static $browser = "browser";
 	
+	/**
+	 * @var /model/LoginDAL
+	 */
 	private $loginDAL;
 	
 	
@@ -107,6 +119,10 @@ class loginModel{
 		}
 	}
 	
+	/**
+	 * @param /model/member
+	 * @return int
+	 */	
 	public function checkUnvalidNewMember(member $member)
 	{
 		$name = $member->getName();
@@ -138,37 +154,107 @@ class loginModel{
 		
 	}
 	
+	/**
+	 * @param /model/event
+	 * @return bool
+	 */	
 	public function checkValidEvent(event $event)
 	{
 		$title = $event->getTitle();
-		$dateTime = $event ->getDateTime();		
+		$eventDate = $event ->getEventDate();
+		$eventTime = $event ->getEventTime();		
 		$info = $event->getInfo();
 		
-		if(empty($title) || empty($dateTime) || empty($info) )
+		if(empty($title) || empty($eventDate) || empty($info) || empty($eventTime))
 		{
 			 return false;
 		}		
-		else {
+		else if($this->unvalidDateFormat($eventDate))
+		{
+			return false;
+		}
+		else if($this->unvalidTimeFormat($eventTime))
+		{
+			return false;
+		}
+		else 
+		{
+			return true;
+		}
+	}	
+	
+	/**
+	 * @param string
+	 * @return bool
+	 */
+	public function checkValidDateForUpdate($date)
+	{
+		if(empty($date) || $this->unvalidDateFormat($date))
+		{
+			return false;
+		}
+		else{
+			return true;
+		}
+		
+	}
+	
+	/**
+	 * @param string
+	 * @return bool
+	 */
+	public function checkValidTimeForUpdate($time)
+	{
+		if(empty($time) || $this->unvalidTimeFormat($time))
+		{
+			return false;
+		}
+		else{
 			return true;
 		}
 	}
+	
+	/**
+	 * @param /model/event
+	 * @return int
+	 */
 	public function checkUnvalidEvent(event $event)
 	{
 		$title = $event->getTitle();
-		$dateTime = $event ->getDateTime();		
+		$eventDate = $event ->getEventDate();
+		$eventTime = $event ->getEventTime();		
 		$info = $event->getInfo();
 		
-		if(empty($title) || empty($dateTime) || empty($info) )
+		if(empty($title) || empty($eventDate) || empty($info) || empty($eventTime) )
 		{
 			 return self::EMPTYFORMEVENT;
-		}		
+		}	
+		
+		if($this->unvalidDateFormat($eventDate))
+		{
+			 return self::UNVALIDDATEFORMAT;
+		}
+		
+		if($this->unvalidTimeFormat($eventTime))
+		{
+			 return self::UNVALIDTIMEFORMAT;
+		}	
+		else{
+			return self::ADDINGEVENTSUCCES;
+		}	
 	}
 	
+	/**
+	 * @return int
+	 */
 	public function alreadyExistingPnr()
 	{
 		return self::EXISTINGPNR;
 	}
 	
+	/**
+	 * @return bool
+	 */
 	public function unvalidPersonalnumber($pnr)
 	{
 		preg_match('/^[0-9]{10}$/', $pnr, $matches);
@@ -182,9 +268,35 @@ class loginModel{
 		
 	}
 	
+	/**
+	 * @return bool
+	 */
+	public function eventExists($title, $date)
+	{
+		if(isset($title) && isset($date))
+		{
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function alreadyExistingEvent()
+	{
+		return self::EXISTINGEVENT;
+	}
+	
+	/**
+	 * @param string
+	 * @return bool
+	 */
 	public function unvalidDateFormat($date)
 	{
-		preg_match('/^([1-2]{1}[0-9]{3})-([0-1]{1}[0-9]{1})-([0-1]{1}[0-9]{1})$/', $date, $matches);
+		preg_match('/^([1-2]{1}[0-9]{3})-([0-1]{1}[0-9]{1})-([0-2]{1}[0-9]{1})$/', $date, $matches);
 		$valid = count($matches);
 		if($valid == 4){
 			return false;
@@ -195,21 +307,58 @@ class loginModel{
 				
 	}
 	
+	/**
+	 * @param string
+	 * @return bool
+	 */
+	public function unvalidTimeFormat($time)
+	{
+		preg_match('/^([0-2]{1}[0-9]{1}):([0-5]{1}[0-9]{1})$/', $time, $matches);
+		$valid = count($matches);
+		if($valid == 3){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+	
+	/**
+	 * @return int
+	 */
 	public function correctChangeOfPasswords()
 	{
 		return self::CORRECTCHANGE;
 	}
 	
+	/**
+	 * @return int
+	 */
 	public function incorrectChangeOfPasswords()
 	{
 		return self::INCORRECTCHANGE;
 	}
 	
+	/**
+	 * @return int
+	 */
 	public function unexistingPnr()
 	{
 		return self::UNEXISTINGPNR;
 	}
 	
+	/**
+	 * @return int
+	 */
+	public function unexistingEvent()
+	{
+		return self::UNEXISTINGTITLE;
+	}
+	
+	/**
+	 * @param /model/member
+	 * @return bool
+	 */
 	public function checkNewMemberValid(member $member)
 	{
 		$name = $member->getName();
@@ -253,6 +402,9 @@ class loginModel{
 		}
 	}
 	
+	/**
+	 * @return bool
+	 */
 	public function checkMemberLoggedIn()
 	{
 		//TODO: Hur fan ska jag kolla om medlemmen har loggat in med korrekta uppgifter för att kunna hållas inloggad?
@@ -298,7 +450,7 @@ class loginModel{
 	}
 	
 	/**
-	 * @param boll $logout
+	 * @param bool $logout
 	 * @return int
 	 */
 	public function setLogout($logout)
@@ -350,6 +502,9 @@ class loginModel{
 		}
 	}
 	
+	/**
+	 * @param string
+	 */
 	public function savePnr($pnr)
 	{
 		if(isset($_SESSION[self::$mySession])){
@@ -359,6 +514,21 @@ class loginModel{
 		
 	}
 	
+	/**
+	 * @param string
+	 */
+	public function saveTitle($title)
+	{
+		if(isset($_SESSION[self::$mySession])){
+			$_SESSION[self::$mySession] = array();
+			$_SESSION[self::$mySession]["Title"] = $title;
+		}
+		
+	}
+	
+	/**
+	 * @param string
+	 */
 	public function saveUsername($username)
 	{
 		if(isset($_SESSION[self::$memberSession])){
@@ -367,6 +537,9 @@ class loginModel{
 		}
 	}
 	
+	/**
+	 * @return string
+	 */
 	public function getUsername()
 	{
 		if(isset($_SESSION[self::$memberSession]["Username"])){
@@ -374,20 +547,71 @@ class loginModel{
 		}
 	}
 	
+	/**
+	 * @return int
+	 */
 	public function memberUpdated()
 	{
 		return self::UPDATEDMEMBER;
 	}
 	
+	/**
+	 * @return int
+	 */
+	public function eventUpdated()
+	{
+		return self::UPDATEDEVENT;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function eventUpdatedDateFail()
+	{
+		return self::UNVALIDDATEFORMAT;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function eventUpdatedTimeFail()
+	{
+		return self::UNVALIDTIMEFORMAT;
+	}
+	
+	/**
+	 * @return int
+	 */
 	public function memberDeleted()
 	{
 		return self::DELETEDMEMBER;
 	}
 	
+	/**
+	 * @return int
+	 */	
+	public function eventDeleted()
+	{
+		return self::DELETEDEVENT;
+	}
+	
+	/**
+	 * @return string
+	 */
 	public function getPnr()
 	{
 		if(isset($_SESSION[self::$mySession])){
 			return $_SESSION[self::$mySession]["Pnr"];
+		}
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getTitle()
+	{
+		if(isset($_SESSION[self::$mySession])){
+			return $_SESSION[self::$mySession]["Title"];
 		}
 		
 	}
@@ -397,7 +621,7 @@ class loginModel{
 		if (!isset($_SESSION[self::$checkBrowser])){
 				$_SESSION[self::$checkBrowser] = array();
 				$_SESSION[self::$checkBrowser][self::$browser] = self::getUserAgent();
-			}		
+		}		
 	}
 	
 	/**
@@ -433,17 +657,25 @@ class loginModel{
 		file_put_contents("endtime.txt", $endtime);		
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getEndTime()
 	{
 		$end = file_get_contents("endtime.txt");
 		return $end;
 	}
 	
+	/**
+	 * @param array
+	 * @param string
+	 * @param string
+	 * @return bool
+	 */
 	public function checkIfUserExists($existingUsernames, $username, $pass)
 	{
 		$passFromDb = $this->loginDAL->getPassword($username);
 		$valid = false;
-		//TODO: Skicka in ett lösenord från databasen istället
 		for($i = 0; $i < count($existingUsernames); $i++)
 			{
 				if($username == $existingUsernames[$i] && $pass == $passFromDb[0]) {
@@ -453,11 +685,20 @@ class loginModel{
 		return false;
 	}
 	
+	/**
+	 * @param string
+	 * @return string
+	 */
 	public function cryptPassword($pass)
 	{
 		return md5($pass."crypt");
 	}
 	
+	/**
+	 * @param string
+	 * @param string
+	 * @return bool
+	 */
 	public function comparePasswords($newpass, $repeatedpass)
 	{
 		$emptyPass = md5(''."crypt");

@@ -95,14 +95,35 @@ class loginController{
 	 */
 	private $memberToShow;
 	
-	private $memberToUpdate;
-		
+	/**
+	 * @var array
+	 */
 	private $numberOfMembers; 
 	
+	/**
+	 * @var string
+	 */
 	private $notClickable = 'false';
+	
+	/**
+	 * @var string
+	 */
 	private $clickable = 'true';
 	
+	/**
+	 * @var \model\event
+	 */
+	private $event;
+	
+	/**
+	 * @var array
+	 */
 	private $events;
+	
+	/**
+	 * @var array
+	 */
+	private $eventToShow;
 	
 	public function __construct()
 	{
@@ -120,7 +141,7 @@ class loginController{
 		$this->loggedIn = $this->stayLoggedin();
 		$this->browserUsed = $this->loginModel->checkBrowserUsed();
 		
-		$this->saveCredentials = $this->loginView->canSaveCredentials();
+		//$this->saveCredentials = $this->loginView->canSaveCredentials();
 		
 		$this->post = $this->loginView->checkFormSent();
 		
@@ -130,7 +151,7 @@ class loginController{
 		
 		$this->logOut();
 		
-		$this->checkStayLoggedIn();	
+		//$this->checkStayLoggedIn();	
 		if($this->logOut() == false){			
 			
 		
@@ -218,15 +239,28 @@ class loginController{
 	public function adminWantsToAddEvent()
 	{
 		$newEvent = $this->loginView->setEvent();
-		$event = new \model\event($newEvent[0], $newEvent[1],
-								$newEvent[2]);
+		$this->event = new \model\event($newEvent[0], $newEvent[1],
+								$newEvent[2], $newEvent[3]);
+							
+		$title = $this->event->getTitle();
+		$existingTitle = $this->loginDAL->getEventToShow($title);
+		
+		/**$date = $this->event->getEventDate();
+		$existingDate = $this->loginDAL->getEventDateToShow($date);
+		
+		$alreadyExists = $this->loginModel->eventExists($title,$date);*/
 			
-		if($this->loginView->checkFormSent()){
-			$this->messageNr = $this->loginModel->checkUnvalidEvent($event);
+		if($this->loginView->checkFormSent() && !isset($existingTitle)){
+			$this->messageNr = $this->loginModel->checkUnvalidEvent($this->event);
 			$this->message = $this->loginView->setMessage($this->messageNr);
 		}
-		if($this->loginModel->checkValidEvent($event)){
-			$this->loginDAL->addEvent($event);
+		else if($this->loginView->checkFormSent() && isset($existingTitle)){
+			$this->messageNr = $this->loginModel->alreadyExistingEvent();
+			$this->message = $this->loginView->setMessage($this->messageNr);
+		}
+		
+		if($this->loginModel->checkValidEvent($this->event) && !isset($existingTitle)){			
+			$this->loginDAL->addEvent($this->event);
 		}
 	}
 	
@@ -258,35 +292,79 @@ class loginController{
 		
 		if ($this->loginView->isUpdatingName()){
 			$value = $this->loginView->getName();
-			$this->memberToUpdate = $this->loginDAL->updateNameMember($pnr, $value);
+			$this->loginDAL->updateNameMember($pnr, $value);
 		}
 		if ($this->loginView->isUpdatingAddress()){
 			$value = $this->loginView->getAddress();
-			$this->memberToUpdate = $this->loginDAL->updateAddressMember($pnr, $value);
+			$this->loginDAL->updateAddressMember($pnr, $value);
 		}
 		if ($this->loginView->isUpdatingEmail()){
 			$value = $this->loginView->getEmail();
-			$this->memberToUpdate = $this->loginDAL->updateEmailMember($pnr, $value);	
+			$this->loginDAL->updateEmailMember($pnr, $value);	
 		}
 		if ($this->loginView->isUpdatingPhonenr()){
 			$value = $this->loginView->getPhonenr();
-			$this->memberToUpdate = $this->loginDAL->updatePhonenrMember($pnr, $value);
+			$this->loginDAL->updatePhonenrMember($pnr, $value);
 		}
 		if ($this->loginView->isUpdatingClass()){
 			$value = $this->loginView->getClass();
-			$this->memberToUpdate = $this->loginDAL->updateClassMember($pnr, $value);
+			$this->loginDAL->updateClassMember($pnr, $value);
 		}
+		
+		$this->messageNr = $this->loginModel->memberUpdated();
+		
 		if ($this->loginView->isUpdatingPaydate()){
 			$value = $this->loginView->getPaydate();
-			$this->memberToUpdate = $this->loginDAL->updatePaydateMember($pnr, $value);
+			
+			if($this->loginModel->checkValidDateForUpdate($value)){
+				$this->loginDAL->updatePaydateMember($pnr, $value);
+				$this->messageNr = $this->loginModel->memberUpdated();
+			}
+			else{
+				$this->messageNr = $this->loginModel->eventUpdatedDateFail();
+			}			
 		}		
 		
 		if($this->loginView->isSavingUpdatedMember())
 		{
-			$this->messageNr = $this->loginModel->memberUpdated();
 			$this->message = $this->loginView->setMessage($this->messageNr);	
 		}
 	}
+
+	public function adminWantsToUpdateEvent()
+		{							
+			$title = $this->loginModel->getTitle();
+			
+			if ($this->loginView->isUpdatingDate()){
+				$value = $this->loginView->getDate();
+				
+				if($this->loginModel->checkValidDateForUpdate($value)){
+					$this->loginDAL->updateDateEvent($title, $value);
+					$this->messageNr = $this->loginModel->eventUpdated();	
+				}
+				else{
+					$this->messageNr = $this->loginModel->eventUpdatedDateFail();
+				}
+			}
+			if ($this->loginView->isUpdatingTime()){
+				$value = $this->loginView->getTime();
+				
+				if($this->loginModel->checkValidTimeForUpdate($value)){
+					$this->loginDAL->updateTimeEvent($title, $value);
+					$this->messageNr = $this->loginModel->eventUpdated();
+				}
+				else{
+					$this->messageNr = $this->loginModel->eventUpdatedTimeFail();
+				}
+			}
+			if ($this->loginView->isUpdatingInfo()){
+				$value = $this->loginView->getInfo();
+				$this->loginDAL->updateInfoEvent($title, $value);	
+				$this->messageNr = $this->loginModel->eventUpdated();
+			}	
+			
+			$this->message = $this->loginView->setMessage($this->messageNr);
+		}
 	
 	public function adminWantsToDeleteMember()
 	{
@@ -295,6 +373,31 @@ class loginController{
 		$this->message = $this->loginView->setMessage($this->messageNr);
 		$this->loginDAL->deleteMember($pnr);
 	}
+	
+	public function adminWantsToDeleteEvent()
+	{
+		$title = $this->loginModel->getTitle();
+		$this->messageNr = $this->loginModel->eventDeleted();
+		$this->message = $this->loginView->setMessage($this->messageNr);
+		$this->loginDAL->deleteEvent($title);
+	}
+	
+	public function adminWantsToShowEvent()
+	{
+		$title = $this->loginView->getEventAdminWantsToShow();
+		$correctTitle = $this->loginDAL->getEventToShow($title);
+		
+		if(isset($correctTitle)){
+			$this->eventToShow = $this->loginDAL->getEvent($correctTitle);
+			
+			$this->loginModel->saveTitle($correctTitle);
+		}
+		else{
+			$this->messageNr = $this->loginModel->unexistingEvent();
+			$this->message = $this->loginView->setMessage($this->messageNr);
+		}		
+	}
+	
 	/**
 	 * @return array
 	 */
@@ -339,6 +442,9 @@ class loginController{
 		$this->message = $this->loginView->setMessage($this->messageNr);
 	}
 	
+	/**
+	 * @return boll
+	 */
 	public function matchingPasswords($newpass, $repeatedpass)
 	{
 		return $this->loginModel->comparePasswords($newpass, $repeatedpass);	
@@ -357,49 +463,66 @@ class loginController{
 			$this->HTMLPage->getLogOutPage($this->message);				
 			
 		}
+		
 		if($this->checkIfUserCanLogIn($this->loginDAL->getUserName(),$this->loginView->getUsername(),
 		$this->loginView->getPassword()) && $this->memberStayLoggedIn() ){
 			$userInfo = $this->getUserInfoToShow();
 			$username = $this->loginModel->getUsername();
 			$this->HTMLPage->getLoggedInMemberPage($username, $userInfo, $this->message);		
 		}
-		else if($this->loginView->canSaveCredentials() && $this->loggedIn != true && $this->correctSavedCredentials())
-		{
-			$this->HTMLPage->getLoggedInPage($this->message);
-			
-		}	
 		else if($this->loginView->isAddingMember()&& $this->stayLoggedin())
 		{
 			$this->adminWantsToAddMember();
 			$this->HTMLPage->getAddMemberPage($this->message);
 		}	
-		else if($this->loginView->isShowingEvents()&& $this->stayLoggedin())
+		else if($this->loginView->isShowingEvents()&& $this->stayLoggedin() 
+				|| $this->loginView->isShowingEvents() && $this->memberStayLoggedIn())	
 		{
 			$this->showEvents();
 			$this->HTMLPage->getShowEventsPage($this->events);
 		}
+		else if($this->loginView->isSearchingEvent() && $this->stayLoggedin()){
+			$this->adminWantsToShowEvent();
+			if(isset($this->eventToShow)){
+				$this->HTMLPage->getShowEventPage($this->message,$this->eventToShow,$this->clickable);
+			}else{
+			$this->HTMLPage->getShowEventPage($this->message,$this->eventToShow,$this->notClickable);
+			}
+		}
 		else if($this->loginView->isAddingEvent() && $this->stayLoggedin())
 		{
 			$this->adminWantsToAddEvent();
-			
-			$newEvent = $this->loginView->setEvent();
-			$event = new \model\event($newEvent[0], $newEvent[1],
-								$newEvent[2]);
 								
-			if($this->loginModel->checkValidEvent($event) == false){
+			if($this->loginModel->checkValidEvent($this->event) == false){
 				$this->HTMLPage->getAddEventPage($this->message);
 			}
 			else{
 				$this->HTMLPage->getLoggedInPage($this->message);
 			}
 		}
-		else if($this->loginView->isWantingToAddEvent()&& $this->stayLoggedin())
+		else if($this->loginView->isUpdatingEvent() && $this->stayLoggedin()){
+				
+				$this->adminWantsToUpdateEvent();
+				$event = $this->loginModel->getTitle();
+				$this->HTMLPage->getUpdateEventPage($this->message, $event);	
+				
+		} 
+		else if($this->loginView->isWantingToAddEvent() && $this->stayLoggedin())
 		{
 			$this->HTMLPage->getAddEventPage($this->message);
 		}
+		else if($this->loginView->isWantingToUpdateEvent() && $this->stayLoggedin()){
+			$this->HTMLPage->getShowEventPage('',$this->eventToShow,$this->notClickable);
+		}
+		else if($this->loginView->isDeletingEvent() && $this->stayLoggedin()){
+					
+				$this->adminWantsToDeleteEvent();
+				$this->HTMLPage->getLoggedInPage($this->message);
+				
+		} 
 		else if($this->loginView->isShowingMember()&& $this->stayLoggedin())
 		{
-			$this->HTMLPage->getShowMemberPage('','', 'false');
+			$this->HTMLPage->getShowMemberPage('','', $this->notClickable);
 		}	
 		else if($this->loginView->isShowingPayingMembers() && $this->stayLoggedin())
 		{
@@ -504,10 +627,14 @@ class loginController{
 		return $this->loginModel->checkLoggedIn();
 	}
 	
+	/**
+	 * @return bool
+	 */
 	public function memberStayLoggedIn()
 	{
 		return $this->loginModel->checkMemberLoggedIn();
 	}
+	
 	public function checkStayLoggedIn()
 	{
 		$autoLogin = $this->loginView->checkAutoLogin();

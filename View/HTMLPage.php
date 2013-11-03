@@ -226,11 +226,7 @@ class HTMLPage{
 											<label for="Password">Lösenord: </label>
 											<input type="password" name="Password" id="Password" value="">
 											<p><input type="submit" name="login" value="Logga in" /></p>
-										</form>';
-											//<label for="AutoLogin">Håll mig inloggad  :
-											 //<input type="checkbox" name="AutoLogin" id="AutoLogin" />	</label>								
-									      	
-								    	
+										</form>';											    	
 	
 		$this->html .= '</fieldset>
 				    	</div>'.
@@ -254,8 +250,11 @@ class HTMLPage{
 								<li><p><a href="?'.self::$addMember.'">Registera medlem</a></p></li> 
 								<li><p><a href="?'.self::$showAllMembers.'">Visa alla medlemmar</a></p></li>
 								<li><p><a href="?'.self::$showMember.'">Visa medlem</a></p></li>
+								</ul>
+								<ul class="nav nav-pills nav-stacked">
+								<li><p><a href="?wantsToAddEvent">Skapa evenemang</a></p></li>
+								<li><p><a href="?wantsToUpdateEvent">Ändra evenemang</a></p></li>
 								<li><p><a href="?showEvents">Visa evenemang</a></p></li>
-								<li><p><a href="?wantsToAddEvent">Lägg till evenemang</a></p></li>
 								</ul>
 								<form method="post" action="?logout">
 								<input type="submit" name="logout" value="Logga ut" /> 
@@ -325,15 +324,15 @@ class HTMLPage{
 	 */
 	public function getLoggedInMemberPage($userString, $userInfo)
 	{
-		//TODO: visa medlemmens uppgifter här
-	$this->html = $this->startOfHTML();
+		$this->html = $this->startOfHTML();
 		$this->html .="</div>
-					   <div id='content' >". $this->getBack();
+					   <div id='content' >";
 		$this->html .= '
 				<h2>'.$userString.' är inloggad</h2>
 				<p>'.$this->showMembers($userInfo).'</p>
 				<p><a href="?'.self::$changePassword.'">Ändra lösenord</a></p>
 				<p><a href="?'.self::$showAllMembersSimple.'">Visa alla medlemmar</a></p>
+				<p><a href="?showEvents">Visa evenemang</a></p>
 				<form method="post" action="?logout">
 				<input type="submit" name="logout" value="Logga ut" /> 
 				</form>
@@ -348,7 +347,6 @@ class HTMLPage{
 	 */
 	public function getShowEventsPage($events)
 	{
-		//TODO: Visa evenemang
 		$this->html = $this->startOfHTML();
 		$this->html .="</div>
 					   <div id='content' >". $this->getBack();
@@ -365,21 +363,34 @@ class HTMLPage{
 	 */
 	public function getAddEventPage($messagestring)
 	{
+		$titleValue;
+		$dateValue;
+		$timeValue;
+		$infoValue;
+
+		if (isset($_POST['addEvent'])) {
+			$titleValue = $_POST['eventTitle'];
+			$dateValue= $_POST['eventDate'];
+			$timeValue= $_POST['eventTime'];
+			$infoValue= $_POST['eventInfo'];
+		}
 		
 		$this->html = $this->startOfHTML();
 		$this->html .="</div>
 					   <div id='content' >". $this->getBack();
 		$this->html .= "
 				<h2>Evenemang</h2>
-				<form class='form-horizontal' action='?changePassword' method='post' enctype='multipart/form-data'>
+				<form class='form-horizontal' action='?addEvent' method='post' enctype='multipart/form-data'>
 					<fieldset>
 						<legend>Lägg till evenemang</legend>".$messagestring."
 						<p><label for='titleID' >Titel :</label>
-						<input  type='text' size='20' name='eventTitle' id='titleID' value='' /></p>
-						<p><label for='dateID' >Datum och tid :</label>
-						<input type='text' size='50' name='eventDate' id='dateID' value='' /></p>
+						<input  type='text' size='20' name='eventTitle' id='titleID' value='".$titleValue."' /></p>
+						<p><label for='dateID' >Datum (YYYY-MM-DD) :</label>
+						<input type='text' size='50' name='eventDate' id='dateID' value='".$dateValue."' /></p>
+						<p><label for='timeID' >Tid (HH:MM) :</label>
+						<input type='text' size='50' name='eventTime' id='timeID' value='".$timeValue."' /></p>
 						<p><label for='infoID' >Beskrivning :</label>
-						<textarea rows='3'size='250' name='eventInfo' id='infoID' value=''></textarea></p>
+						<textarea size='250' name='eventInfo' id='infoID' value=''>".$infoValue."</textarea></p>
 						<input type='submit' name='addEvent'  value='Spara' />
 					</fieldset>
 				</form>
@@ -389,7 +400,87 @@ class HTMLPage{
 		echo $this->html;
 	}
 
+		/**  
+	 * @param array
+	 * @return String HTML
+	 */
+	public function getShowEventPage($messagestring,$event,$clickable)
+	{
+		$this->html = $this->startOfHTML();
+		$this->html .="</div>
+					   <div id='content'>". $this->getBack();
+		$this->html .= "
+		<form class='form-horizontal' action='?searchEvent' method='post' enctype='multipart/form-data'>
+				<fieldset>
+					<legend>Visa evenemang - Sök på titel</legend>".$messagestring."
+					<p><label for='searchTitleID' >Ange titel :</label>
+					<input type='text' size='20' name='searchEvent' id='searchTitleID' value='' /></p>
+					<input type='submit' name='searchByEvent'  value='Sök' />
+				</fieldset>
+			</form>
+			<p>".$this->showEvents($event)."</p>
+			<p><a href='?updateEvent' onclick='return ".$clickable."'>Ändra event</a></p>
+			<p><a href='?deleteEvent' onclick='return ".$clickable."'>Radera event</a></p>
+			</div>".
+			$this->getClock();
+			
+		echo $this->html;
+	}
+	
+	/**
+	 * @return String HTML
+	 */
+	public function getUpdateEventPage($messagestring, $event)
+	{
+		$this->html = $this->startOfHTML();
+		$this->html .="</div>
+					   <div id='content'>". $this->getBack();
+		$this->html .= "
+			<h2>Titel : ".$event."</h2>
+			<form class='form-horizontal' action='?updateEvent' method='post' enctype='multipart/form-data'>
+				<fieldset>
+					<legend>Uppdatera event</legend>".$messagestring."
+					<p><label for='newDateID' >Datum :</label>
+					<input type='text' size='20' name='newDate' id='newDateID' value='' /></p>					
+					<p><label for='newTimeID' >Tid  :</label>
+					<input type='text' size='20' name='newTime' id='newTimeID' value='' /></p>
+					<p><label for='newInfoID' >Beskrivning  :</label>
+					<input type='text' size='20' name='newInfo' id='newInfoID' value='' /></p>
+					<input type='submit' name='updateThisEvent'  value='Uppdatera' />
+				</fieldset>
+			</form>
+			</div>".
+			$this->getClock();
+			
+		echo $this->html;
+		
+	}
+	
+	/**
+	 * @return String HTML
+	 */
+	public function getDeleteEventPage($messagestring, $event)
+	{
+		$this->html = $this->startOfHTML();
+		$this->html .="</div>
+					   <div id='content'>". $this->getBack();
+		$this->html .= "
+			<h2>Personnummer : ".$event."</h2>
+			<form class='form-horizontal' action='?deleteEvent' method='post' enctype='multipart/form-data'>
+				<fieldset>
+					<legend>Radera medlem</legend>".$messagestring."
+					<input type='submit' name='deleteThisEvent'  value='Radera evenemang' />
+				</fieldset>
+			</form>
+			</div>".
+			$this->getClock();
+			
+		echo $this->html;
+	}
 
+	/**
+	 * @return String HTML
+	 */
 	public function getChangePasswordPage($messagestring)
 	{
 		$this->html = $this->startOfHTML();
@@ -525,7 +616,7 @@ class HTMLPage{
 					<input type='text' size='20' name='" . self::$NEWCLASS . "' id='UserNameID' value='". $value ."' /></p>
 					<p><label for='PasswordID' >Betalat till  :</label>
 					<input type='text' size='20' name='" . self::$NEWPAYDATE . "' id='UserNameID' value='". $value ."' /></p>
-					<input type='submit' name='update'  value='Uppdatera' />
+					<input type='submit' name='updateThisMember'  value='Uppdatera' />
 				</fieldset>
 			</form>
 			</div>".
@@ -535,6 +626,9 @@ class HTMLPage{
 		
 	}
 	
+	/**
+	 * @return String HTML
+	 */
 	public function getDeleteMemberPage($messagestring, $member)
 	{
 		$this->html = $this->startOfHTML();
@@ -545,7 +639,7 @@ class HTMLPage{
 			<form class='form-horizontal' action='?" . self::$DELETE. "' method='post' enctype='multipart/form-data'>
 				<fieldset>
 					<legend>Radera medlem</legend>".$messagestring."
-					<input type='submit' name='delete'  value='Radera medlem' />
+					<input type='submit' name='deleteThisMember'  value='Radera medlem' />
 				</fieldset>
 			</form>
 			</div>".

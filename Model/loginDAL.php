@@ -8,7 +8,12 @@ class LoginDAL
 	 * @var string
 	 */
  	private static $tableName = "member";
-
+	
+	/**
+	 * @var string
+	 */
+	private static $eventTableName = "event";
+	
 	/**
 	 * @var mysqli
 	 */
@@ -50,7 +55,8 @@ class LoginDAL
 		$sql ="CREATE TABLE IF NOT EXISTS event
 		(
 			Titel VARCHAR(100) NOT NULL ,
-	 		Datum VARCHAR(50) NOT NULL ,
+	 		Datum DATE NOT NULL ,
+	 		Tid TIME NOT NULL ,
 			Info VARCHAR(500) NOT NULL 			
 		);";
 		
@@ -138,6 +144,7 @@ class LoginDAL
 	  	
 		mysqli_close($this->con);
 	}
+	
 	/**
 	 * @return array
 	 */
@@ -180,6 +187,73 @@ class LoginDAL
 	  	
 		mysqli_close($this->con);
 	}
+	
+	/**
+	 * @return array
+	 */
+	public function getEventToShow($title)
+	{
+		$result = mysqli_query($this->con,"SELECT * FROM event");
+		$array = array();
+		
+		while($row = mysqli_fetch_array($result))
+		  {
+			  array_push($array,$row['Titel']);
+		  }
+		  
+	  	for ($i=0; $i <count($array) ; $i++) {
+			  if($title == $array[$i]){
+			  	return $array[$i];
+			  }
+		  }
+	  	
+		mysqli_close($this->con);
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getEventDateToShow($date)
+	{
+		$result = mysqli_query($this->con,"SELECT * FROM event");
+		$array = array();
+		
+		while($row = mysqli_fetch_array($result))
+		  {
+			  array_push($array,$row['Datum']);
+		  }
+		  
+	  	for ($i=0; $i <count($array) ; $i++) {
+			  if($date == $array[$i]){
+			  	return $array[$i];
+			  }
+		  }
+	  	
+		mysqli_close($this->con);
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getEvent($title)
+	{
+		$result = mysqli_query($this->con,"SELECT * FROM event WHERE Titel = "."'$title'");
+		
+		$array = array();
+		
+		while($row = mysqli_fetch_array($result))
+		  {
+		  	  array_push($array,$row['Titel']); 
+			  array_push($array,$row['Datum']);
+			  array_push($array,$row['Tid']);
+			  array_push($array,$row['Info']);
+		  }
+	  	
+		return $array;
+		
+		mysqli_close($this->con);
+	}
+	
 	
 	/**
 	 * @return array
@@ -248,8 +322,7 @@ class LoginDAL
 		  }
 		  
 	  	return $array;
-		mysqli_close($this->con);
-		
+		mysqli_close($this->con);		
 	}
 	
 	/**
@@ -288,6 +361,9 @@ class LoginDAL
 		mysqli_close($this->con);
 	}
 	
+	/**
+	 * @return array
+	 */
 	public function getPayingMembers($newRow)
 	{
 		$today = date('Y-m-d');
@@ -310,6 +386,9 @@ class LoginDAL
 		mysqli_close($this->con);
 	}
 	
+	/**
+	 * @return array
+	 */
 	public function getNotPayingMembers($newRow)
 	{
 		$today = date('Y-m-d');
@@ -404,6 +483,39 @@ class LoginDAL
 		$stmt->close();					
 	}
 	
+	public function updateDateEvent($title, $date)
+	{
+		$this->openCon();
+		$sql = " UPDATE ".self::$eventTableName." SET Datum = ? WHERE Titel = "."'$title'";
+		
+		$stmt = $this->con->prepare($sql);
+		$stmt->bind_param('s', $date);
+		$stmt->execute();	
+		$stmt->close();	
+	}
+	
+	public function updateTimeEvent($title, $time)
+	{
+		$this->openCon();
+		$sql = " UPDATE ".self::$eventTableName." SET Tid = ? WHERE Titel = "."'$title'";
+		
+		$stmt = $this->con->prepare($sql);
+		$stmt->bind_param('s', $time);
+		$stmt->execute();	
+		$stmt->close();	
+	}
+	
+	public function updateInfoEvent($title, $info)
+	{
+		$this->openCon();
+		$sql = " UPDATE ".self::$eventTableName." SET Info  = ? WHERE Titel = "."'$title'";
+		
+		$stmt = $this->con->prepare($sql);
+		$stmt->bind_param('s', $info);
+		$stmt->execute();	
+		$stmt->close();	
+	}
+	
 	public function deleteMember($pnr)
 	{
 		$this->openCon();
@@ -414,27 +526,43 @@ class LoginDAL
 		$stmt->close();	
 	}
 	
+	public function deleteEvent($title)
+	{
+		$this->openCon();
+		$sql = " DELETE FROM ".self::$eventTableName." WHERE Titel = "."'$title'";
+		
+		$stmt = $this->con->prepare($sql);
+		$stmt->execute();	
+		$stmt->close();	
+		
+	}
+	
 	public function addEvent(event $event)
 	{
 		$this->openCon();
 		
 		$title = $event->getTitle();
-		$dateTime = $event ->getDateTime();		
+		$eventDate = $event ->getEventDate();	
+		$eventTime = $event->getEventTime();	
 		$info = $event->getInfo();
 
 			$sql = "INSERT INTO event
 			(
 				Titel,
 				Datum,
+				Tid,
 				Info
 				
 			)
-			VALUES ('$title','$dateTime','$info');";
+			VALUES ('$title','$eventDate','$eventTime','$info');";
 			
 			$stmt = $this->con->prepare($sql);
 			$stmt->execute();				
 	}
 	
+	/**
+	 * @return array
+	 */
 	public function getEvents($newRow)
 	{
 		$result = mysqli_query($this->con,"SELECT * FROM event ORDER BY Datum ASC");
@@ -445,6 +573,7 @@ class LoginDAL
 		  {
 			  array_push($array,$row['Titel']);
 			  array_push($array,$row['Datum']);
+			  array_push($array, $row['Tid']);
 			  array_push($array,$row['Info'].$newRow);
 		  }
 		  
