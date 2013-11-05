@@ -36,7 +36,8 @@ class LoginDAL
 	{
 		$sql ="CREATE TABLE IF NOT EXISTS ".self::$tableName."
 		(
-			Namn VARCHAR(60) NOT NULL ,
+			Fornamn VARCHAR(20) NOT NULL ,
+			Efternamn VARCHAR(30) NOT NULL ,
 	 		Personnummer VARCHAR(20) NOT NULL ,
 			Klass VARCHAR(5) NOT NULL ,
 	 		Telefonnummer VARCHAR(20) NOT NULL ,
@@ -73,7 +74,8 @@ class LoginDAL
 	{
 		$this->openCon();
 		
-		$name = $member->getName();
+		$firstName = $member->getFirstName();
+		$lastName = $member->getLastName();
 		$pnr = $member ->getPersonalNr();		
 		$address = $member->getAddres();
 		$phnr = $member->getPhoneNr();
@@ -86,7 +88,8 @@ class LoginDAL
 
 				$sql = "INSERT INTO ".self::$tableName."
 			(
-				Namn,
+				Fornamn,
+				Efternamn,
 				Personnummer,
 				Klass,
 				Telefonnummer,
@@ -97,10 +100,9 @@ class LoginDAL
 				Losenord
 				
 			)
-			VALUES ('$name','$pnr','$class','$phnr','$email','$address','$paydate','$username','$password');";
+			VALUES ('$firstName','$lastName','$pnr','$class','$phnr','$email','$address','$paydate','$username','$password');";
 			
 			$stmt = $this->con->prepare($sql);
-			//$stmt->bind_param("sssssss",$name,$pnr,$class,$phnr,$email,$address,$paydate);
 			$stmt->execute();				
 			
     }
@@ -118,7 +120,8 @@ class LoginDAL
 		while($row = mysqli_fetch_array($result))
 		  {
 			  array_push($array,$row['Personnummer']);
-			  array_push($array,$row['Namn']);
+			  array_push($array,$row['Fornamn']);
+			  array_push($array,$row['Efternamn']);
 			  array_push($array,$row['Klass']);
 			  array_push($array,$row['Adress']);
 			  array_push($array,$row['Epostadress']);
@@ -156,13 +159,14 @@ class LoginDAL
 	 */
 	public function getMembersSimple($newRow)
 	{
-		$result = mysqli_query($this->con,"SELECT Namn, Klass, Epostadress FROM ".self::$tableName." ORDER BY Namn DESC");
+		$result = mysqli_query($this->con,"SELECT Fornamn, Efternamn, Klass, Epostadress FROM ".self::$tableName." ORDER BY Namn DESC");
 		
 		$array = array();
 		
 		while($row = mysqli_fetch_array($result))
 		  {
-			  array_push($array,$row['Namn']);
+			  array_push($array,$row['Fornamn']);
+			  array_push($array,$row['Efternamn']);
 			  array_push($array,$row['Klass']);
 			  array_push($array,$row['Epostadress'].$newRow);
 		  }
@@ -301,8 +305,8 @@ class LoginDAL
 		
 		while($row = mysqli_fetch_array($result))
 		  {
-			  array_push($array,$row['Personnummer']);
-			  array_push($array,$row['Namn']);
+			  array_push($array,$row['Fornamn']);
+			  array_push($array,$row['Efternamn']);
 			  array_push($array,$row['Klass']);
 			  array_push($array,$row['Adress']);
 			  array_push($array,$row['Epostadress']);
@@ -326,7 +330,8 @@ class LoginDAL
 		while($row = mysqli_fetch_array($result))
 		  {
 			  array_push($array,$row['Personnummer']);
-			  array_push($array,$row['Namn']);
+			  array_push($array,$row['Fornamn']);
+			  array_push($array,$row['Efternamn']);
 			  array_push($array,$row['Klass']);
 			  array_push($array,$row['Adress']);
 			  array_push($array,$row['Epostadress']);
@@ -384,13 +389,13 @@ class LoginDAL
 		$today = date('Y-m-d');
 		
 		$result = mysqli_query($this->con,"SELECT * FROM ".self::$tableName." WHERE Betalat_till >= "."'$today'"." ORDER BY Personnummer DESC ;");
-		
 		$array = array();
 		
 		while($row = mysqli_fetch_array($result))
 		  {
 			array_push($array,$row['Personnummer']);
-			array_push($array,$row['Namn']);
+			array_push($array,$row['Fornamn']);
+			array_push($array,$row['Efternamn']);
 			array_push($array,$row['Klass']);
 			array_push($array,$row['Adress']);
 			array_push($array,$row['Epostadress']);
@@ -416,7 +421,8 @@ class LoginDAL
 		while($row = mysqli_fetch_array($result))
 		  {
 			array_push($array,$row['Personnummer']);
-			array_push($array,$row['Namn']);
+			array_push($array,$row['Fornamn']);
+			array_push($array,$row['Efternamn']);
 			array_push($array,$row['Klass']);
 			array_push($array,$row['Adress']);
 			array_push($array,$row['Epostadress']);
@@ -446,13 +452,28 @@ class LoginDAL
 	 * @param string
 	 * @param string
 	 */
-	public function updateNameMember($pnr, $name)
+	public function updateFirstNameMember($pnr, $firstName)
 	{	
 		$this->openCon();
-		$sql = " UPDATE ".self::$tableName." SET Namn = ? WHERE Personnummer = ".$pnr.";";
+		$sql = " UPDATE ".self::$tableName." SET Fornamn = ? WHERE Personnummer = ".$pnr.";";
 		
 		$stmt = $this->con->prepare($sql);
-		$stmt->bind_param('s', $name);
+		$stmt->bind_param('s', $firstName);
+		$stmt->execute();	
+		$stmt->close();					
+	}
+
+/**
+	 * @param string
+	 * @param string
+	 */
+	public function updateLastNameMember($pnr, $lastName)
+	{	
+		$this->openCon();
+		$sql = " UPDATE ".self::$tableName." SET Efternamn = ? WHERE Personnummer = ".$pnr.";";
+		
+		$stmt = $this->con->prepare($sql);
+		$stmt->bind_param('s', $lastName);
 		$stmt->execute();	
 		$stmt->close();					
 	}

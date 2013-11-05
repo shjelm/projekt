@@ -7,7 +7,12 @@ class Member{
 	/**
 	 * @var string
 	 */
-	private $name;
+	private $firstName;
+	
+	/**
+	 * @var string
+	 */
+	private $lastName;
 	
 	/**
 	 * @var string
@@ -50,17 +55,18 @@ class Member{
 	private $password;
 	
 	
-	public function __construct($name, $personalnr, $class, $phonenr, $email, $address, $paydate)
+	public function __construct($firstName, $lastName, $personalnr, $class, $phonenr, $email, $address, $paydate)
 	{
 		
-		$this->name = $name;
+		$this->firstName = $firstName;
+		$this->lastName = $lastName;
 		$this->personalnr = $personalnr;
 		$this->class = $class;
 		$this->phonenr = $phonenr;
 		$this->email = $email;
 		$this->address = $address;
 		$this->paydate = $paydate;
-		$this->username = $this->generateUsername($name, $personalnr);
+		$this->username = $this->generateUsername($firstName, $lastName, $personalnr);
 		$this->password = $this->generateDefaultPassword();
 		
 	}
@@ -68,9 +74,17 @@ class Member{
 	/**
 	 * @return string
 	 */
-	public function getName()
+	public function getFirstName()
 	{
-		return $this->name;
+		return $this->firstName;
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getLastName()
+	{
+		return $this->lastName;
 	}
 	
 	/**
@@ -140,10 +154,11 @@ class Member{
 	/**
 	 * @return string
 	 */
-	public function generateUsername($name, $pnr)
+	public function generateUsername($firstName, $lastName, $pnr)
 	{
 		$name = preg_replace('/\s+/', '', $name);
-		$username = substr($name, 0,3);
+		$username = substr($firstName, 0,3);
+		$username .= substr($lastName, 0,3);
 		$username .= substr($pnr, 0,6);
 		
 		return $username;

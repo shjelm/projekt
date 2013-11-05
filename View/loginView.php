@@ -36,7 +36,12 @@ class loginView{
 	/**
 	 * @var string
 	 */
-	private static $NAME = "name";
+	private static $FIRSTNAME = "firstName";
+	
+	/**
+	 * @var string
+	 */
+	private static $LASTNAME = "lastName";
 	
 	/**
 	 * @var string
@@ -71,7 +76,12 @@ class loginView{
 	/**
 	 * @var string
 	 */
-	private static $NEWNAME = "newName";
+	private static $NEWFIRSTNAME = "newFirstName";
+	
+	/**
+	 * @var string
+	 */
+	private static $NEWLASTNAME = "newLastName";
 	
 	/**
 	 * @var string
@@ -539,9 +549,22 @@ class loginView{
 	/**
 	 * @return bool
 	 */
-	public function isUpdatingName()
+	public function isUpdatingFirstName()
 	{
-		if (!empty($_POST[self::$NEWNAME])) {
+		if (!empty($_POST[self::$NEWFIRSTNAME])) {
+			return true;
+		}
+		else{
+			return false;
+		}	
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isUpdatingLastName()
+	{
+		if (!empty($_POST[self::$NEWLASTNAME])) {
 			return true;
 		}
 		else{
@@ -749,10 +772,21 @@ class loginView{
 	/**
 	 * @return string
 	 */
-	public function getName()
+	public function getFirstName()
 	{	if($_POST || $_GET){
-			if(isset($_POST[self::$NEWNAME])){
-				return $_POST[self::$NEWNAME];
+			if(isset($_POST[self::$NEWFIRSTNAME])){
+				return $_POST[self::$NEWFIRSTNAME];
+			}
+		}				
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getLastName()
+	{	if($_POST || $_GET){
+			if(isset($_POST[self::$NEWLASTNAME])){
+				return $_POST[self::$NEWLASTNAME];
 			}
 		}				
 	}
@@ -995,7 +1029,8 @@ class loginView{
 	public function setMember()
 	{
 		if($_POST){
-			$name = $_POST[self::$NAME];
+			$firstName = $_POST[self::$FIRSTNAME];
+			$lastName = $_POST[self::$LASTNAME];
 			$personalnr = $_POST[self::$PERSONALNR];
 			$address = $_POST[self::$ADDRESS];
 			$email = $_POST[self::$EMAIL];
@@ -1005,7 +1040,8 @@ class loginView{
 		
 			$array = array();
 			
-			array_push($array, $name);
+			array_push($array, $firstName);
+			array_push($array, $lastName);
 			array_push($array, $personalnr);		
 			array_push($array, $class);			
 			array_push($array, $phonenr);
@@ -1046,4 +1082,3 @@ class loginView{
 		return '<br>';
 	}
 }
-

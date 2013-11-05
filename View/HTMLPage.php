@@ -43,7 +43,12 @@ class HTMLPage{
 	/**
 	 * @var string
 	 */
-	private static $NAME = "name";
+	private static $FIRSTNAME = "firstName";
+	
+	/**
+	 * @var string
+	 */
+	private static $LASTNAME = "lastName";
 	
 	/**
 	 * @var string
@@ -83,7 +88,12 @@ class HTMLPage{
 	/**
 	 * @var string
 	 */
-	private static $NEWNAME = "newName";
+	private static $NEWFIRSTNAME = "newFirstName";
+	
+	/**
+	 * @var string
+	 */
+	private static $NEWLASTNAME = "newLastName";
 	
 	/**
 	 * @var string
@@ -278,8 +288,9 @@ class HTMLPage{
 		$classValue;
 		$paydateValue;
 
-		if (isset($_POST[self::$NAME])) {
-			$nameValue = $_POST[self::$NAME];
+		if (isset($_POST)) {
+			$firstNameValue = $_POST[self::$FIRSTNAME];
+			$lastNameValue = $_POST[self::$LASTNAME];
 			$pnrValue= $_POST[self::$PERSONALNR];
 			$addressValue= $_POST[self::$ADDRESS];
 			$emailValue= $_POST[self::$EMAIL];
@@ -293,21 +304,23 @@ class HTMLPage{
 		$this->html .= "
 				<form class='form-horizontal' action='?" . self::$REGISTRATE. "' method='post' enctype='multipart/form-data'>
 				<fieldset>
-					<legend>Registrera ny användare - Skriv in namn och lösenord</legend>".$messagestring."
-					<p><label for='UserNameID' >Namn :</label>
-					<input type='text' size='20' name='" . self::$NAME . "' id='UserNameID' value='". $nameValue ."' /></p>
-					<p><label for='PasswordID' >Personnummer (Anges på formatet ÅÅMMDDXXXX)  :</label>
-					<input type='text' size='20' name='" . self::$PERSONALNR . "' id='UserNameID' value='". $pnrValue ."' /></p>
-					<p><label for='PasswordID' >Adress  :</label>
-					<input type='text' size='20' name='" . self::$ADDRESS . "' id='UserNameID' value='". $addressValue ."' /></p>
-					<p><label for='PasswordID' >Epost  :</label>
-					<input type='text' size='20' name='" . self::$EMAIL . "' id='UserNameID' value='". $emailValue ."' /></p>
-					<p><label for='PasswordID' >Telefonnummer  :</label>
-					<input type='text' size='20' name='" . self::$PHONENR . "' id='UserNameID' value='". $phnrValue ."' /></p>
-					<p><label for='PasswordID' >Klass (Om passiv medlem skriv ange '-' som klass) :</label>
-					<input type='text' size='20' name='" . self::$CLASS . "' id='UserNameID' value='". $classValue ."' /></p>
-					<p><label for='PasswordID' >Betalat till (Anges på formatet ÅÅÅÅ-MM-DD) :</label>
-					<input type='text' size='20' name='" . self::$PAYDATE . "' id='UserNameID' value='". $paydateValue ."' /></p>
+					<legend>Registrera ny användare - Skriv in uppgifter</legend>".$messagestring."
+					<p><label for='FirstNameID' >Förnamn :</label>
+					<input type='text' size='20' name='" . self::$FIRSTNAME . "' id='FirstNameID' value='". $firstNameValue ."' /></p>
+					<p><label for='LastNameID' >Efternamn :</label>
+					<input type='text' size='30' name='" . self::$LASTNAME . "' id='LastNameID' value='". $lastNameValue ."' /></p>
+					<p><label for='PnrID' >Personnummer (Anges på formatet ÅÅMMDDXXXX)  :</label>
+					<input type='text' size='20' name='" . self::$PERSONALNR . "' id='PnrID' value='". $pnrValue ."' /></p>
+					<p><label for='AddressID' >Adress  :</label>
+					<input type='text' size='20' name='" . self::$ADDRESS . "' id='AddressID' value='". $addressValue ."' /></p>
+					<p><label for='EmailID' >Epost  :</label>
+					<input type='text' size='20' name='" . self::$EMAIL . "' id='EmailID' value='". $emailValue ."' /></p>
+					<p><label for='PhNrID' >Telefonnummer  :</label>
+					<input type='text' size='20' name='" . self::$PHONENR . "' id='PhNrID' value='". $phnrValue ."' /></p>
+					<p><label for='ClassID' >Klass (Om passiv medlem skriv ange '-' som klass) :</label>
+					<input type='text' size='20' name='" . self::$CLASS . "' id='ClassID' value='". $classValue ."' /></p>
+					<p><label for='PaydateID' >Betalat till (Anges på formatet ÅÅÅÅ-MM-DD) :</label>
+					<input type='text' size='20' name='" . self::$PAYDATE . "' id='PaydateID' value='". $paydateValue ."' /></p>
 					<input type='submit' name=''  value='Registrera' />
 				</fieldset>
 			</form>
@@ -618,18 +631,20 @@ class HTMLPage{
 			<form class='form-horizontal' action='?".self::$UPDATE."' method='post' enctype='multipart/form-data'>
 				<fieldset>
 					<legend>Uppdatera medlem</legend>".$messagestring."
-					<p><label for='UserNameID' >Namn :</label>
-					<input type='text' size='20' name='" . self::$NEWNAME . "' id='UserNameID' value='". $value ."' /></p>					
-					<p><label for='PasswordID' >Adress  :</label>
-					<input type='text' size='20' name='" . self::$NEWADDRESS . "' id='UserNameID' value='". $value ."' /></p>
-					<p><label for='PasswordID' >Epost  :</label>
-					<input type='text' size='20' name='" . self::$NEWEMAIL . "' id='UserNameID' value='". $value ."' /></p>
-					<p><label for='PasswordID' >Telefonnummer  :</label>
-					<input type='text' size='20' name='" . self::$NEWPHONENR . "' id='UserNameID' value='". $value ."' /></p>
-					<p><label for='PasswordID' >Klass  :</label>
-					<input type='text' size='20' name='" . self::$NEWCLASS . "' id='UserNameID' value='". $value ."' /></p>
-					<p><label for='PasswordID' >Betalat till  :</label>
-					<input type='text' size='20' name='" . self::$NEWPAYDATE . "' id='UserNameID' value='". $value ."' /></p>
+					<p><label for='nFirstNameID' >Förnaamn :</label>
+					<input type='text' size='20' name='" . self::$NEWFIRSTNAME . "' id='nFirstNameID' value='". $value ."' /></p>
+					<p><label for='nLastNameID' >Efternamn :</label>
+					<input type='text' size='20' name='" . self::$NEWLASTNAME . "' id='nLastNameID' value='". $value ."' /></p>					
+					<p><label for='nAdressID' >Adress  :</label>
+					<input type='text' size='20' name='" . self::$NEWADDRESS . "' id='nAdressID' value='". $value ."' /></p>
+					<p><label for='nEmailID' >Epost  :</label>
+					<input type='text' size='20' name='" . self::$NEWEMAIL . "' id='nEmailID' value='". $value ."' /></p>
+					<p><label for='nPhNrID' >Telefonnummer  :</label>
+					<input type='text' size='20' name='" . self::$NEWPHONENR . "' id='nPhNrID' value='". $value ."' /></p>
+					<p><label for='nClassID' >Klass  :</label>
+					<input type='text' size='20' name='" . self::$NEWCLASS . "' id='nPhNrID' value='". $value ."' /></p>
+					<p><label for='nPaydateID' >Betalat till  :</label>
+					<input type='text' size='20' name='" . self::$NEWPAYDATE . "' id='nPaydateID' value='". $value ."' /></p>
 					<input type='submit' name='updateThisMember'  value='Uppdatera' />
 				</fieldset>
 			</form>

@@ -191,7 +191,7 @@ class loginController{
 		$member = new \model\member($newMember[0], $newMember[1],
 								$newMember[2], $newMember[3],
 								$newMember[4], $newMember[5],
-								$newMember[6]);
+								$newMember[6], $newMember[7]);
 		
 		$pnr = $member->getPersonalNr();
 		$existingPnr = $this->loginDAL->getMemberToShow($pnr);
@@ -204,7 +204,7 @@ class loginController{
 			$this->messageNr = $this->loginModel->alreadyExistingPnr();
 			$this->message = $this->loginView->setMessage($this->messageNr);
 		}
-		
+			
 		if($this->loginModel->checkNewMemberValid($member) && !isset($existingPnr)){
 			$this->loginDAL->addMember($member);			
 		}		
@@ -290,9 +290,13 @@ class loginController{
 	{							
 		$pnr = $this->loginModel->getPnr();
 		
-		if ($this->loginView->isUpdatingName()){
-			$value = $this->loginView->getName();
-			$this->loginDAL->updateNameMember($pnr, $value);
+		if ($this->loginView->isUpdatingFirstName()){
+			$value = $this->loginView->getFirstName();
+			$this->loginDAL->updateFirstNameMember($pnr, $value);
+		}		
+		if ($this->loginView->isUpdatingLastName()){
+			$value = $this->loginView->getLastName();
+			$this->loginDAL->updateLarstNameMember($pnr, $value);
 		}
 		if ($this->loginView->isUpdatingAddress()){
 			$value = $this->loginView->getAddress();
@@ -670,4 +674,3 @@ class loginController{
 		}
 	}
 }
-

@@ -125,7 +125,8 @@ class loginModel{
 	 */	
 	public function checkUnvalidNewMember(member $member)
 	{
-		$name = $member->getName();
+		$firstName = $member->getFirstName();
+		$lastName = $member->getLastName();
 		$pnr = $member ->getPersonalNr();		
 		$address = $member->getAddres();
 		$phnr = $member->getPhoneNr();
@@ -134,16 +135,17 @@ class loginModel{
 		$paydate = $member->getPayDate();
 		$username = $member->getUserName();
 		
-		if($this->unvalidDateFormat($paydate)){
+		
+		if(!empty($paydate) &&$this->unvalidDateFormat($paydate)){
 			return self::UNVALIDDATEFORMAT;
 		}
-		
+			
 		if($this->unvalidPersonalnumber($pnr)){
 			
 			return self::UNVALIDPNR;
 		}
 		
-		if(empty($name) || empty($pnr) || empty($address) || empty($phnr) ||
+		if(empty($firstName) || empty($lastName)  || empty($pnr) || empty($address) || empty($phnr) ||
 			empty($email) || empty($class))
 		{
 			 return self::EMPTYFORM;
@@ -361,7 +363,8 @@ class loginModel{
 	 */
 	public function checkNewMemberValid(member $member)
 	{
-		$name = $member->getName();
+		$firstName = $member->getFirstName();
+		$lastName = $member->getLastName();
 		$pnr = $member ->getPersonalNr();		
 		$address = $member->getAddres();
 		$phnr = $member->getPhoneNr();
@@ -370,15 +373,18 @@ class loginModel{
 		$paydate = $member->getPayDate();
 		$username = $member->getUserName();
 
-		if(empty($name) || empty($pnr) || empty($address) || empty($phnr) ||
+		if(empty($firstName) || empty($lastName) || empty($address) || empty($phnr) ||
 			empty($email) || empty($class))
 		{
+			echo 'tom';
 			return false;
 		}
-		else if ($this->unvalidDateFormat($paydate)){
+		else if (!empty($paydate) && $this->unvalidDateFormat($paydate)){
+			echo 'fel datum';
 			return false;
 		}
 		else if ($this->unvalidPersonalnumber($pnr)){
+			echo 'fel tid';
 			return false;
 		}
 		else{
