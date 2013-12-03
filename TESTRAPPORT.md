@@ -191,3 +191,8 @@ TF 9.7 Ändra evenemang, misslyckat tid - Uppfylls
 TF 9.8 Radera evenemang - Uppfylls
 
 TF 9.9 Lägg till redan registrerat evenemang - Uppfylls
+============================================================
+============================================================
+
+Test 2/12-13 
+

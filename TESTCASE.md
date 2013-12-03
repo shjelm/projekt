@@ -52,38 +52,52 @@ TF 1.7 Inloggad vid omladdning av sida
 
 TF 2.1 Visa medlem
 1. TF 1.2 Logga in admin	
-2. Klicka på visa medlem
+2. TF 3.1 Visa alla medlemmar
 3. Ange personnummer
 4. Klicka på sök
 5. Medlem visas
 
 TF 2.2 Visa medlem, ogiltigt personnummer
 1. TF 1.2 Logga in admin	
-2. Klicka på visa medlem
+2. TF 3.1 Visa alla medlemmar
 3. Ange ett ej registrerat personnummer
 4. Klicka på sök
 5. Felmeddelande visas
 
 TF 2.3 Ändra medlem
-1. TF 2.1 Visa medlem
-2. Klicka på ändra medlem
-3. Fyll i de uppgifter som ska ändras
-4. Klicka på uppdatera
-5. Rättmeddelande visas
+1. TF 3.1 Visa alla medlemmar
+2. Leta upp dem medlem som ska ändras
+3. Klicka på ändra medlem
+4. Fyll i de uppgifter som ska ändras
+5. Klicka på uppdatera
+6. Rättmeddelande visas
 
 TF 2.4 Ändra medlem, fel format på datum
-1. TF 2.1 Visa medlem
+1. TF 3.1 Visa alla medlemmar
 2. Klicka på ändra medlem
 3. Fyll i ett felaktigt format på datum (23/6-2013)
 4. Klicka på uppdatera
 5. Felmeddelande visas
 
 TF 2.5 Radera medlem
-1. TF 2.1 Visa medlem
+1. TF 3.1 Visa alla medlemmar
 2. Klicka på radera medlem
 3. Klicka på radera medlem för att bekräfta
 5. Rättmeddelande visas
 
+TF 2.6 Ändra medlem, felaktig klass
+1. TF 3.1 Visa alla medlemmar
+2. Klicka på ändra meelm
+3. Ange en felatkig klass (WP23)
+3. Klicka på uppdatera
+5. Felmeddelande visas
+
+TF 2.7 Ändra medlem, felaktig email
+1. TF 3.1 Visa alla medlemmar
+2. Klicka på ändra meelm
+3. Ange en felatkig email (hej@du)
+3. Klicka på uppdatera
+5. Felmeddelande visas
 ===================================
 
 TF 3.1 Visa alla medlemmar
@@ -135,6 +149,20 @@ TF 4.5 Registrera medlem, med redan registrerat personnummer
 1. TF 1.2 Logga in admin
 2. Klicka på registrera medlem
 3. Skriva in uppgifter men ange ett personnummer som redan är registrerat (9103014565)
+4. Klicka på registrera
+5. Felmeddalnde visas
+
+TF 4.6 Registrera medlem, felaktig klass
+1. TF 1.2 Logga in admin
+2. Klicka på registrera medlem
+3. Ange en felaktig klass (WP23)
+4. Klicka på registrera
+5. Felmeddalnde visas
+
+TF 4.7 Registrera medlem, felaktig email
+1. TF 1.2 Logga in admin
+2. Klicka på registrera medlem
+3. Ange en felaktig email (hej@du)
 4. Klicka på registrera
 5. Felmeddalnde visas
 
@@ -253,54 +281,40 @@ TF 9.2 Lägg till evenemang, tomma fält
 
 TF 9.3 Visa evenemang, admin
 1. TF 1.2 Logga in admin
-2. Klicka på visa evenemang 
+2. Klicka på visa alla evenemang 
 3. Alla evenemang visas
 
 TF 9.4 Visa evenemang, medlem
 1. TF 5.1 Logga in medlem
-2. Klicka på visa evenemang 
+2. Klicka på visa alla evenemang 
 3. Alla evenemang visas
 
 TF 9.5 Ändra evenemang
 1. TF 1.2 Logga in admin
-2. Klicka på ändra evenemang
-3. Ange titel
-4. Sök 
-5. Klicka på ändra event
-6. Fyll i uppgifter
-7. Klicka på uppdatera
-8. Rättmeddelande visas
+2. Klicka på visa alla evenemang 
+3. Klicka på ändra evenemang
+4. Fyll i uppgifter
+5. Klicka på uppdatera
+6. Rättmeddelande visas
 
 TF 9.6 Ändra evenemang, misslyckat datum
 1. TF 1.2 Logga in admin
-2. Klicka på ändra evenemang
-3. Ange titel
-4. Sök 
-5. Klicka på ändra event
-6. Fyll i ogiltigt datum
-7. Klicka på uppdatera
-8. Felmeddelande visas
+2. Klicka på visa evenemang 
+3. Klicka på ändra evenemang
+4. Fyll i ogiltigt datum
+5. Klicka på uppdatera
+6. Felmeddelande visas
 
-TF 9.7 Ändra evenemang, misslyckat tid
+TF 9.7 Ändra evenemang, misslyckad tid
 1. TF 1.2 Logga in admin
-2. Klicka på ändra evenemang
-3. Ange titel
-4. Sök 
-5. Klicka på ändra event
-6. Fyll i ogiltig tid
-7. Klicka på uppdatera
-8. Felmeddelande visas
+2. Klicka på visa evenemang 
+3. Klicka på ändra evenemang
+5. Fyll i ogiltig tidpunkt
+5. Klicka på uppdatera
+6. Felmeddelande visas
 
 TF 9.8 Radera evenemang
 1. TF 1.2 Logga in admin
-2. Klicka på ändra evenemang
-3. Ange titel
-4. Sök 
-5. Klicka på radera event
-8. Rättmeddelande visas
-
-TF 9.9 Lägg till redan registrerat evenemang
-1. TF 1.2 Logga in admin
-2. Klicka på skapa evenemang
-3. Fyll i redan existerande titel
-4. Felmeddelande visas 
+2. Klicka på visa evenemang 
+3. Klicka på radera evenemang
+4. Evenemanget raderas och rättmeddeladne visas
