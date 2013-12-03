@@ -35,8 +35,7 @@ class memberController{
 	public $memberToShow;
 	
 	public function changePassword()
-	{
-		
+	{		
 		$username = $this->loginModel->getUsername();
 		$newpassword = $this->loginView->getNewPasswordUncrypted();
 		$repeatedpassword = $this->loginView->getRepeatedNewPassword();

@@ -43,27 +43,23 @@ class loginModel{
 	/**
 	 * @var string
 	 */
-	private static $username = "Username";
+	private static $USERNAME = "Username";
+	
+	/**
+	 * @var string
+	 */
+	private static $TITLE = "Title";
+	
+	/**
+	 * @var string
+	 */
+	private static $PNR = "Pnr";
+	
 	
 	public function __construct()
 	{
 		$this->loginDAL = new \model\loginDAL();
 		$this->checkModel = new \Model\checkModel();;
-	}
-	/**
-	 * @return string
-	 */
-	public function getUser()
-	{
-		return self::$username;		
-	}
-	
-	/**
-	 * @return string
-	 */
-	public function getPass()
-	{
-		return self::$password;
 	}
 	
 	/**
@@ -206,35 +202,11 @@ class loginModel{
 	/**
 	 * @param string
 	 */
-	public function savePnr($pnr)
-	{
-		if(isset($_SESSION[self::$mySession])){
-			$_SESSION[self::$mySession] = array();
-			$_SESSION[self::$mySession]["Pnr"] = $pnr;
-		}
-		
-	}
-	
-	/**
-	 * @param string
-	 */
-	public function saveTitle($title)
-	{
-		if(isset($_SESSION[self::$mySession])){
-			$_SESSION[self::$mySession] = array();
-			$_SESSION[self::$mySession]["Title"] = $title;
-		}
-		
-	}
-	
-	/**
-	 * @param string
-	 */
 	public function saveUsername($username)
 	{
 		if(isset($_SESSION[self::$memberSession])){
 			$_SESSION[self::$memberSession] = array();
-			$_SESSION[self::$memberSession]["Username"] = $username;
+			$_SESSION[self::$memberSession][self::$USERNAME] = $username;
 		}
 	}
 	
@@ -243,31 +215,10 @@ class loginModel{
 	 */
 	public function getUsername()
 	{
-		if(isset($_SESSION[self::$memberSession]["Username"])){
-			return $_SESSION[self::$memberSession]["Username"];
+		if(isset($_SESSION[self::$memberSession][self::$USERNAME])){
+			return $_SESSION[self::$memberSession][self::$USERNAME];
 		}
 	}
-	
-	/**
-	 * @return string
-	 */
-	public function getPnr()
-	{
-		if(isset($_SESSION[self::$mySession])){
-			return $_SESSION[self::$mySession]["Pnr"];
-		}
-	}
-	
-	/**
-	 * @return string
-	 */
-	public function getTitle()
-	{
-		if(isset($_SESSION[self::$mySession])){
-			return $_SESSION[self::$mySession]["Title"];
-		}
-		
-	}	
 		
 	/**
 	 * @param array
@@ -286,15 +237,6 @@ class loginModel{
 				}
 			}
 		return false;
-	}
-	
-	/**
-	 * @param string
-	 * @return string
-	 */
-	public function cryptPassword($pass)
-	{
-		return md5($pass."crypt");
 	}
 	
 	/**

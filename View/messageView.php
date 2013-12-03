@@ -30,7 +30,6 @@ class messageView{
 	CONST UPDATEDEVENT = 27;
 	CONST EXISTINGEVENT = 28;
 	CONST DELETEDEVENT = 29;
-	CONST UNEXISTINGTITLE = 30;
 	CONST UNVALIDLENGTHPASSWORD = 31;
 	CONST UNVALIDCLASS = 32;
 	CONST UNVALIDEMAIL = 33;
@@ -42,6 +41,7 @@ class messageView{
 	private $messageString;
 	
 	/**
+	 * @param int
 	 * @return string
 	 */
 	public function setMessage($messageNr)
@@ -139,10 +139,6 @@ class messageView{
 
 				case self::DELETEDEVENT:
 					$this->messageString = '<p class="alert alert-success">Evenemanget har raderats</p>';	
-					break;	
-				
-				case self::UNEXISTINGTITLE:
-					$this->messageString = '<p class="alert alert-danger">Evenemanget är ej registrerat</p>';	
 					break;	
 					
 				case self::UNVALIDLENGTHPASSWORD:

@@ -140,6 +140,7 @@ class loginView{
 	}
 	
 	/**
+	 * @param string
 	 * @return string
 	 */
 	public function encryptPassword($pass)

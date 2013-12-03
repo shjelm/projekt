@@ -29,8 +29,7 @@ class Event{
 		$this->title = $title;
 		$this->eventDate = $eventDate;		
 		$this->eventTime = $eventTime;
-		$this->info = $info;
-		
+		$this->info = $info;		
 	}
 	
 	/**

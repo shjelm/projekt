@@ -162,8 +162,7 @@ class Member{
 		$username .= substr($pnr, 0,6);
 		
 		return $username;
-	}
-	
+	}	
 	
 	/**
 	 * @return string

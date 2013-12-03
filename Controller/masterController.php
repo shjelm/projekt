@@ -42,7 +42,7 @@ class masterController{
 		   $this->loginView->getPassword()) && $this->loginController->memberStayLoggedIn() ){
 
 			$userInfo = $this->loginController->getUserInfoToShow();
-			$username = $this->loginController->loginModel->getUsername();
+			$username = $this->loginModel->getUsername();
 			$this->HTMLPage->getLoggedInMemberPage($username, $userInfo, $this->loginController->message);		
 		}
 		else if($this->memberView->isAddingMember()&& $this->loginController->stayLoggedin())

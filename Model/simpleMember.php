@@ -26,13 +26,11 @@ class SimpleMember{
 	
 	
 	public function __construct($firstName, $lastName, $class, $email)
-	{
-		
+	{		
 		$this->firstName = $firstName;
 		$this->lastName = $lastName;
 		$this->class = $class;
-		$this->email = $email;
-		
+		$this->email = $email;		
 	}
 	
 	/**

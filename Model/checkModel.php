@@ -69,6 +69,7 @@ class checkModel{
 	}
 	
 	/**
+	 * @param string
 	 * @return bool
 	 */
 	public function unvalidPersonalnumber($pnr)
@@ -84,6 +85,7 @@ class checkModel{
 	}
 	
 	/**
+	 * @param string
 	 * @return bool
 	 */
 	public function unvalidLengthPassword($password)
@@ -98,6 +100,7 @@ class checkModel{
 	}
 	
 	/**
+	 * @param string
 	 * @return bool
 	 */
 	public function unvalidClass($class)
@@ -125,6 +128,7 @@ class checkModel{
 	}
 		
 	/**
+	 * @param string
 	 * @return bool
 	 */
 	public function unvalidEmail($email)
@@ -140,6 +144,4 @@ class checkModel{
 			return true;
 		}		
 	}
-	
-	
 }

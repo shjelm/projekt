@@ -24,38 +24,6 @@ class memberModel{
 	}
 	
 	/**
-	 * @param /model/member
-	 * @return array 
-	 */	
-	/*public function setMember(member $member)
-	{	
-		$firstName = $member->getFirstName();
-		$lastName = $member->getLastName();
-		$pnr = $member ->getPersonalNr();		
-		$address = $member->getAddres();
-		$phnr = $member->getPhoneNr();
-		$email = $member->getEmail();		
-		$class = $member->getClass();
-		$paydate = $member->getPayDate();
-		$username = $member->getUserName();
-		
-		$setMember = array();
-		
-		array_push($setMember, $firstName);
-		array_push($setMember, $lastName);
-		array_push($setMember, $pnr);
-		array_push($setMember, $address);
-		array_push($setMember, $phnr);
-		array_push($setMember, $email);
-		array_push($setMember, $class);		
-		array_push($setMember, $username);		
-		array_push($setMember, $paydate);
-		
-		return $setMember;		
-	}*/
-	
-	
-	/**
 	 * @return int
 	 */
 	public function unexistingPnr()
@@ -84,7 +52,6 @@ class memberModel{
 	 */	
 	public function checkUnvalidNewMember(member $member)
 	{		
-		//$setMember = $this->setMember($member);
 		$paydate = $member->getpayDate();
 		$class = $member->getClass();
 		$pnr = $member->getPersonalNr();
@@ -121,7 +88,6 @@ class memberModel{
 	 */
 	public function checkNewMemberValid(member $member)
 	{
-		//$setMember = $this->setMember($member);
 		$paydate = $member->getpayDate();
 		$class = $member->getClass();
 		$pnr = $member->getPersonalNr();

@@ -27,6 +27,11 @@ class memberView{
 	/**
 	 * @var string
 	 */
+	private static $deleteThisMember = "deleteThisMember";
+	
+	/**
+	 * @var string
+	 */
 	private static $EMAIL = "email";
 	
 	/**
@@ -445,7 +450,7 @@ class memberView{
 	 */
 	public function isWantingDeletingMember()
 	{
-		if (isset($_GET["deleteMember"])) {
+		if (isset($_GET[self::$deleteMember])) {
 			return true;
 		}
 		else{
@@ -458,7 +463,7 @@ class memberView{
 	 */
 	public function isDeletingMember()
 	{
-		if (isset($_POST["deleteThisMember"])) {
+		if (isset($_POST[self::$deleteThisMember])) {
 			return true;
 		}
 		else{

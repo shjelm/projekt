@@ -25,7 +25,7 @@ class HTMLPage{
 	/**
 	 * @var string
 	 */
-	private static $USERNAME = "username";
+	private static $USERNAME = "UserName";
 	
 	/**
 	 * @var string
@@ -36,7 +36,12 @@ class HTMLPage{
 	/**
 	 * @var string
 	 */
-	private static $PASSWORD = "password";
+	private static $PASSWORD = "Password";
+	
+	/**
+	 * @var string
+	 */
+	private static $LOGOUT = "logout";
 	
 	/**
 	 * @var string
@@ -177,11 +182,6 @@ class HTMLPage{
 	/**
 	 * @var string
 	 */
-	private static $username = "UserName";
-	
-	/**
-	 * @var string
-	 */
 	private static $mySession = "mySession";
 	
 	/**
@@ -255,9 +255,9 @@ class HTMLPage{
 									<legend>Skriv in användarnamn och lösenord</legend>'.$messageString.'
 										<form class="form-horizontal" method="post" action="?login" role="form">
 											<label for="UserName">Användarnamn: </label>
-											<input autofocus type="text" name="UserName" id="UserName" value="' . $value .'">
+											<input autofocus type="text" name="'.self::$USERNAME.'" id="UserName" value="' . $value .'">
 											<label for="Password">Lösenord: </label>
-											<input type="password" name="Password" id="Password" value="">
+											<input type="password" name="'.self::$PASSWORD.'" id="Password" value="">
 											<p><input type="submit" name="login" value="Logga in" /></p>
 										</form>';											    	
 	
@@ -274,26 +274,25 @@ class HTMLPage{
 	 */
 	public function getLoggedInPage($messageString) {
 		$this->html = $this->startOfHTML();
-		$this->html .= '	</div>
-							<div id="content">	
-								<h2> Admin är inloggad </h2>
-								' . $messageString . '
-								<p>Vad vill du göra nu?</p>
-								<ul class="nav nav-pills nav-stacked">
+		$this->html .= '</div>
+						<div id="content">	
+							<h2> Admin är inloggad </h2>
+							' . $messageString . '
+							<p>Vad vill du göra nu?</p>
+							<ul class="nav nav-pills nav-stacked">
 								<li><p><a href="?'.self::$addMember.'">Registera medlem</a></p></li> 
 								<li><p><a href="?'.self::$showAllMembers.'">Visa alla medlemmar</a></p></li>						
-								</ul>
-								<ul class="nav nav-pills nav-stacked">
+							</ul>
+							<ul class="nav nav-pills nav-stacked">
 								<li><p><a href="?wantsToAddEvent">Skapa evenemang</a></p></li>
 								
 								<li><p><a href="?showEvents">Visa alla evenemang</a></p></li>
-								</ul>
-								<form method="post" action="?logout">
-								<input type="submit" name="logout" value="Logga ut" /> 
-								</form>
-								</div>'.
-								$this->getClock();	
-								//<li><p><a href="?wantsToUpdateEvent">Ändra evenemang</a></p></li>		<li><p><a href="?'.self::$showMember.'">Visa medlem</a></p></li>					
+							</ul>
+							<form method="post" action="?'.self::$LOGOUT.'">
+								<input type="submit" name="'.self::$LOGOUT.'" value="Logga ut" /> 
+							</form>
+						</div>'.
+						$this->getClock();	
 		echo $this->html;
 	}
 
@@ -369,8 +368,8 @@ class HTMLPage{
 				<p><a href="?'.self::$changePassword.'">Ändra lösenord</a></p>
 				<p><a href="?'.self::$showAllMembersSimple.'">Visa alla medlemmar</a></p>
 				<p><a href="?showEvents">Visa alla evenemang</a></p>
-				<form method="post" action="?logout">
-				<input type="submit" name="logout" value="Logga ut" /> 
+				<form method="post" action="?'.self::$LOGOUT.'">
+				<input type="submit" name="'.self::$LOGOUT.'" value="Logga ut" /> 
 				</form>
 			</div>'.
 			$this->getClock();
@@ -809,8 +808,8 @@ class HTMLPage{
 	 */
 	public function getUsername(){
 		if($_POST || $_GET){
-			if(isset($_POST[self::$username])){
-				$username = $_POST[self::$username];
+			if(isset($_POST[self::$USERNAME])){
+				$username = $_POST[self::$USERNAME];
 				
 				return $username;
 			}

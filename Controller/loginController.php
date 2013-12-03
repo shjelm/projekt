@@ -85,8 +85,6 @@ class loginController{
 			return true;
 		}		
 	}	
-		
-	
 	
 	/**
 	 * @return bool

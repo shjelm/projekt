@@ -138,16 +138,6 @@ class eventView{
 	/**
      * @return string
      */
-    /**public function getEventAdminWantsToShow()
-    {
-            if(isset($_POST[self::$searchEvent])){
-                    return strip_tags($_POST[self::$searchEvent]);
-            }        
-    }*/
-	
-	/**
-     * @return string
-     */
     public function getEventAdminWantsToDelete()
     {
             if(isset($_GET[self::$deleteEvent])){
