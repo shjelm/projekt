@@ -32,6 +32,61 @@ class HTMLPage{
 	 */
 	private static $SAVENEWMEMBER = "saveNewMember";
 	
+	/**
+	 * @var string
+	 */
+	private static $newInfo = "newInfo";
+	
+	/**
+	 * @var string
+	 */
+	private static $newDate = "newDate";
+	
+	/**
+	 * @var string
+	 */
+	private static $newTime = "newTime";
+	
+	/**
+	 * @var string
+	 */
+	private static $newTitle = "newTitle";
+	
+	/**
+	 * @var string
+	 */
+	private static $deleteThisMember = "deleteThisMember";
+	
+	/**
+	 * @var string
+	 */
+	private static $deleteThisEvent = "deleteThisEvent";
+	
+	/**
+	 * @var string
+	 */
+	private static $updateThisEvent = "updateThisEvent";
+	
+	/**
+	 * @var string
+	 */
+	private static $updateThisMember = "updateThisMember";
+	
+	/**
+	 * @var string
+	 */
+	private static $repeatPasswordField = "repeatPasswordField";
+	
+	/**
+	 * @var string
+	 */
+	private static $changePasswordField = "changePasswordField";
+	
+	
+	/**
+	 * @var string
+	 */
+	private static $searchMember = "searchMember";
 	
 	/**
 	 * @var string
@@ -52,6 +107,31 @@ class HTMLPage{
 	 * @var string
 	 */
 	private static $REGISTRATE ="addMember";
+	
+	/**
+	 * @var string
+	 */
+	private static $eventDate ="eventDate";
+	
+	/**
+	 * @var string
+	 */
+	private static $eventTime ="eventTime";
+	
+	/**
+	 * @var string
+	 */
+	private static $eventInfo ="eventInfo";
+	
+	/**
+	 * @var string
+	 */
+	private static $addEvent ="addEvent";
+	
+	/**
+	 * @var string
+	 */
+	private static $showEvents ="showEvents";
 	
 	/**
 	 * @var string
@@ -185,6 +265,11 @@ class HTMLPage{
 	private static $mySession = "mySession";
 	
 	/**
+	 * @var string
+	 */
+	private static $wantsToAddEvent = "wantsToAddEvent";
+	
+	/**
 	 * @var view/LoginView
 	 */	
 	private $loginView;
@@ -284,9 +369,9 @@ class HTMLPage{
 								<li><p><a href="?'.self::$showAllMembers.'">Visa alla medlemmar</a></p></li>						
 							</ul>
 							<ul class="nav nav-pills nav-stacked">
-								<li><p><a href="?wantsToAddEvent">Skapa evenemang</a></p></li>
+								<li><p><a href="?'.self::$wantsToAddEvent.'">Skapa evenemang</a></p></li>
 								
-								<li><p><a href="?showEvents">Visa alla evenemang</a></p></li>
+								<li><p><a href="?'.self::$showEvents.'">Visa alla evenemang</a></p></li>
 							</ul>
 							<form method="post" action="?'.self::$LOGOUT.'">
 								<input type="submit" name="'.self::$LOGOUT.'" value="Logga ut" /> 
@@ -367,7 +452,7 @@ class HTMLPage{
 				<p>'.$this->showMemberForMembers($userInfo).'</p>
 				<p><a href="?'.self::$changePassword.'">Ändra lösenord</a></p>
 				<p><a href="?'.self::$showAllMembersSimple.'">Visa alla medlemmar</a></p>
-				<p><a href="?showEvents">Visa alla evenemang</a></p>
+				<p><a href="?'.self::$showEvents.'">Visa alla evenemang</a></p>
 				<form method="post" action="?'.self::$LOGOUT.'">
 				<input type="submit" name="'.self::$LOGOUT.'" value="Logga ut" /> 
 				</form>
@@ -423,11 +508,11 @@ class HTMLPage{
 		$timeValue;
 		$infoValue;
 
-		if (isset($_POST['addEvent'])) {
-			$titleValue = $_POST['eventTitle'];
-			$dateValue= $_POST['eventDate'];
-			$timeValue= $_POST['eventTime'];
-			$infoValue= $_POST['eventInfo'];
+		if (isset($_POST[self::$addEvent])) {
+			$titleValue = $_POST[self::$eventTitle];
+			$dateValue= $_POST[self::$eventDate];
+			$timeValue= $_POST[self::$eventTime];
+			$infoValue= $_POST[self::$eventInfo];
 		}
 		
 		$this->html = $this->startOfHTML();
@@ -439,14 +524,14 @@ class HTMLPage{
 					<fieldset>
 						<legend>Lägg till evenemang</legend>".$messagestring."
 						<p><label for='titleID' >Titel :</label>
-						<input autofocus type='text' size='20' name='eventTitle' id='titleID' value='".$titleValue."' /></p>
+						<input autofocus type='text' size='20' name='".self::$eventTitle."' id='titleID' value='".$titleValue."' /></p>
 						<p><label for='dateID' >Datum (ÅÅÅÅ-MM-DD) :</label>
-						<input type='text' size='50' name='eventDate' id='dateID' value='".$dateValue."' /></p>
+						<input type='text' size='50' name='".self::$eventDate."' id='dateID' value='".$dateValue."' /></p>
 						<p><label for='timeID' >Tid (HH:MM:SS) :</label>
-						<input type='text' size='50' name='eventTime' id='timeID' value='".$timeValue."' /></p>
+						<input type='text' size='50' name='".self::$eventTime."' id='timeID' value='".$timeValue."' /></p>
 						<p><label for='infoID' >Beskrivning :</label>
-						<textarea size='250' name='eventInfo' id='infoID' value=''>".$infoValue."</textarea></p>
-						<input type='submit' name='addEvent'  value='Spara' />
+						<textarea size='250' name='".self::$eventInfo."' id='infoID' value=''>".$infoValue."</textarea></p>
+						<input type='submit' name='".self::$addEvent."'  value='Spara' />
 					</fieldset>
 				</form>
 			</div>".
@@ -454,35 +539,6 @@ class HTMLPage{
 			
 		echo $this->html;
 	}
-
-	/**
-	 * @param string  
-	 * @param array
-	 * @param string
-	 * @return String HTML
-	 */
-	/**public function getShowEventPage($messagestring,$event,$clickable)
-	{
-		$this->html = $this->startOfHTML();
-		$this->html .="</div>
-					   <div id='content'>". $this->getBack();
-		$this->html .= "
-		<form class='form-horizontal' action='?searchEvent' method='post' enctype='multipart/form-data'>
-				<fieldset>
-					<legend>Visa evenemang - Sök på titel</legend>".$messagestring."
-					<p><label for='searchTitleID' >Ange titel :</label>
-					<input type='text' size='20' name='searchEvent' id='searchTitleID' value='' /></p>
-					<input type='submit' name='searchByEvent'  value='Sök' />
-				</fieldset>
-			</form>
-			<p>".$this->showEvents($event)."</p>
-			<p><a href='?updateEvent' onclick='return ".$clickable."'>Ändra event</a></p>
-			<p><a href='?deleteEvent' onclick='return ".$clickable."'>Radera event</a></p>
-			</div>".
-			$this->getClock();
-			
-		echo $this->html;
-	}*/
 	
 	/**
 	 * @param string
@@ -505,14 +561,14 @@ class HTMLPage{
 				<fieldset>
 					<legend>Uppdatera event</legend>".$messagestring."
 					<p><label for='newDateID' >Titel: </label>
-					<input autofocus type='text' size='20' name='newTitle' id='newTitleID' value='".$title."' /></p>
+					<input autofocus type='text' size='20' name='".self::$newTitle."' id='newTitleID' value='".$title."' /></p>
 					<p><label for='newDateID' >Datum (ÅÅÅÅ-MM-DD):</label>
-					<input autofocus type='text' size='20' name='newDate' id='newDateID' value='".$eventDate."' /></p>					
+					<input autofocus type='text' size='20' name='".self::$newDate."' id='newDateID' value='".$eventDate."' /></p>					
 					<p><label for='newTimeID' >Tid  (HH:MM::SS):</label>
-					<input type='text' size='20' name='newTime' id='newTimeID' value='".$eventTime."' /></p>
+					<input type='text' size='20' name='".self::$newTime."' id='newTimeID' value='".$eventTime."' /></p>
 					<p><label for='newInfoID' >Beskrivning  :</label>
-					<textarea size='250' name='newInfo' id='newInfoID'>".$info."</textarea></p>
-					<input type='submit' name='updateThisEvent'  value='Uppdatera' />
+					<textarea size='250' name='".self::$newInfo."' id='newInfoID'>".$info."</textarea></p>
+					<input type='submit' name='".self::$updateThisEvent."'  value='Uppdatera' />
 				</fieldset>
 			</form>
 			</div>".
@@ -536,7 +592,7 @@ class HTMLPage{
 			<form class='form-horizontal' action='?deleteEvent' method='post' enctype='multipart/form-data'>
 				<fieldset>
 					<legend>Radera medlem</legend>".$messagestring."
-					<input type='submit' name='deleteThisEvent'  value='Radera evenemang' />
+					<input type='submit' name='".self::$$deleteThisEvent."'  value='Radera evenemang' />
 				</fieldset>
 			</form>
 			</div>".
@@ -559,9 +615,9 @@ class HTMLPage{
 				<fieldset>
 					<legend>Ändra lösenord</legend>".$messagestring."
 					<p><label for='changeID' >Ange nytt lösenord :</label>
-					<input autofocus type='password' size='20' name='changePasswordField' id='changeID' value='' /></p>
+					<input autofocus type='password' size='20' name='".self::$changePasswordField."' id='changeID' value='' /></p>
 					<p><label for='changeAgainID' >Repetera lösenord :</label>
-					<input type='password' size='20' name='repeatPasswordField' id='changeAgainID' value='' /></p>
+					<input type='password' size='20' name='".self::$repeatPasswordField."' id='changeAgainID' value='' /></p>
 					<input type='submit' name='changePass'  value='Bekräfta ändring' />
 				</fieldset>
 			</form>".
@@ -656,11 +712,11 @@ class HTMLPage{
 			<p><a href='?payingMembers'>Visa betalande medlemmar </a><a href='?notPayingMembers'> 
 			Visa icke betalande medlemmar </a><a href='?".self::$showAllMembers."'> 
 			Visa alla medlemmar</a></p>
-			<form class='form-horizontal' action='?searchMember' method='post' enctype='multipart/form-data'>
+			<form class='form-horizontal' action='?".self::$searchMember."' method='post' enctype='multipart/form-data'>
 				<fieldset>
 					<legend>Visa en medlem - Sök på personnummer</legend>
 					<p><label for='searchID' >Ange personnummer :</label>
-					<input autofocus type='text' size='20' name='searchMember' id='searchID' value='' /></p>
+					<input autofocus type='text' size='20' name='".self::$searchMember."' id='searchID' value='' /></p>
 					<input type='submit' name=''  value='Sök' />
 				</fieldset>
 			</form>
@@ -703,11 +759,11 @@ class HTMLPage{
 		$this->html .= "<p><a href='?payingMembers'>Visa betalande medlemmar </a><a href='?notPayingMembers'> 
 			Visa icke betalande medlemmar </a><a href='?".self::$showAllMembers."'> 
 			Visa alla medlemmar</a></p>
-		<form class='form-horizontal' action='?searchMember' method='post' enctype='multipart/form-data'>
+		<form class='form-horizontal' action='?".self::$searchMember."' method='post' enctype='multipart/form-data'>
 				<fieldset>
 					<legend>Visa en medlem - Sök på personnummer</legend>".$messagestring."
 					<p><label for='searchID' >Ange personnummer :</label>
-					<input autofocus type='text' size='20' name='searchMember' id='searchID' value='' /></p>
+					<input autofocus type='text' size='20' name='".self::$searchMember."' id='searchID' value='' /></p>
 					<input type='submit' name=''  value='Sök' />
 				</fieldset>
 			</form>
@@ -756,7 +812,7 @@ class HTMLPage{
 					<input type='text' size='20' name='" . self::$NEWCLASS . "' id='nPhNrID' value='". $class ."' /></p>
 					<p><label for='nPaydateID' >Betalat till  :</label>
 					<input type='text' size='20' name='" . self::$NEWPAYDATE . "' id='nPaydateID' value='". $paydate ."' /></p>
-					<input type='submit' name='updateThisMember'  value='Uppdatera' />
+					<input type='submit' name='".self::$updateThisMember."'  value='Uppdatera' />
 				</fieldset>
 			</form>
 			</div>".
@@ -781,7 +837,7 @@ class HTMLPage{
 			<form class='form-horizontal' action='?" . self::$DELETE."=".$pnr."' method='post' enctype='multipart/form-data'>
 				<fieldset>
 					<legend>Radera medlem</legend>".$messagestring."
-					<input type='submit' name='deleteThisMember'  value='Bekräfta' />
+					<input type='submit' name='".self::$deleteThisMember."'  value='Bekräfta' />
 				</fieldset>
 			</form>
 			</div>".
@@ -795,9 +851,6 @@ class HTMLPage{
 	 * @return String HTML
 	 */
 	public function getLogOutPage($messageString) {
-				
-		setcookie("username", "",time()-3600);
-		setcookie("password", "",time()-3600);
 	
 		$this->getPage($messageString);
 		exit;
