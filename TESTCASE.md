@@ -48,6 +48,18 @@ TF 1.7 Inloggad vid omladdning av sida
 2. Uppdatera sidan (markera url och enter)
 3. Admin är fortfarande inloggad
 
+TF 1.8 Logga in admin, med HTML-taggar och fel uppgifter	
+1. Testfall 1.1 Navigera till sida
+2. Skriv in "<a href="?">Admin</a>" och "Fel"
+3. Klicka på logga in
+4. Felmeddelande visas och taggarna tas bort från användarnamnet
+
+TF 1.9 Logga in admin, med HTML-taggar och rätt uppgifter	
+1. Testfall 1.1 Navigera till sida
+2. Skriv in "<a href="?">Admin</a>" och "Password"
+3. Klicka på logga in
+4. Admin loggas in och rättmeddelande visas
+
 ===================================
 
 TF 2.1 Visa medlem
@@ -66,7 +78,7 @@ TF 2.2 Visa medlem, ogiltigt personnummer
 
 TF 2.3 Ändra medlem
 1. TF 3.1 Visa alla medlemmar
-2. Leta upp dem medlem som ska ändras
+2. Leta upp den medlem som ska ändras
 3. Klicka på ändra medlem
 4. Fyll i de uppgifter som ska ändras
 5. Klicka på uppdatera
@@ -82,8 +94,8 @@ TF 2.4 Ändra medlem, fel format på datum
 TF 2.5 Radera medlem
 1. TF 3.1 Visa alla medlemmar
 2. Klicka på radera medlem
-3. Klicka på radera medlem för att bekräfta
-5. Rättmeddelande visas
+3. Klicka på bekräfta
+4. Medlemmen raderas och rättmeddelande visas
 
 TF 2.6 Ändra medlem, felaktig klass
 1. TF 3.1 Visa alla medlemmar
@@ -243,6 +255,14 @@ TF 6.5 Ändra lösenord, misslyckat försök med tomma fält
 2. Klicka på ändra lösenord
 3. Lämna ange ett nytt lösenord tomt
 4. Lämna reptera lösenord tomt
+5. Klicka på bekräfta ändring
+6. Felmeddelande visas
+
+TF 6.6 Ändra lösenord, misslyckat försök med för kort lösenord
+1. TF 5.1 Logga in medlem
+2. Klicka på ändra lösenord
+3. Ange "losen"
+4. Repeera "losen"
 5. Klicka på bekräfta ändring
 6. Felmeddelande visas
 
