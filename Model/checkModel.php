@@ -4,19 +4,31 @@ namespace model;
 
 class checkModel{
 	
+	CONST UNVALIDDATEFORMAT = 23;
+	CONST UNVALIDTIMEFORMAT = 25;
+	
+	/**
+	 * @var string
+	 */
+	private static $emptyDate = "0000-00-00";
+	
 	/**
 	 * @param string
 	 * @return bool
 	 */
 	public function checkValidDateForUpdate($date)
 	{
-		if(empty($date) || $this->unvalidDateFormat($date))
+		if ($date == self::$emptyDate){
+			
+			return true;
+		}
+		else if($this->unvalidDateFormat($date))
 		{
 			return false;
-		}
+		}		
 		else{
 			return true;
-		}		
+		}
 	}
 	
 	/**
@@ -48,7 +60,6 @@ class checkModel{
 		else{
 			return true;
 		}
-				
 	}
 	
 	/**
@@ -59,7 +70,6 @@ class checkModel{
 	{
 		preg_match('/^([0-2]{1}[0-9]{1}):([0-5]{1}[0-9]{1}:([0-5]{1}[0-9]{1}))$/', $time, $matches);
 		$valid = count($matches);
-		var_dump($valid);
 		if($valid == 4){
 			return false;
 		}
@@ -96,7 +106,6 @@ class checkModel{
 		else{
 			return false;
 		}
-		
 	}
 	
 	/**
@@ -108,7 +117,6 @@ class checkModel{
 		preg_match('/^[-]{1}$/', $class, $matches);
 		
 		$isPassive = count($matches); 
-		
 		if($isPassive == 1){
 			return false;
 		}
@@ -143,5 +151,21 @@ class checkModel{
 		else{
 			return true;
 		}		
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function updatedDateFail()
+	{
+		return self::UNVALIDDATEFORMAT;
+	}	
+	
+	/**
+	 * @return int
+	 */
+	public function updatedTimeFail()
+	{
+		return self::UNVALIDTIMEFORMAT;
 	}
 }

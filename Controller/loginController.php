@@ -26,9 +26,7 @@ class loginController{
 		$this->loginView = new \view\loginView();
 		$this->messageView = new \view\messageView();
 		$this->loginModel = new \model\loginModel();
-		$this->loginDAL = new \model\loginDAL($mysqli);	
-		
-		
+		$this->loginDAL = new \model\loginDAL();	
 	}
 	
 	public function userWantsToLogin()

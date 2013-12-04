@@ -51,7 +51,11 @@ class memberModel{
 	 * @return int
 	 */	
 	public function checkUnvalidNewMember(member $member)
-	{		
+	{
+		$firstName = $member->getFirstName();
+		$lastName = $member->getLastName();
+		$address = $member->getAddres();
+		$phnr = $member->getPhoneNr();		
 		$paydate = $member->getpayDate();
 		$class = $member->getClass();
 		$pnr = $member->getPersonalNr();
@@ -73,12 +77,9 @@ class memberModel{
 		{
 			return self::UNVALIDEMAIL;
 		}
-		
-		for ($i=0; $i < count($member)-1; $i++) { 
-			if(empty($member[$i])){
-				return self::EMPTYFORM;
-			}
-		} 	
+		else if(empty($firstName) || empty($lastName) || empty($address) || empty($phnr)){
+			return self::EMPTYFORM;
+		} 
 		return self::ADDINGMEMBERSUCCES;	
 	}
 	
@@ -88,16 +89,17 @@ class memberModel{
 	 */
 	public function checkNewMemberValid(member $member)
 	{
+		$firstName = $member->getFirstName();
+		$lastName = $member->getLastName();
+		$address = $member->getAddres();
+		$phnr = $member->getPhoneNr();
 		$paydate = $member->getpayDate();
 		$class = $member->getClass();
 		$pnr = $member->getPersonalNr();
 		$email = $member->getEmail();
-			
-
-		for ($i=0; $i < count($member)-1; $i++) { 
-			if(empty($member[$i])){
-				return false;
-			}
+		
+		if(empty($firstName) || empty($lastName) || empty($address) || empty($phnr)){
+			return false;
 		} 
 		if (!empty($paydate) && $this->checkModel->unvalidDateFormat($paydate)){
 			return false;
@@ -124,5 +126,21 @@ class memberModel{
 	public function memberDeleted()
 	{
 		return self::DELETEDMEMBER;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function unvalidClass()
+	{
+		return self::UNVALIDCLASS;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function unvalidEmail()
+	{
+		return self::UNVALIDEMAIL;
 	}
 }

@@ -375,7 +375,6 @@ class memberView{
 		}
 	}
 	
-
 	/**
 	 * @return string
 	 */
@@ -431,7 +430,6 @@ class memberView{
 			return false;
 		}
 	}
-	
 	
 	/**
 	 * @return bool
@@ -492,6 +490,47 @@ class memberView{
 		}
 		else{
 			return false;
+		}
+	}
+	
+	/**  
+	 * @param array
+	 * @return string
+	 */
+	public function showMembers($members)
+	{
+		if($members != NULL){
+			for ($i=0; $i < count($members); $i++) {
+				$this->membersToShow .= $this->getMemberHTML($members[$i]);
+			} 		
+			
+			return $this->membersToShow;
+		}
+	}	
+	
+	public function showSimpleMembers($members)
+	{
+		if($members != NULL){
+			for ($i=0; $i < count($members); $i++) {
+				$this->membersToShow .= $this->getSimpleMemberHTML($members[$i]);
+			} 		
+			
+			return $this->membersToShow;
+		}
+	}
+	
+	/**  
+	 * @param array
+	 * @return string
+	 */
+	public function showMemberForMembers($members)
+	{
+		if($members != NULL){
+			for ($i=0; $i < count($members); $i++) {
+				$this->membersToShow .= $this->getMemberHTMLForMembers($members[$i]);
+			} 		
+			
+			return $this->membersToShow;
 		}
 	}
 	

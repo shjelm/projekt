@@ -57,7 +57,6 @@ class Member{
 	
 	public function __construct($firstName, $lastName, $personalnr, $class, $phonenr, $email, $address, $paydate)
 	{
-		
 		$this->firstName = $firstName;
 		$this->lastName = $lastName;
 		$this->personalnr = $personalnr;
@@ -68,7 +67,6 @@ class Member{
 		$this->paydate = $paydate;
 		$this->username = $this->generateUsername($firstName, $lastName, $personalnr);
 		$this->password = $this->generateDefaultPassword();
-		
 	}
 	
 	/**
@@ -169,11 +167,10 @@ class Member{
 	 */
 	public function generateDefaultPassword()
 	{
-		$password = md5('Password'."crypt");
+		$password = md5('Newpassword'."crypt");
 		
 		$this->password = $password;
 		
 		return $password;
-		
 	}
 }

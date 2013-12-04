@@ -46,9 +46,7 @@ class LoginDAL
 		if ($this->con->query($sql) === FALSE) {
           throw new \Exception("'$sql' failed " . $this->con->error);
       	}
-		
 	}
-	
 	
 	/**
 	 * @param /model/member

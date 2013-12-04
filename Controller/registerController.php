@@ -46,7 +46,7 @@ class registerController{
 			
 		}
 		else if($this->loginView->checkFormSent() && isset($existingPnr)){
-			$this->messageNr = $this->loginModel->alreadyExistingPnr();
+			$this->messageNr = $this->memberModel->alreadyExistingPnr();
 			$this->message = $this->messageView->setMessage($this->messageNr);
 		}
 		

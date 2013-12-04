@@ -4,9 +4,7 @@ namespace model;
 
 class eventModel{
 	
-	CONST UNVALIDDATEFORMAT = 23;
 	CONST EMPTYFORMEVENT = 24;
-	CONST UNVALIDTIMEFORMAT = 25;
 	CONST ADDINGEVENTSUCCES = 26;
 	CONST UPDATEDEVENT = 27;
     CONST EXISTINGEVENT = 28;
@@ -118,22 +116,6 @@ class eventModel{
 	public function eventUpdated()
 	{
 		return self::UPDATEDEVENT;
-	}
-	
-	/**
-	 * @return int
-	 */
-	public function eventUpdatedDateFail()
-	{
-		return self::UNVALIDDATEFORMAT;
-	}	
-	
-	/**
-	 * @return int
-	 */
-	public function eventUpdatedTimeFail()
-	{
-		return self::UNVALIDTIMEFORMAT;
 	}
 	
 }

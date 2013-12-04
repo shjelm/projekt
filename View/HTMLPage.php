@@ -126,6 +126,11 @@ class HTMLPage{
 	/**
 	 * @var string
 	 */
+	private static $eventTitle ="eventTitle";
+	
+	/**
+	 * @var string
+	 */
 	private static $addEvent ="addEvent";
 	
 	/**
@@ -449,7 +454,7 @@ class HTMLPage{
 					   <div id='content' >";
 		$this->html .= '
 				<h2>'.$userString.' är inloggad</h2>
-				<p>'.$this->showMemberForMembers($userInfo).'</p>
+				<p>'.$this->memberView->showMemberForMembers($userInfo).'</p>
 				<p><a href="?'.self::$changePassword.'">Ändra lösenord</a></p>
 				<p><a href="?'.self::$showAllMembersSimple.'">Visa alla medlemmar</a></p>
 				<p><a href="?'.self::$showEvents.'">Visa alla evenemang</a></p>
@@ -472,8 +477,8 @@ class HTMLPage{
 		$this->html .="</div>
 					   <div id='content' >". $this->getBack();
 		$this->html .= '
-				<h2>Kommande evenemang</h2>'.$this->showEvents($events).'	
-				<h2>Genomförda evenemang</h2>'.$this->showSimpleEvents($completedEvents).'</div>'.
+				<h2>Kommande evenemang</h2>'.$this->eventView->showEvents($events).'	
+				<h2>Genomförda evenemang</h2>'.$this->eventView->showSimpleEvents($completedEvents).'</div>'.
 			$this->getClock();
 			
 		echo $this->html;
@@ -489,8 +494,8 @@ class HTMLPage{
 		$this->html .="</div>
 					   <div id='content' >". $this->getBack();
 		$this->html .= "
-				<h2>Kommande evenemang</h2>".$this->showSimpleEvents($events)."
-				<h2>Genomförda evenemang</h2>".$this->showSimpleEvents($completedEvents)."
+				<h2>Kommande evenemang</h2>".$this->eventView->showSimpleEvents($events)."
+				<h2>Genomförda evenemang</h2>".$this->eventView->showSimpleEvents($completedEvents)."
 			</div>".
 			$this->getClock();
 			
@@ -547,7 +552,6 @@ class HTMLPage{
 	 */
 	public function getUpdateEventPage($messagestring, $event, $id)
 	{
-		var_dump($event->getTitle());
 		$title = $event->getTitle();
 	 	$eventDate = $event->getEventDate();
 		$eventTime = $event->getEventTime();
@@ -625,78 +629,6 @@ class HTMLPage{
 			
 		echo $this->html;
 	}
-
-	/**  
-	 * @param array
-	 * @return string
-	 */
-	public function showMembers($members)
-	{
-		if($members != NULL){
-			for ($i=0; $i < count($members); $i++) {
-				$this->membersToShow .= $this->memberView->getMemberHTML($members[$i]);
-			} 		
-			
-			return $this->membersToShow;
-		}
-	}
-	
-	public function showSimpleMembers($members)
-	{
-		if($members != NULL){
-			for ($i=0; $i < count($members); $i++) {
-				$this->membersToShow .= $this->memberView->getSimpleMemberHTML($members[$i]);
-			} 		
-			
-			return $this->membersToShow;
-		}
-	}
-	
-	/**  
-	 * @param array
-	 * @return string
-	 */
-	public function showMemberForMembers($members)
-	{
-		if($members != NULL){
-			for ($i=0; $i < count($members); $i++) {
-				$this->membersToShow .= $this->memberView->getMemberHTMLForMembers($members[$i]);
-			} 		
-			
-			return $this->membersToShow;
-		}
-	}
-	
-	
-	/**  
-	 * @param array
-	 * @return string
-	 */
-	public function showEvents($events)
-	{
-		if($events != NULL){		
-			for ($i=0; $i < count($events); $i++) {
-				$this->eventsToShow .= $this->eventView->getEventHTML($events[$i]);
-			} 
-						
-			return $this->eventsToShow;
-		}
-	}
-	
-	/**  
-	 * @param array
-	 * @return string
-	 */
-	public function showSimpleEvents($events)
-	{
-		if($events != NULL){		
-			for ($i=0; $i < count($events); $i++) {
-				$this->simpleEventsToShow .= $this->eventView->getSimpleEventHTML($events[$i]);
-			} 		
-			
-			return $this->simpleEventsToShow;
-		}
-	}
 	
 	/**  
 	 * @param int
@@ -722,7 +654,7 @@ class HTMLPage{
 			</form>
 			<h2>Medlemmar</h2>
 			<p>Totalt antal medlemmar i registret: ".$nr."</p>".
-				$this->showMembers($members)."
+				$this->memberView->showMembers($members)."
 			</div>".
 			$this->getClock();
 			
@@ -739,7 +671,7 @@ class HTMLPage{
 		$this->html .="</div>
 					   <div id='content'>". $this->getBack();
 		$this->html .= 
-				$this->showSimpleMembers($members)."
+				$this->memberView->showSimpleMembers($members)."
 			</div>".
 			$this->getClock();
 		echo $this->html;
@@ -767,7 +699,7 @@ class HTMLPage{
 					<input type='submit' name=''  value='Sök' />
 				</fieldset>
 			</form>
-			<p>".$this->showMembers($member)."</p>
+			<p>".$this->memberView->showMembers($member)."</p>
 			</div>".
 			$this->getClock();
 			
@@ -781,16 +713,17 @@ class HTMLPage{
 	 */
 	public function getUpdateMemberPage($messagestring, $member)
 	{
-		$firstName = $member[0]->getFirstName();
-	 	$lastName= $member[0]->getLastName();
-		$class= $member[0]->getClass();
-		$phonenr= $member[0]->getPhoneNr();
-		$email= $member[0]->getEmail();
-		$address= $member[0]->getAddres();
-		$paydate= $member[0]->getPayDate();	
-		$pnr = $member[0]->getPersonalNr();
-		 
-		$this->html = $this->startOfHTML();
+		if($member != NULL){
+			$firstName = $member[0]->getFirstName();
+		 	$lastName= $member[0]->getLastName();
+			$class= $member[0]->getClass();
+			$phonenr= $member[0]->getPhoneNr();
+			$email= $member[0]->getEmail();
+			$address= $member[0]->getAddres();
+			$paydate= $member[0]->getPayDate();	
+			$pnr = $member[0]->getPersonalNr();
+			
+			$this->html = $this->startOfHTML();
 		$this->html .="</div>
 					   <div id='content'>". $this->getBack();
 		$this->html .= "
@@ -819,7 +752,10 @@ class HTMLPage{
 			$this->getClock();
 			
 		echo $this->html;
-		
+		}
+		else{
+			$this->getLoggedInPage('');
+		}
 	}
 	
 	/**
@@ -854,19 +790,6 @@ class HTMLPage{
 	
 		$this->getPage($messageString);
 		exit;
-	}
-	
-	/**
-	 * @return string
-	 */
-	public function getUsername(){
-		if($_POST || $_GET){
-			if(isset($_POST[self::$USERNAME])){
-				$username = $_POST[self::$USERNAME];
-				
-				return $username;
-			}
-		}
 	}
 	
 	/**

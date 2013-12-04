@@ -66,11 +66,11 @@ class eventController{
 					$this->messageNr = $this->eventModel->eventUpdated();	
 				}
 				else{
-					$this->messageNr = $this->eventModel->eventUpdatedDateFail();
+					$this->messageNr = $this->checkModel->updatedDateFail();
 				}
 			}
 			
-			if($this->messageNr != $this->eventModel->eventUpdatedDateFail()){
+			if($this->messageNr != $this->checkModel->updatedDateFail()){
 				if ($this->loginView->isUpdatingTime()){
 					$timeValue = $this->loginView->getTime();
 					if($this->checkModel->checkValidTimeForUpdate($timeValue)){
@@ -78,7 +78,7 @@ class eventController{
 						$this->messageNr = $this->eventModel->eventUpdated();
 					}
 					else{
-						$this->messageNr = $this->eventModel->eventUpdatedTimeFail();
+						$this->messageNr = $this->checkModel->updatedTimeFail();
 					}
 				}
 			}
@@ -104,7 +104,7 @@ class eventController{
 		$title = $this->event->getTitle();
 		
 		$this->messageNr = $this->eventModel->checkUnvalidEvent($this->event);
-		$this->message = $this->loginView->setMessage($this->messageNr);
+		$this->message = $this->messageView->setMessage($this->messageNr);
 		
 		if($this->eventModel->checkValidEvent($this->event)){			
 			$this->eventDAL->addEvent($this->event);

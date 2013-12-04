@@ -19,7 +19,5 @@ class ApplicationController{
 	public function runApplication()
 	{
 			$this->LoginController->userWantsToLogin();
-	}
-	
-	
+	}	
 }

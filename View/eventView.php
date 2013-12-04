@@ -259,6 +259,36 @@ class eventView{
 		}
 	}
 	
+	/**  
+	 * @param array
+	 * @return string
+	 */
+	public function showEvents($events)
+	{
+		if($events != NULL){		
+			for ($i=0; $i < count($events); $i++) {
+				$this->eventsToShow .= $this->getEventHTML($events[$i]);
+			} 
+						
+			return $this->eventsToShow;
+		}
+	}
+	
+	/**  
+	 * @param array
+	 * @return string
+	 */
+	public function showSimpleEvents($events)
+	{
+		if($events != NULL){		
+			for ($i=0; $i < count($events); $i++) {
+				$this->simpleEventsToShow .= $this->getSimpleEventHTML($events[$i]);
+			} 		
+			
+			return $this->simpleEventsToShow;
+		}
+	}
+	
 	/**
 	 * @param model/event 
 	 * @return string HTML
@@ -302,4 +332,5 @@ class eventView{
 						
 		return $eventHTML;					
 	}
+	
 }

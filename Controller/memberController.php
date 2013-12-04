@@ -10,6 +10,7 @@ class memberController{
 		$this->memberView = new \view\memberView();
 		$this->messageView = new \view\messageView();
 		$this->loginModel = new \model\loginModel();
+		$this->memberModel = new \model\memberModel();
 		$this->HTMLPage = new \view\HTMLPage();
 		$this->loginDAL = new \model\loginDAL();
 		$this->checkModel = new \model\checkModel();
@@ -77,7 +78,7 @@ class memberController{
 	public function adminWantsToDeleteMember()
 	{
 		$this->pnr = $this->memberView->getMemberAdminWantsToDelete();
-		$this->messageNr = $this->loginModel->memberDeleted();
+		$this->messageNr = $this->memberModel->memberDeleted();
 		$this->message = $this->messageView->setMessage($this->messageNr);
 		$this->loginDAL->deleteMember($this->pnr);
 		
@@ -98,7 +99,7 @@ class memberController{
 			$this->memberToShow = $memberToShow;
 		}
 		else{
-			$this->messageNr = $this->loginModel->unexistingPnr();
+			$this->messageNr = $this->memberModel->unexistingPnr();
 			$this->message = $this->messageView->setMessage($this->messageNr);
 		}
 		
@@ -124,34 +125,54 @@ class memberController{
 		}
 		if ($this->memberView->isUpdatingEmail()){
 			$emailValue = $this->memberView->getEmail();
-			$this->loginDAL->updateEmailMember($this->pnr, $emailValue);	
+			
+			if($this->checkModel->unvalidEmail($emailValue)){
+				$this->messageNr = $this->memberModel->unvalidEmail();
+			}
+			else{
+				$this->loginDAL->updateEmailMember($this->pnr, $emailValue);
+				$this->messageNr = $this->memberModel->memberUpdated();
+			}	
 		}
 		if ($this->memberView->isUpdatingPhonenr()){
 			$phNrValue = $this->memberView->getPhonenr();
 			$this->loginDAL->updatePhonenrMember($this->pnr, $phNrValue);
 		}
-		if ($this->memberView->isUpdatingClass()){
-			$classValue = $this->memberView->getClass();
-			$this->loginDAL->updateClassMember($this->pnr, $classValue);
+		if($this->checkModel->unvalidEmail($emailValue) == FALSE){
+			if ($this->memberView->isUpdatingClass()){
+				$classValue = $this->memberView->getClass();
+				
+				if($this->checkModel->unvalidClass($classValue))
+				{
+					$this->messageNr = $this->memberModel->unvalidClass();
+				}
+				else{
+					$this->loginDAL->updateClassMember($this->pnr, $classValue);
+					$this->messageNr = $this->memberModel->memberUpdated();
+				}
+			}
 		}
 		
-		if ($this->memberView->isUpdatingPaydate()){
-			$paydateValue = $this->memberView->getPaydate();
-			
-			if($this->loginModel->checkValidDateForUpdate($paydateValue)){
-				$this->loginDAL->updatePaydateMember($this->pnr, $paydateValue);
-				$this->messageNr = $this->loginModel->memberUpdated();
+		if($this->checkModel->unvalidEmail($emailValue) == FALSE && $this->checkModel->unvalidClass($classValue) == FALSE){
+			if ($this->memberView->isUpdatingPaydate()){
+				$paydateValue = $this->memberView->getPaydate();
+				
+				if($this->checkModel->checkValidDateForUpdate($paydateValue)){
+					$this->loginDAL->updatePaydateMember($this->pnr, $paydateValue);
+					$this->messageNr = $this->memberModel->memberUpdated();
+				}
+				else{
+					$this->messageNr = $this->checkModel->updatedDateFail();
+				}			
 			}
-			else{
-				$this->messageNr = $this->loginModel->eventUpdatedDateFail();
-			}			
 		}				
 		
 		$this->message = $this->messageView->setMessage($this->messageNr);	
-	
-		if($this->memberView->isSavingUpdatedMember() && $this->loginModel->checkValidDateForUpdate($paydateValue))
+
+		if($this->memberView->isSavingUpdatedMember() && $this->checkModel->checkValidDateForUpdate($paydateValue)
+			&& $this->checkModel->unvalidClass($classValue) == FALSE && $this->checkModel->unvalidEmail($emailValue) == FALSE)
 		{
-			$this->messageNr = $this->loginModel->memberUpdated();
+			$this->messageNr = $this->memberModel->memberUpdated();
 			$this->HTMLPage->getLoggedInPage($this->message);
 		}
 		else{
@@ -167,17 +188,13 @@ class memberController{
 	
 	public function adminWantsToShowPayingMembers()
 	{
-		
 		$this->numberOfMembers = $this->loginDAL->getNumberOfMembers($this->members);
 		$this->members = $this->loginDAL->getPayingMembers();
-		
 	}
 	
 	public function adminWantsToShowNotPayingMembers()
 	{
-		
 		$this->numberOfMembers = $this->loginDAL->getNumberOfMembers($this->members);
 		$this->members = $this->loginDAL->getNotPayingMembers();
-		
 	}
 }
